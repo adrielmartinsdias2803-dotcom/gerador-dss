@@ -1,0 +1,378 @@
+:root {
+    --bg-color: #f3f4f6;
+    --sidebar-bg: #ffffff;
+    --sidebar-width: 380px;
+    --text-color: #333333;
+    --border-color: #dddddd;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+/* Layout do Aplicativo */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100vh;
+    overflow-y: auto;
+    position: fixed;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+    z-index: 10;
+}
+
+.sidebar h2 {
+    font-size: 1.25rem;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.sidebar p {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-row {
+    display: flex;
+    gap: 12px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.875rem;
+    transition: border-color 0.2s;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+textarea {
+    resize: vertical;
+}
+
+small {
+    color: #6b7280;
+    font-size: 0.75rem;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 16px;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-ia {
+    background-color: #8b5cf6;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-ia:hover {
+    background-color: #7c3aed;
+}
+
+.btn-ia:disabled {
+    background-color: #c4b5fd;
+    cursor: not-allowed;
+}
+
+/* Área de Pré-visualização */
+.preview-area {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #e5e7eb;
+    min-height: 100vh;
+}
+
+.preview-hint {
+    background: #111827;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.page-container {
+    background: white;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    /* Tamanho exato de A4 em pixels para visualização (96dpi) */
+    width: 210mm;
+    min-height: 297mm; 
+    margin: 0 auto;
+}
+
+/* =========================================
+   ESTILOS DO DOCUMENTO A4 (Visualização e Impressão)
+   Baseado na formatação do Word
+   ========================================= */
+.a4-page {
+    width: 100%;
+    height: 100%;
+    padding: 20mm 15mm; /* Margens padrão do Word */
+    background: white;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    font-size: 11pt; /* Tamanho de fonte padrão para esse tipo de doc */
+}
+
+.a4-page table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12px;
+}
+
+.a4-page td, .a4-page th {
+    border: 1px solid #000;
+    padding: 3px 6px;
+    vertical-align: middle;
+}
+
+/* Cabeçalho */
+.header-table {
+    margin-bottom: 20px;
+    font-family: "Times New Roman", Times, serif;
+}
+
+.header-table td {
+    font-size: 11pt; /* Um pouco maior */
+    color: black; /* Texto preto como no original */
+}
+
+.col-logo {
+    width: 20%;
+    text-align: center;
+    vertical-align: middle;
+    padding: 2px;
+}
+
+.logo-img {
+    max-width: 100px;
+    max-height: 40px;
+    object-fit: contain;
+}
+
+.logo-placeholder span {
+    font-size: 14pt;
+}
+
+.logo-placeholder small {
+    font-size: 6pt;
+}
+
+.col-form-title {
+    background-color: #8c8c8c; /* Cinza mais escuro como na imagem */
+    color: black; /* Texto preto */
+    font-weight: bold; /* Voltar para negrito */
+    text-align: left;
+    height: 35px; /* Mais altura para ficar mais fiel */
+}
+
+.col-doc-name {
+    font-weight: bold; /* Negrito aqui também */
+    width: 60%;
+    color: black;
+}
+
+.col-rev {
+    width: 20%;
+    color: black;
+    font-weight: normal; /* Sem negrito */
+}
+
+/* Tabela Info */
+.info-table {
+    margin-bottom: 0;
+    border: 1.5px solid #000;
+}
+
+.info-table td {
+    font-size: 10pt;
+    border: 1px solid #000;
+    padding: 4px 6px;
+}
+
+/* Caixa de Conteúdo com borda profissional */
+.content-box {
+    margin: 0;
+    padding: 8px 8px;
+    border: 1.5px solid #000;
+    border-top: none; /* une visualmente com a info-table acima */
+    min-height: 120px;
+}
+
+.content-box p {
+    margin-bottom: 8px;
+    line-height: 1.5;
+    text-align: justify;
+}
+
+.out-conteudo {
+    white-space: pre-wrap;
+    text-align: justify;
+    font-size: 10.5pt;
+    line-height: 1.5;
+}
+
+/* Lista de Presença */
+.presence-table {
+    margin-top: 18px;
+    border: 1.5px solid #000;
+    border-collapse: collapse;
+}
+
+.presence-table th {
+    background-color: #8c8c8c;
+    font-weight: bold;
+    text-align: center;
+    font-size: 10pt;
+    height: 22px;
+    color: black;
+    border: 1px solid #000;
+    padding: 4px 6px;
+}
+
+.presence-table td {
+    height: 20px;
+    border: 1px solid #000;
+    padding: 2px 4px;
+}
+
+
+/* =========================================
+   REGRAS DE IMPRESSÃO
+   ========================================= */
+
+/* Invisível na tela, visível apenas na impressão */
+.page-break {
+    display: none;
+}
+
+@media print {
+    /* Quebra de página */
+    .page-break {
+        display: block;
+        page-break-before: always;
+    }
+
+    /* Esconder a interface do app */
+    .no-print, .sidebar, .preview-hint {
+        display: none !important;
+    }
+
+    /* Garantir que o documento e área de preview apareçam */
+    .app-container {
+        display: block !important;
+    }
+
+    .preview-area {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+        width: 100% !important;
+    }
+
+    .page-container {
+        display: block !important;
+        box-shadow: none;
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    .a4-page {
+        padding: 15mm 15mm;
+        page-break-after: auto;
+    }
+    
+    /* Previne quebra de página no meio de linhas da tabela */
+    tr {
+        page-break-inside: avoid;
+    }
+    
+    /* Previne quebra de página logo após o título do conteúdo */
+    .content-box h2, .content-box p strong {
+        page-break-after: avoid;
+    }
+
+    /* IMPEDE que o cabeçalho (NOME/SETOR/ASSINATURA) repita em nova página */
+    .presence-table thead {
+        display: table-row-group;
+    }
+}
+
