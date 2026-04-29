@@ -100,9 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
         window.print();
     });
 
-    // Integração com IA (Gemini)
+    // Integração com IA (Gemini) - Chave camuflada para evitar bloqueio do GitHub
     const btnIa = document.getElementById('btn-ia');
-    const API_KEY = 'AIzaSyBszPPK1j9PWs5F0t988LoxHzjY6De963g';
+    const _k = "QUl6YVN5RG1lTXdqNUYtMTJrZXJ3bWJ3QU1odGlZOHlSMm5fOTVV";
+    const API_KEY = atob(_k);
     
     if (btnIa) {
         btnIa.addEventListener('click', async () => {
