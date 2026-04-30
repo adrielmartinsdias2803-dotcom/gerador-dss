@@ -136,7 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     .col-doc-name { font-weight: bold; text-align: left; }
                     .content-box { border: 1.5px solid black; border-top: none; padding: 12px; }
                     .info-table { border: 1.5px solid black; margin-bottom: 0; }
-                    .content-box p, .out-conteudo { text-align: justify; line-height: 1.5; font-size: 10.5pt; font-family: Arial, sans-serif; }
+                    .content-box p, .out-conteudo { text-align: left; line-height: 1.5; font-size: 10.5pt; font-family: Arial, sans-serif; }
+                    .presence-table td { height: 26px; }
                     .page-break { page-break-before: always; }
                     img { max-width: 120px; height: auto; }
                 </style>
