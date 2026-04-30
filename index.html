@@ -69,6 +69,14 @@
                         <div id="history-list"></div>
                     </div>
                 </div>
+                <!-- Sugestões de temas pela IA -->
+                <button type="button" id="btn-suggest" class="btn-suggest">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 2.4-1.2 4.5-3 5.7V17a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-2.3C6.2 13.5 5 11.4 5 9a7 7 0 0 1 7-7z"/><line x1="10" y1="22" x2="14" y2="22"/></svg>
+                    Sugerir temas com IA
+                </button>
+                <div id="suggestions-area" class="suggestions-area hidden">
+                    <div id="suggestions-list" class="suggestions-list"></div>
+                </div>
                 <!-- Campo oculto que guarda o título completo montado -->
                 <input type="hidden" id="titulo">
             </div>

@@ -367,6 +367,77 @@ small {
 }
 
 /* =========================================
+   SUGESTÕES DE TEMAS (IA)
+   ========================================= */
+.btn-suggest {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px dashed var(--input-border);
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-suggest:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(139, 92, 246, 0.06);
+}
+
+.btn-suggest:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-suggest svg {
+    flex-shrink: 0;
+}
+
+.suggestions-area {
+    animation: dropIn 0.3s ease;
+}
+
+.suggestions-area.hidden {
+    display: none;
+}
+
+.suggestions-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.suggestion-chip {
+    display: inline-block;
+    padding: 6px 12px;
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.15);
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.suggestion-chip:hover {
+    background: rgba(139, 92, 246, 0.2);
+    border-color: var(--accent);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+/* =========================================
    HISTÓRICO DE TEMAS
    ========================================= */
 .input-with-history {

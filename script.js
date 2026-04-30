@@ -264,6 +264,83 @@ Conclusão:
     }
 
     // =========================================
+    // SUGESTÃO DE TEMAS COM IA
+    // =========================================
+    const btnSuggest = document.getElementById('btn-suggest');
+    const suggestionsArea = document.getElementById('suggestions-area');
+    const suggestionsList = document.getElementById('suggestions-list');
+
+    if (btnSuggest) {
+        btnSuggest.addEventListener('click', async () => {
+            btnSuggest.disabled = true;
+            btnSuggest.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 2.4-1.2 4.5-3 5.7V17a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-2.3C6.2 13.5 5 11.4 5 9a7 7 0 0 1 7-7z"/><line x1="10" y1="22" x2="14" y2="22"/></svg> Buscando sugestões...';
+
+            try {
+                const setor = inputSetor.value.trim() || 'indústria';
+                const promptSuggest = `Você é um técnico de segurança do trabalho. Liste exatamente 10 temas essenciais e variados de Diálogo Semanal de Segurança (DSS) para colaboradores do setor de "${setor}".
+
+REGRAS:
+- Retorne APENAS os temas, um por linha
+- Cada tema deve ter no máximo 6 palavras
+- NÃO numere os temas
+- NÃO use bullet points
+- NÃO adicione explicações
+- Temas variados: EPI, ergonomia, elétrica, química, incêndio, saúde mental, trânsito, etc.
+
+Exemplo de formato:
+Uso correto de EPIs
+Prevenção de quedas em altura
+Ergonomia no posto de trabalho`;
+
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: promptSuggest }] }]
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error ? data.error.message : 'Erro desconhecido');
+                }
+
+                const textoSugestoes = data.candidates[0].content.parts[0].text;
+                const temas = textoSugestoes.split('\n').map(t => t.trim()).filter(t => t.length > 3 && t.length < 60);
+
+                // Renderiza os chips
+                suggestionsList.innerHTML = temas.map(tema => 
+                    `<span class="suggestion-chip" data-tema="${tema}">${tema}</span>`
+                ).join('');
+
+                // Adiciona click nos chips
+                suggestionsList.querySelectorAll('.suggestion-chip').forEach(chip => {
+                    chip.addEventListener('click', () => {
+                        inputTema.value = chip.dataset.tema;
+                        buildTitulo();
+                        updatePreview();
+                        updateProgress();
+                        // Destaque visual no chip selecionado
+                        suggestionsList.querySelectorAll('.suggestion-chip').forEach(c => c.style.opacity = '0.5');
+                        chip.style.opacity = '1';
+                        chip.style.borderColor = '#8b5cf6';
+                    });
+                });
+
+                suggestionsArea.classList.remove('hidden');
+
+            } catch (error) {
+                console.error(error);
+                alert('Erro ao buscar sugestões: ' + error.message);
+            } finally {
+                btnSuggest.disabled = false;
+                btnSuggest.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 2.4-1.2 4.5-3 5.7V17a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-2.3C6.2 13.5 5 11.4 5 9a7 7 0 0 1 7-7z"/><line x1="10" y1="22" x2="14" y2="22"/></svg> Sugerir temas com IA';
+            }
+        });
+    }
+
+    // =========================================
     // HISTÓRICO DE TEMAS (localStorage)
     // =========================================
     const HISTORY_KEY = 'dss_temas_history';
