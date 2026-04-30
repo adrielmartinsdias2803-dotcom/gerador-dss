@@ -100,6 +100,39 @@ document.addEventListener('DOMContentLoaded', () => {
         window.print();
     });
 
+    // Evento de Exportar para Word
+    const btnWord = document.getElementById('btn-word');
+    if (btnWord) {
+        btnWord.addEventListener('click', () => {
+            // Pega o conteúdo HTML do documento
+            const printContent = document.getElementById('printable-area').innerHTML;
+            
+            // Monta o cabeçalho específico para o MS Word reconhecer
+            const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+                "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+                "xmlns='http://www.w3.org/TR/REC-html40'>" +
+                "<head><meta charset='utf-8'><title>DSS</title>" +
+                "<style> table { width: 100%; border-collapse: collapse; } td, th { border: 1px solid black; padding: 4px; } </style>" +
+                "</head><body>";
+            const footer = "</body></html>";
+            
+            // Concatena tudo
+            const sourceHTML = header + printContent + footer;
+            
+            // Cria o link de download mágico
+            const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+            const fileDownload = document.createElement("a");
+            document.body.appendChild(fileDownload);
+            fileDownload.href = source;
+            
+            // Define o nome do arquivo com a data
+            const nomeArquivo = `DSS_${inputData.value}.doc`;
+            fileDownload.download = nomeArquivo;
+            fileDownload.click();
+            document.body.removeChild(fileDownload);
+        });
+    }
+
     // Integração com IA (Gemini) - Chave camuflada para evitar bloqueio do GitHub
     const btnIa = document.getElementById('btn-ia');
     const _k = "QUl6YVN5RG1lTXdqNUYtMTJrZXJ3bWJ3QU1odGlZOHlSMm5fOTVV";
