@@ -4,20 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de DSS - Mococa</title>
+    <meta name="description" content="Automação de Diálogo Semanal de Segurança (DSS) com inteligência artificial para a empresa Mococa.">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app-container">
         <aside class="sidebar no-print">
-            <h2>Gerador de DSS</h2>
+            <!-- Header -->
+            <div class="sidebar-header">
+                <div class="logo-icon">🛡️</div>
+                <div>
+                    <h2>Gerador de DSS</h2>
+                </div>
+            </div>
             <p>Preencha os dados abaixo para gerar o formulário.</p>
-            
-            <div class="form-group">
-                <label>Tema / Título da Semana:</label>
-                <div class="form-row" style="gap: 8px; align-items: center;">
-                    <div class="form-group" style="flex: 0 0 auto;">
-                        <label for="semana" style="font-size: 0.75rem;">Semana</label>
-                        <select id="semana" style="padding: 8px 6px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
+
+            <!-- Barra de progresso visual -->
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+
+            <!-- Card 1: Tema e Título -->
+            <div class="form-card">
+                <div class="form-card-title"><span class="card-icon">📌</span> Tema da Semana</div>
+                <div class="form-row" style="gap: 8px; align-items: flex-end;">
+                    <div class="form-group" style="flex: 0 0 70px;">
+                        <label for="semana">Semana</label>
+                        <select id="semana">
                             <option value="1ª">1ª</option>
                             <option value="2ª">2ª</option>
                             <option value="3ª">3ª</option>
@@ -25,9 +38,9 @@
                             <option value="5ª">5ª</option>
                         </select>
                     </div>
-                    <div class="form-group" style="flex: 0 0 auto;">
-                        <label for="mes" style="font-size: 0.75rem;">Mês</label>
-                        <select id="mes" style="padding: 8px 6px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="mes">Mês</label>
+                        <select id="mes">
                             <option value="JANEIRO">JANEIRO</option>
                             <option value="FEVEREIRO">FEVEREIRO</option>
                             <option value="MARÇO">MARÇO</option>
@@ -44,54 +57,65 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="tema">Tema do DSS:</label>
+                    <label for="tema">Tema do DSS</label>
                     <input type="text" id="tema" placeholder="Ex: Uso correto de EPIs">
                 </div>
                 <!-- Campo oculto que guarda o título completo montado -->
                 <input type="hidden" id="titulo">
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="data">Data:</label>
-                    <input type="date" id="data">
+            <!-- Card 2: Dados do Formulário -->
+            <div class="form-card">
+                <div class="form-card-title"><span class="card-icon">📋</span> Dados do Formulário</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="data">Data</label>
+                        <input type="date" id="data">
+                    </div>
+                    <div class="form-group">
+                        <label for="duracao">Tempo (min)</label>
+                        <input type="text" id="duracao" value="10 MINUTOS">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="duracao">Tempo (min):</label>
-                    <input type="text" id="duracao" value="10 MINUTOS">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="responsavel">Dirigido por</label>
+                        <input type="text" id="responsavel" placeholder="Nome do instrutor">
+                    </div>
+                    <div class="form-group">
+                        <label for="setor">Setor</label>
+                        <input type="text" id="setor" value="Produção e Manutenção">
+                    </div>
                 </div>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="responsavel">Dirigido por:</label>
-                    <input type="text" id="responsavel" placeholder="Nome do instrutor">
-                </div>
-                <div class="form-group">
-                    <label for="setor">Setor:</label>
-                    <input type="text" id="setor" value="Produção e Manutenção">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="conteudo">Conteúdo do DSS:</label>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                    <small>Você pode colar o texto aqui ou digitá-lo.</small>
+            <!-- Card 3: Conteúdo com IA -->
+            <div class="form-card">
+                <div class="form-card-title" style="justify-content: space-between;">
+                    <span><span class="card-icon">✏️</span> Conteúdo do DSS</span>
                     <button id="btn-ia" class="btn-ia" type="button">✨ Gerar com IA</button>
                 </div>
-                <textarea id="conteudo" rows="12" placeholder="Digite o conteúdo do DSS aqui...&#10;&#10;Introdução:&#10;...&#10;&#10;Desenvolvimento:&#10;...&#10;&#10;Conclusão:&#10;..."></textarea>
+                <textarea id="conteudo" rows="10" placeholder="Digite o conteúdo do DSS aqui...&#10;&#10;Introdução:&#10;...&#10;&#10;Desenvolvimento:&#10;...&#10;&#10;Conclusão:&#10;..."></textarea>
             </div>
 
-            <button id="btn-imprimir" class="btn-primary">Imprimir / Salvar PDF</button>
-            <button id="btn-word" class="btn-primary" style="background-color: #2b579a; margin-top: 8px;">Baixar em Word (.doc)</button>
+            <!-- Botões de ação -->
+            <div class="btn-group">
+                <button id="btn-imprimir" class="btn-primary">
+                    <span>🖨️</span> Imprimir / Salvar PDF
+                </button>
+                <button id="btn-word" class="btn-word">
+                    <span>📄</span> Baixar em Word (.doc)
+                </button>
+            </div>
 
-            <div style="margin-top: auto; text-align: center; padding-top: 16px; border-top: 1px solid #e5e7eb;">
-                <p style="font-size: 0.75rem; color: #9ca3af; font-weight: 500; letter-spacing: 0.5px;">DESENVOLVIDO PELO MENINO NEY</p>
+            <!-- Watermark -->
+            <div class="watermark">
+                <p>DESENVOLVIDO PELO MENINO NEY</p>
             </div>
         </aside>
         
         <main class="preview-area">
-            <div class="preview-hint no-print">Pré-visualização (Folha A4)</div>
+            <div class="preview-hint no-print">👁️ Pré-visualização (Folha A4)</div>
             <!-- O documento A4 fica aqui dentro -->
             <div class="page-container" id="printable-area">
                 <!-- Conteúdo injetado via JS -->
@@ -191,4 +215,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-

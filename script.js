@@ -46,6 +46,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Constrói o título inicial
     buildTitulo();
 
+    // Barra de progresso dinâmica
+    const progressBar = document.getElementById('progress-bar');
+    function updateProgress() {
+        const fields = [inputTema, inputData, inputResponsavel, inputConteudo];
+        const filled = fields.filter(f => f.value.trim() !== '').length;
+        const percent = Math.round((filled / fields.length) * 100);
+        if (progressBar) {
+            progressBar.style.width = percent + '%';
+        }
+    }
+
     // Função para gerar as linhas em branco da tabela de presença
     function generatePresenceRows() {
         const tbody = document.getElementById('presence-rows');
@@ -95,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Adiciona os eventos (listeners) aos inputs para atualizar em tempo real
     const inputs = [inputTitulo, inputData, inputDuracao, inputResponsavel, inputSetor, inputConteudo];
     inputs.forEach(input => {
-        input.addEventListener('input', updatePreview);
+        input.addEventListener('input', () => { updatePreview(); updateProgress(); });
     });
 
     // Evento de Imprimir
@@ -280,4 +291,5 @@ Conclusão:
     // Execução inicial
     generatePresenceRows();
     updatePreview();
+    updateProgress();
 });
