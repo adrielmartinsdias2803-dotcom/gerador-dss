@@ -85,8 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.out-responsavel').forEach(el => el.textContent = inputResponsavel.value || '');
         document.querySelectorAll('.out-setor').forEach(el => el.textContent = inputSetor.value || '');
         
-        // Atualiza o conteúdo do texto
-        document.querySelectorAll('.out-conteudo').forEach(el => el.textContent = inputConteudo.value || '');
+        // Atualiza o conteúdo do texto, convertendo as quebras de linha nativas em <br> para funcionar em qualquer formato (HTML, PDF, Word)
+        document.querySelectorAll('.out-conteudo').forEach(el => {
+            const texto = inputConteudo.value || '';
+            el.innerHTML = texto.replace(/\n/g, '<br>');
+        });
     }
 
     // Adiciona os eventos (listeners) aos inputs para atualizar em tempo real
@@ -107,8 +110,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Pega o conteúdo HTML do documento
             let printContent = document.getElementById('printable-area').innerHTML;
             
-            // 1. O MS Word ignora o "white-space: pre-wrap" do CSS. Precisamos trocar as quebras de linha (\n) por <br>
-            printContent = printContent.replace(/\n/g, '<br>');
+            // 1. Não substituimos globalmente para não criar buracos no layout do Word
+            // As quebras de linha (<br>) já estão injetadas corretamente no HTML do out-conteudo.
+
+            // Força a largura 100% nas tabelas usando atributos HTML puros (o Word lê melhor que CSS)
+            printContent = printContent.replace(/<table/g, '<table width="100%"');
 
             // 2. O MS Word bloqueia imagens Base64 por segurança. Vamos usar o link direto da logo no seu GitHub Pages
             const logoUrl = "https://adrielmartinsdias2803-dotcom.github.io/gerador-dss/logo.png";
