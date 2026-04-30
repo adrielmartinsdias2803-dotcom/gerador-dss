@@ -89,35 +89,36 @@ body {
 .sidebar-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 4px;
+    gap: 14px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 0;
 }
 
-.sidebar-header .logo-icon {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    box-shadow: 0 4px 15px var(--primary-glow);
+.sidebar-logo {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    background: white;
+    border-radius: 14px;
+    padding: 6px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar h2 {
-    font-size: 1.35rem;
+    font-size: 1.3rem;
     font-weight: 800;
     color: var(--text-primary);
     letter-spacing: -0.5px;
-    margin-bottom: 0;
+    margin-bottom: 2px;
+    line-height: 1.2;
 }
 
-.sidebar > p {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    margin-bottom: 0;
-    margin-top: -12px;
+.sidebar-subtitle {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 0.3px;
 }
 
 /* =========================================
@@ -366,21 +367,76 @@ small {
 }
 
 /* =========================================
-   WATERMARK / CRÉDITO
+   WATERMARK / CRÉDITO — Badge Premium
    ========================================= */
 .watermark {
     margin-top: auto;
-    text-align: center;
     padding-top: 16px;
-    border-top: 1px solid var(--border-color);
 }
 
-.watermark p {
-    font-size: 0.65rem;
+.watermark-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 12px;
+    padding: 10px 14px;
+    position: relative;
+    overflow: hidden;
+}
+
+.watermark-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 80%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    animation: shimmer 4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -150%; }
+    50% { left: 150%; }
+    100% { left: 150%; }
+}
+
+.watermark-icon {
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border-radius: 8px;
+    box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+.watermark-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.watermark-label {
+    font-size: 0.6rem;
     color: var(--text-muted);
-    font-weight: 600;
-    letter-spacing: 1.5px;
+    font-weight: 500;
     text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1.2;
+}
+
+.watermark-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.3;
 }
 
 /* =========================================
