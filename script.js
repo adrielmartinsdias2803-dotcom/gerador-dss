@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fileDownload.href = source;
             
             // Define o nome do arquivo com a data
-            const nomeArquivo = \`DSS_\${inputData.value}.doc\`;
+            const nomeArquivo = `DSS_${inputData.value}.doc`;
             fileDownload.download = nomeArquivo;
             fileDownload.click();
             document.body.removeChild(fileDownload);
