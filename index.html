@@ -58,7 +58,16 @@
                 </div>
                 <div class="form-group">
                     <label for="tema">Tema do DSS</label>
-                    <input type="text" id="tema" placeholder="Ex: Uso correto de EPIs">
+                    <div class="input-with-history">
+                        <input type="text" id="tema" placeholder="Ex: Uso correto de EPIs" autocomplete="off">
+                        <button type="button" id="btn-history" class="btn-history" title="Temas recentes">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </button>
+                    </div>
+                    <div id="history-dropdown" class="history-dropdown hidden">
+                        <div class="history-header">Temas recentes</div>
+                        <div id="history-list"></div>
+                    </div>
                 </div>
                 <!-- Campo oculto que guarda o título completo montado -->
                 <input type="hidden" id="titulo">
@@ -108,13 +117,15 @@
                 </button>
             </div>
 
-            <!-- Watermark / Créditos -->
+            <!-- Atalhos de teclado -->
+            <div class="shortcuts-hint">
+                <span><kbd>Ctrl</kbd>+<kbd>P</kbd> Imprimir</span>
+                <span><kbd>Ctrl</kbd>+<kbd>S</kbd> Word</span>
+            </div>
+
+            <!-- Watermark -->
             <div class="watermark">
-                <a href="https://github.com/adrielmartinsdias2803-dotcom" target="_blank" class="watermark-badge">
-                    <span class="watermark-label">Desenvolvido por</span>
-                    <span class="watermark-name">Menino Ney</span>
-                    <span class="watermark-arrow">→</span>
-                </a>
+                <span class="watermark-line">© 2026 · Powered by <a href="https://github.com/adrielmartinsdias2803-dotcom" target="_blank" class="watermark-link">Menino Ney</a></span>
             </div>
         </aside>
         

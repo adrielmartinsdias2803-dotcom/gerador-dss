@@ -196,6 +196,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             btnIa.disabled = true;
             btnIa.textContent = '⏳ Gerando...';
+            
+            // Skeleton loading — anima o textarea enquanto a IA trabalha
+            inputConteudo.value = '';
+            inputConteudo.placeholder = 'A inteligência artificial está escrevendo o DSS...';
+            inputConteudo.classList.add('skeleton-loading');
 
             try {
                 const prompt = `Você é um técnico de segurança do trabalho experiente. Escreva um Diálogo Semanal de Segurança (DSS) sobre o tema: "${tema}". 
@@ -242,15 +247,105 @@ Conclusão:
                 
                 inputConteudo.value = textoGerado.trim();
                 updatePreview();
+                updateProgress();
+
+                // Salva o tema no histórico (após sucesso)
+                saveToHistory(tema);
             } catch (error) {
                 console.error(error);
                 alert('Erro ao gerar DSS: ' + error.message);
             } finally {
                 btnIa.disabled = false;
                 btnIa.textContent = '✨ Gerar com IA';
+                inputConteudo.classList.remove('skeleton-loading');
+                inputConteudo.placeholder = 'Digite o conteúdo do DSS aqui...\n\nIntrodução:\n...\n\nDesenvolvimento:\n...\n\nConclusão:\n...';
             }
         });
     }
+
+    // =========================================
+    // HISTÓRICO DE TEMAS (localStorage)
+    // =========================================
+    const HISTORY_KEY = 'dss_temas_history';
+    const MAX_HISTORY = 8;
+    const btnHistory = document.getElementById('btn-history');
+    const historyDropdown = document.getElementById('history-dropdown');
+    const historyList = document.getElementById('history-list');
+
+    function getHistory() {
+        try {
+            return JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+        } catch { return []; }
+    }
+
+    function saveToHistory(tema) {
+        let history = getHistory();
+        // Remove duplicatas
+        history = history.filter(item => item.tema !== tema);
+        // Adiciona no topo
+        history.unshift({ tema: tema, data: new Date().toLocaleDateString('pt-BR') });
+        // Limita o tamanho
+        if (history.length > MAX_HISTORY) history = history.slice(0, MAX_HISTORY);
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    }
+
+    function renderHistory() {
+        if (!historyList) return;
+        const history = getHistory();
+        if (history.length === 0) {
+            historyList.innerHTML = '<div class="history-empty">Nenhum tema usado ainda</div>';
+            return;
+        }
+        historyList.innerHTML = history.map(item => 
+            `<div class="history-item" data-tema="${item.tema}">
+                <span>${item.tema}</span>
+                <span class="history-date">${item.data}</span>
+            </div>`
+        ).join('');
+
+        // Adiciona click nos itens
+        historyList.querySelectorAll('.history-item').forEach(el => {
+            el.addEventListener('click', () => {
+                inputTema.value = el.dataset.tema;
+                historyDropdown.classList.add('hidden');
+                buildTitulo();
+                updatePreview();
+                updateProgress();
+            });
+        });
+    }
+
+    if (btnHistory) {
+        btnHistory.addEventListener('click', (e) => {
+            e.stopPropagation();
+            renderHistory();
+            historyDropdown.classList.toggle('hidden');
+        });
+    }
+
+    // Fecha o dropdown ao clicar fora
+    document.addEventListener('click', (e) => {
+        if (historyDropdown && !historyDropdown.contains(e.target) && e.target !== btnHistory) {
+            historyDropdown.classList.add('hidden');
+        }
+    });
+
+    // =========================================
+    // ATALHOS DE TECLADO
+    // =========================================
+    document.addEventListener('keydown', (e) => {
+        // Ctrl+P → Imprimir
+        if (e.ctrlKey && e.key === 'p') {
+            e.preventDefault();
+            window.print();
+        }
+        // Ctrl+S → Baixar Word
+        if (e.ctrlKey && e.key === 's') {
+            e.preventDefault();
+            const btnWord = document.getElementById('btn-word');
+            if (btnWord) btnWord.click();
+        }
+    });
 
     // Upload da Logo pelo usuário
     const logoUpload = document.getElementById('logo-upload');

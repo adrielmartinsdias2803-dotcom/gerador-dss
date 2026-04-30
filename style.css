@@ -367,80 +367,182 @@ small {
 }
 
 /* =========================================
-   WATERMARK / CRÉDITO — Interativo Premium
+   HISTÓRICO DE TEMAS
    ========================================= */
-.watermark {
-    margin-top: auto;
-    padding-top: 16px;
-}
-
-.watermark-badge {
+.input-with-history {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 6px;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(139, 92, 246, 0.08));
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 12px;
-    padding: 12px 16px;
-    text-decoration: none;
+}
+
+.input-with-history input {
+    padding-right: 40px;
+}
+
+.btn-history {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
     cursor: pointer;
-    transition: all 0.35s ease;
+    padding: 4px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.btn-history:hover {
+    color: var(--primary);
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.history-dropdown {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    margin-top: 6px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    animation: dropIn 0.2s ease;
+}
+
+.history-dropdown.hidden {
+    display: none;
+}
+
+@keyframes dropIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.history-header {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    padding: 10px 14px 6px;
+}
+
+.history-item {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.history-item:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--text-primary);
+}
+
+.history-item .history-date {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+.history-empty {
+    padding: 12px 14px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+    font-style: italic;
+}
+
+/* =========================================
+   SKELETON LOADING (IA)
+   ========================================= */
+.skeleton-loading {
     position: relative;
     overflow: hidden;
 }
 
-.watermark-badge::before {
+.skeleton-loading::after {
     content: '';
     position: absolute;
     top: 0;
-    left: -150%;
-    width: 80%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
-    animation: shimmer 5s ease-in-out infinite;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(59, 130, 246, 0.06) 20%,
+        rgba(139, 92, 246, 0.1) 50%,
+        rgba(59, 130, 246, 0.06) 80%,
+        transparent 100%
+    );
+    animation: skeletonWave 1.5s ease-in-out infinite;
+    pointer-events: none;
 }
 
-@keyframes shimmer {
-    0% { left: -150%; }
-    50% { left: 150%; }
-    100% { left: 150%; }
+@keyframes skeletonWave {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
 }
 
-.watermark-badge:hover {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15));
-    border-color: rgba(139, 92, 246, 0.3);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.15);
+/* =========================================
+   ATALHOS DE TECLADO
+   ========================================= */
+.shortcuts-hint {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding: 8px 0;
 }
 
-.watermark-label {
+.shortcuts-hint span {
     font-size: 0.65rem;
     color: var(--text-muted);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
-.watermark-name {
-    font-size: 0.85rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-left: 2px;
+kbd {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-family: 'Inter', monospace;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--text-secondary);
 }
 
-.watermark-arrow {
-    margin-left: auto;
-    font-size: 1rem;
+/* =========================================
+   WATERMARK — Discreta e Profissional
+   ========================================= */
+.watermark {
+    margin-top: auto;
+    text-align: center;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.watermark-line {
+    font-size: 0.65rem;
     color: var(--text-muted);
-    transition: all 0.3s ease;
+    font-weight: 400;
+    letter-spacing: 0.3px;
 }
 
-.watermark-badge:hover .watermark-arrow {
-    color: var(--accent);
-    transform: translateX(4px);
+.watermark-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.watermark-link:hover {
+    color: var(--primary);
 }
 
 /* =========================================
