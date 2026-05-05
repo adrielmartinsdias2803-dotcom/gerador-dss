@@ -647,12 +647,11 @@ kbd {
 }
 
 .page-container {
-    background: white;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     width: 210mm;
-    min-height: 297mm; 
     margin: 0 auto;
-    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
 
 /* =========================================
@@ -660,10 +659,12 @@ kbd {
    Estes estilos NÃO mudam (são do formulário)
    ========================================= */
 .a4-page {
-    width: 100%;
-    height: 100%;
+    width: 210mm;
+    min-height: 297mm;
     padding: 20mm 15mm;
     background: white;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    border-radius: 4px;
     font-family: Arial, Helvetica, sans-serif;
     color: black;
     font-size: 11pt;
@@ -822,12 +823,10 @@ kbd {
 
     .page-container {
         display: block !important;
-        box-shadow: none;
         width: 100%;
-        min-height: 100%;
         margin: 0;
         padding: 0;
-        border-radius: 0;
+        gap: 0;
     }
     
     @page {
@@ -836,7 +835,15 @@ kbd {
     }
 
     .a4-page {
+        width: 100%;
+        min-height: auto;
         padding: 15mm 15mm;
+        box-shadow: none;
+        border-radius: 0;
+        page-break-after: always;
+    }
+    
+    .a4-page:last-child {
         page-break-after: auto;
     }
     

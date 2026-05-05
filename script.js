@@ -277,7 +277,7 @@ Conclusão:
 
             try {
                 const setor = inputSetor.value.trim() || 'indústria';
-                const promptSuggest = `Você é um técnico de segurança do trabalho. Liste exatamente 10 temas essenciais e variados de Diálogo Semanal de Segurança (DSS) para colaboradores do setor de "${setor}".
+                const promptSuggest = `Você é um técnico de segurança do trabalho. Liste exatamente 10 temas essenciais e variados de Diálogo Semanal de Segurança (DSS) focados nas rotinas, atos e riscos do setor de "${setor}".
 
 REGRAS:
 - Retorne APENAS os temas, um por linha
@@ -285,7 +285,7 @@ REGRAS:
 - NÃO numere os temas
 - NÃO use bullet points
 - NÃO adicione explicações
-- Temas variados: EPI, ergonomia, elétrica, química, incêndio, saúde mental, trânsito, etc.
+- Temas devem ser diretamente ligados às atividades do setor de ${setor}
 
 Exemplo de formato:
 Uso correto de EPIs
