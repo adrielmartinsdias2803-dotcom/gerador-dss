@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const prompt = `Você é um técnico de segurança do trabalho experiente. Escreva um Diálogo Semanal de Segurança (DSS) sobre o tema: "${tema}". 
-O texto deve ser direto, profissional, sem enrolação e focado na prevenção de acidentes.
+O texto deve ser direto, profissional, conciso (máximo de 200 palavras) e focado na prevenção de acidentes.
 NÃO use formatação markdown como **negrito**, # ou *. APENAS texto puro.
 Para listas e tópicos, use APENAS o símbolo de bullet point "•".
 Estruture a resposta EXATAMENTE com os 3 títulos abaixo (pule uma linha entre eles):

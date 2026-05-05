@@ -684,7 +684,7 @@ kbd {
 
 /* Cabeçalho */
 .header-table {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-family: "Times New Roman", Times, serif;
 }
 
@@ -764,8 +764,8 @@ kbd {
 .out-conteudo {
     white-space: pre-wrap;
     text-align: justify;
-    font-size: 10.5pt;
-    line-height: 1.5;
+    font-size: 10pt;
+    line-height: 1.4;
 }
 
 /* Lista de Presença */
@@ -837,7 +837,7 @@ kbd {
     .a4-page {
         width: 100%;
         min-height: auto;
-        padding: 15mm 15mm;
+        padding: 10mm 15mm;
         box-shadow: none;
         border-radius: 0;
         page-break-after: always;
