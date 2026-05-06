@@ -263,6 +263,9 @@ RESPOSTA: C`;
                     throw new Error(errMsg);
                 }
 
+                // Extrai o texto da resposta da IA
+                const textoGerado = data.candidates[0].content.parts[0].text;
+
                 // Separa o conteúdo DSS do quiz
                 let textoConteudo = textoGerado.trim();
                 let quizData = [];
