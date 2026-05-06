@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputTema     = document.getElementById('tema');
     const inputData     = document.getElementById('data');
     const inputDuracao  = document.getElementById('duracao');
+    const inputHora     = document.getElementById('hora');
     const inputResponsavel = document.getElementById('responsavel');
     const inputSetor    = document.getElementById('setor');
     const inputConteudo = document.getElementById('conteudo');
@@ -104,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Adiciona os eventos (listeners) aos inputs para atualizar em tempo real
-    const inputs = [inputTitulo, inputData, inputDuracao, inputResponsavel, inputSetor, inputConteudo];
+    const inputs = [inputTitulo, inputData, inputHora, inputDuracao, inputResponsavel, inputSetor, inputConteudo];
     inputs.forEach(input => {
         input.addEventListener('input', () => { updatePreview(); updateProgress(); });
     });
@@ -517,15 +518,12 @@ Ergonomia no posto de trabalho`;
     // A variável global `db` está disponível automaticamente.
 
     const btnIniciarSessao = document.getElementById('btn-iniciar-sessao');
-    const qrModal = document.getElementById('qr-modal');
-    const btnFecharQr = document.getElementById('btn-fechar-qr');
-    const qrcodeContainer = document.getElementById('qrcode-container');
-    const qrTemaDisplay = document.getElementById('qr-tema-display');
 
     if (btnIniciarSessao && db) {
         btnIniciarSessao.addEventListener('click', async () => {
             const titulo = inputTitulo.value.trim();
             const setor = inputSetor.value;
+            const hora = inputHora ? inputHora.value : "07:00";
             
             if (!inputTema.value.trim() || !inputConteudo.value.trim()) {
                 alert("Por favor, preencha o Tema e o Conteúdo do DSS antes de iniciar a sessão!");
@@ -542,6 +540,7 @@ Ergonomia no posto de trabalho`;
                     tema: inputTema.value.trim(),
                     setor: setor,
                     data: inputData.value,
+                    hora: hora,
                     responsavel: inputResponsavel.value || "Não informado",
                     duracao: inputDuracao.value || "10 MINUTOS",
                     status: "agendado",
@@ -552,27 +551,8 @@ Ergonomia no posto de trabalho`;
                 const sessionId = docRef.id;
                 console.log("Sessão criada com ID: ", sessionId);
 
-                // Mostra o Modal
-                qrModal.style.display = "flex";
-                qrTemaDisplay.textContent = titulo || tema;
-
-                // Limpa QRCode anterior se houver
-                qrcodeContainer.innerHTML = "";
-
-                // Gera o Link de Assinatura (Mude a URL base quando fizer deploy)
-                // Usando a URL do GitHub Pages atual do Adriel
-                const baseUrl = "https://adrielmartinsdias2803-dotcom.github.io/gerador-dss";
-                const assinaturaUrl = `${baseUrl}/assinatura.html?id=${sessionId}`;
-
-                // Gera o QR Code visual
-                new QRCode(qrcodeContainer, {
-                    text: assinaturaUrl,
-                    width: 200,
-                    height: 200,
-                    colorDark : "#0f172a",
-                    colorLight : "#f8fafc",
-                    correctLevel : QRCode.CorrectLevel.H
-                });
+                // Mostra alerta de sucesso
+                alert("✅ DSS agendado com sucesso! Acesse o Painel de Gestão para acompanhar.");
 
             } catch (error) {
                 console.error("Erro ao agendar sessão:", error);
@@ -581,12 +561,6 @@ Ergonomia no posto de trabalho`;
                 btnIniciarSessao.disabled = false;
                 btnIniciarSessao.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Agendar / Salvar DSS`;
             }
-        });
-    }
-
-    if (btnFecharQr) {
-        btnFecharQr.addEventListener('click', () => {
-            qrModal.style.display = "none";
         });
     }
 });
