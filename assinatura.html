@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assinatura de Presença — DSS Mococa</title>
+    <meta name="description" content="Assine sua presença no Diálogo Semanal de Segurança da Mococa.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-glow: rgba(16, 185, 129, 0.25);
+            --danger: #ef4444;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --card: #1e293b;
+            --border: rgba(255,255,255,0.08);
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        /* Logo e Header */
+        .logo-area {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .logo-area img {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            background: white;
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            margin-bottom: 12px;
+        }
+        .logo-area h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+        .logo-area p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Card de status da sessão */
+        .session-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .session-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            color: #10b981;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+        }
+        .session-badge .dot {
+            width: 6px;
+            height: 6px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .session-tema {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .session-meta {
+            display: flex;
+            gap: 16px;
+            margin-top: 14px;
+        }
+        .session-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .session-meta-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .session-meta-value {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Contador de Presenças */
+        .presence-counter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(16, 185, 129, 0.06);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-top: 14px;
+        }
+        .counter-icon {
+            font-size: 1.4rem;
+        }
+        .counter-info {
+            flex: 1;
+        }
+        .counter-number {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #10b981;
+            line-height: 1;
+        }
+        .counter-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Formulário de Assinatura */
+        .form-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+        .form-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+        .form-group {
+            margin-bottom: 14px;
+        }
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text);
+            transition: all 0.25s ease;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+        input::placeholder { color: var(--text-muted); }
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 12px center;
+            background-repeat: no-repeat;
+            background-size: 20px;
+            padding-right: 40px;
+        }
+
+        /* Área de Assinatura */
+        .signature-area {
+            margin-top: 4px;
+        }
+        .signature-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        #signature-canvas {
+            width: 100%;
+            height: 120px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            cursor: crosshair;
+            touch-action: none;
+        }
+        .signature-hint {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+            text-align: center;
+        }
+        .btn-clear-sig {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            float: right;
+            transition: color 0.2s;
+        }
+        .btn-clear-sig:hover { color: var(--danger); }
+
+        /* Botão Assinar */
+        .btn-assinar {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px var(--primary-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-assinar::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: left 0.5s ease;
+        }
+        .btn-assinar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--primary-glow);
+        }
+        .btn-assinar:hover::before { left: 100%; }
+        .btn-assinar:disabled {
+            background: linear-gradient(135deg, #475569, #334155);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Estados de Feedback */
+        #feedback-area { display: none; }
+
+        .state-success, .state-error, .state-loading, .state-invalid {
+            text-align: center;
+            padding: 40px 24px;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+        }
+        .state-icon { font-size: 3.5rem; margin-bottom: 16px; }
+        .state-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .state-desc {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        .state-success .state-title { color: #10b981; }
+        .state-error .state-title { color: #ef4444; }
+        .state-invalid .state-title { color: #f59e0b; }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 40px; height: 40px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: #10b981;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo-area">
+            <img src="logo.png" alt="Mococa">
+            <h1>Assinatura de Presença</h1>
+            <p>Diálogo Semanal de Segurança</p>
+        </div>
+
+        <!-- Estado: Carregando sessão -->
+        <div id="state-loading">
+            <div class="form-card" style="text-align:center; padding: 40px;">
+                <div class="spinner"></div>
+                <p style="color: var(--text-secondary); font-size: 0.875rem;">Carregando sessão...</p>
+            </div>
+        </div>
+
+        <!-- Estado: Sessão Inválida / Não Encontrada -->
+        <div id="state-invalid" style="display:none;">
+            <div class="state-invalid">
+                <div class="state-icon">⚠️</div>
+                <div class="state-title">Sessão Inválida</div>
+                <p class="state-desc">Este QR Code não corresponde a nenhuma sessão ativa. Peça ao instrutor para gerar um novo QR Code.</p>
+            </div>
+        </div>
+
+        <!-- Estado: Sessão Encerrada -->
+        <div id="state-encerrada" style="display:none;">
+            <div class="state-invalid">
+                <div class="state-icon">🔒</div>
+                <div class="state-title">Sessão Encerrada</div>
+                <p class="state-desc">Esta sessão de DSS já foi encerrada pelo instrutor. Não é mais possível registrar presença.</p>
+            </div>
+        </div>
+
+        <!-- Estado: Formulário de Assinatura (principal) -->
+        <div id="state-form" style="display:none;">
+            <!-- Card da Sessão -->
+            <div class="session-card">
+                <div class="session-badge">
+                    <span class="dot"></span>
+                    Sessão Ativa
+                </div>
+                <div class="session-tema" id="display-tema">—</div>
+                <div class="session-meta">
+                    <div class="session-meta-item">
+                        <span class="session-meta-label">📅 Data</span>
+                        <span class="session-meta-value" id="display-data">—</span>
+                    </div>
+                    <div class="session-meta-item">
+                        <span class="session-meta-label">🏭 Setor</span>
+                        <span class="session-meta-value" id="display-setor">—</span>
+                    </div>
+                    <div class="session-meta-item">
+                        <span class="session-meta-label">👤 Instrutor</span>
+                        <span class="session-meta-value" id="display-responsavel">—</span>
+                    </div>
+                </div>
+                <!-- Contador em tempo real -->
+                <div class="presence-counter">
+                    <div class="counter-icon">✅</div>
+                    <div class="counter-info">
+                        <div class="counter-number" id="counter-number">0</div>
+                        <div class="counter-label">pessoa(s) assinaram</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário -->
+            <div class="form-card">
+                <div class="form-title">✍️ Registrar minha presença</div>
+
+                <div class="form-group">
+                    <label for="input-nome">Seu nome completo *</label>
+                    <input type="text" id="input-nome" placeholder="Ex: João da Silva" autocomplete="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="input-setor">Seu setor *</label>
+                    <select id="input-setor">
+                        <option value="">Selecione o setor...</option>
+                        <option value="Manutenção">Manutenção</option>
+                        <option value="Almoxarifado">Almoxarifado</option>
+                        <option value="Produção">Produção</option>
+                        <option value="Administrativo">Administrativo</option>
+                        <option value="Qualidade">Qualidade</option>
+                        <option value="Logística">Logística</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+
+                <!-- Assinatura Digital -->
+                <div class="form-group signature-area">
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 8px;">
+                        <span class="signature-label">Assinatura Digital *</span>
+                        <button class="btn-clear-sig" onclick="clearSignature()">🗑️ Limpar</button>
+                    </div>
+                    <canvas id="signature-canvas"></canvas>
+                    <p class="signature-hint">Use o dedo ou mouse para assinar acima</p>
+                </div>
+
+                <button class="btn-assinar" id="btn-assinar" onclick="registrarPresenca()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                    Confirmar Presença
+                </button>
+            </div>
+        </div>
+
+        <!-- Estado: Sucesso -->
+        <div id="state-success" style="display:none;">
+            <div class="state-success">
+                <div class="state-icon">✅</div>
+                <div class="state-title">Presença Registrada!</div>
+                <p class="state-desc">
+                    Sua presença foi confirmada com sucesso no DSS de hoje.<br><br>
+                    <strong id="success-nome" style="color: #10b981;"></strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- Estado: Erro -->
+        <div id="state-error" style="display:none;">
+            <div class="state-error">
+                <div class="state-icon">❌</div>
+                <div class="state-title">Erro ao Registrar</div>
+                <p class="state-desc" id="error-msg">Ocorreu um erro. Tente novamente.</p>
+                <button onclick="location.reload()" style="margin-top:16px; padding: 10px 24px; background: #ef4444; color:white; border:none; border-radius:10px; cursor:pointer; font-family:Inter; font-weight:600;">
+                    Tentar Novamente
+                </button>
+            </div>
+        </div>
+
+        <div class="footer">© 2026 · Mococa · Sistema de Segurança do Trabalho</div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="firebaseConfig.js"></script>
+
+    <script>
+        // =========================================
+        // LÓGICA DA PÁGINA DE ASSINATURA
+        // =========================================
+
+        let sessaoId = null;
+        let sessaoData = null;
+        let signaturePad = null;
+        let isDrawing = false;
+        let lastX = 0, lastY = 0;
+
+        // Pega o ID da sessão da URL (?id=XXXX)
+        const urlParams = new URLSearchParams(window.location.search);
+        sessaoId = urlParams.get('id');
+
+        // ---- Funções de Estado (Mostrar/Esconder telas) ----
+        function showState(stateId) {
+            ['state-loading', 'state-invalid', 'state-encerrada', 'state-form', 'state-success', 'state-error']
+                .forEach(id => document.getElementById(id).style.display = 'none');
+            document.getElementById(stateId).style.display = 'block';
+        }
+
+        // ---- Inicialização ----
+        async function init() {
+            if (!sessaoId) {
+                showState('state-invalid');
+                return;
+            }
+
+            try {
+                // Busca a sessão no Firestore
+                const docRef = db.collection('sessoes_dss').doc(sessaoId);
+                const doc = await docRef.get();
+
+                if (!doc.exists) {
+                    showState('state-invalid');
+                    return;
+                }
+
+                sessaoData = doc.data();
+
+                if (sessaoData.status === 'encerrada') {
+                    showState('state-encerrada');
+                    return;
+                }
+
+                // Preenche os dados da sessão no card
+                document.getElementById('display-tema').textContent = sessaoData.tema || sessaoData.titulo || '—';
+                document.getElementById('display-data').textContent = formatarData(sessaoData.data) || '—';
+                document.getElementById('display-setor').textContent = sessaoData.setor || '—';
+                document.getElementById('display-responsavel').textContent = sessaoData.responsavel || '—';
+
+                // Pre-seleciona o setor do funcionário com o setor da sessão
+                const selectSetor = document.getElementById('input-setor');
+                if (sessaoData.setor) {
+                    for (let opt of selectSetor.options) {
+                        if (opt.value === sessaoData.setor) {
+                            opt.selected = true;
+                            break;
+                        }
+                    }
+                }
+
+                showState('state-form');
+
+                // Inicializa o canvas de assinatura
+                initSignaturePad();
+
+                // Escuta o contador de presenças em tempo real
+                docRef.collection('presencas').onSnapshot(snapshot => {
+                    document.getElementById('counter-number').textContent = snapshot.size;
+                });
+
+            } catch (error) {
+                console.error('Erro ao carregar sessão:', error);
+                document.getElementById('error-msg').textContent = 'Erro ao carregar sessão: ' + error.message;
+                showState('state-error');
+            }
+        }
+
+        // ---- Canvas de Assinatura Digital ----
+        function initSignaturePad() {
+            const canvas = document.getElementById('signature-canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Ajusta resolução para telas de alta densidade (Retina)
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 2.5;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            function getPos(e) {
+                const r = canvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return { x: clientX - r.left, y: clientY - r.top };
+            }
+
+            canvas.addEventListener('mousedown', (e) => { isDrawing = true; const p = getPos(e); lastX = p.x; lastY = p.y; });
+            canvas.addEventListener('mousemove', (e) => { if (!isDrawing) return; draw(ctx, getPos(e)); });
+            canvas.addEventListener('mouseup', () => isDrawing = false);
+            canvas.addEventListener('mouseleave', () => isDrawing = false);
+
+            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); isDrawing = true; const p = getPos(e); lastX = p.x; lastY = p.y; }, { passive: false });
+            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); if (!isDrawing) return; draw(ctx, getPos(e)); }, { passive: false });
+            canvas.addEventListener('touchend', () => isDrawing = false);
+        }
+
+        function draw(ctx, pos) {
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            lastX = pos.x;
+            lastY = pos.y;
+        }
+
+        function clearSignature() {
+            const canvas = document.getElementById('signature-canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function isSignatureEmpty() {
+            const canvas = document.getElementById('signature-canvas');
+            const ctx = canvas.getContext('2d');
+            const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+            return !data.some(channel => channel !== 0);
+        }
+
+        // ---- Registrar Presença ----
+        async function registrarPresenca() {
+            const nome = document.getElementById('input-nome').value.trim();
+            const setor = document.getElementById('input-setor').value;
+
+            // Validações
+            if (!nome) {
+                alert('Por favor, informe seu nome completo.');
+                document.getElementById('input-nome').focus();
+                return;
+            }
+            if (!setor) {
+                alert('Por favor, selecione seu setor.');
+                return;
+            }
+            if (isSignatureEmpty()) {
+                alert('Por favor, faça sua assinatura no campo indicado.');
+                return;
+            }
+
+            const btn = document.getElementById('btn-assinar');
+            btn.disabled = true;
+            btn.innerHTML = `<div class="spinner" style="width:20px;height:20px;border-width:2px;margin:0;"></div> Registrando...`;
+
+            try {
+                // Captura a assinatura como imagem base64
+                const canvas = document.getElementById('signature-canvas');
+                const assinaturaImg = canvas.toDataURL('image/png');
+
+                // Salva a presença no Firestore
+                await db.collection('sessoes_dss').doc(sessaoId).collection('presencas').add({
+                    nome: nome,
+                    setor: setor,
+                    assinatura: assinaturaImg,
+                    assinadoEm: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // Mostra tela de sucesso
+                document.getElementById('success-nome').textContent = nome + ' · ' + setor;
+                showState('state-success');
+
+            } catch (error) {
+                console.error('Erro ao registrar presença:', error);
+                document.getElementById('error-msg').textContent = error.message;
+                showState('state-error');
+            }
+        }
+
+        // ---- Utilitários ----
+        function formatarData(dataStr) {
+            if (!dataStr) return '';
+            const partes = dataStr.split('-');
+            if (partes.length !== 3) return dataStr;
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+
+        // Inicializa a página
+        init();
+    </script>
+</body>
+</html>

@@ -464,4 +464,82 @@ Ergonomia no posto de trabalho`;
     generatePresenceRows();
     updatePreview();
     updateProgress();
+
+    // =========================================
+    // INTEGRAÇÃO FIREBASE & SESSÃO DIGITAL
+    // =========================================
+    // Firebase já inicializado pelo firebaseConfig.js (carregado antes no HTML)
+    // A variável global `db` está disponível automaticamente.
+
+    const btnIniciarSessao = document.getElementById('btn-iniciar-sessao');
+    const qrModal = document.getElementById('qr-modal');
+    const btnFecharQr = document.getElementById('btn-fechar-qr');
+    const qrcodeContainer = document.getElementById('qrcode-container');
+    const qrTemaDisplay = document.getElementById('qr-tema-display');
+
+    if (btnIniciarSessao && db) {
+        btnIniciarSessao.addEventListener('click', async () => {
+            const titulo = inputTitulo.value.trim();
+            const setor = inputSetor.value;
+            
+            if (!inputTema.value.trim() || !inputConteudo.value.trim()) {
+                alert("Por favor, preencha o Tema e o Conteúdo do DSS antes de iniciar a sessão!");
+                return;
+            }
+
+            btnIniciarSessao.disabled = true;
+            btnIniciarSessao.textContent = "Iniciando...";
+
+            try {
+                // Cria a sessão no Firebase Firestore
+                const docRef = await db.collection("sessoes_dss").add({
+                    titulo: titulo,
+                    tema: inputTema.value.trim(),
+                    setor: setor,
+                    data: inputData.value,
+                    responsavel: inputResponsavel.value || "Não informado",
+                    status: "ativa",
+                    criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                const sessionId = docRef.id;
+                console.log("Sessão criada com ID: ", sessionId);
+
+                // Mostra o Modal
+                qrModal.style.display = "flex";
+                qrTemaDisplay.textContent = titulo;
+
+                // Limpa QRCode anterior se houver
+                qrcodeContainer.innerHTML = "";
+
+                // Gera o Link de Assinatura (Mude a URL base quando fizer deploy)
+                // Usando a URL do GitHub Pages atual do Adriel
+                const baseUrl = "https://adrielmartinsdias2803-dotcom.github.io/gerador-dss";
+                const assinaturaUrl = `${baseUrl}/assinatura.html?id=${sessionId}`;
+
+                // Gera o QR Code visual
+                new QRCode(qrcodeContainer, {
+                    text: assinaturaUrl,
+                    width: 200,
+                    height: 200,
+                    colorDark : "#0f172a",
+                    colorLight : "#f8fafc",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+
+            } catch (error) {
+                console.error("Erro ao iniciar sessão:", error);
+                alert("Erro ao conectar com o banco de dados. Verifique a configuração do Firebase.");
+            } finally {
+                btnIniciarSessao.disabled = false;
+                btnIniciarSessao.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Iniciar Sessão Digital`;
+            }
+        });
+    }
+
+    if (btnFecharQr) {
+        btnFecharQr.addEventListener('click', () => {
+            qrModal.style.display = "none";
+        });
+    }
 });

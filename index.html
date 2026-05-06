@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de DSS - Mococa</title>
-    <meta name="description" content="Automação de Diálogo Semanal de Segurança (DSS) com inteligência artificial para a empresa Mococa.">
+    <meta name="description"
+        content="Automação de Diálogo Semanal de Segurança (DSS) com inteligência artificial para a empresa Mococa.">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="app-container">
         <aside class="sidebar no-print">
@@ -61,7 +64,11 @@
                     <div class="input-with-history">
                         <input type="text" id="tema" placeholder="Ex: Uso correto de EPIs" autocomplete="off">
                         <button type="button" id="btn-history" class="btn-history" title="Temas recentes">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
                         </button>
                     </div>
                     <div id="history-dropdown" class="history-dropdown hidden">
@@ -71,7 +78,11 @@
                 </div>
                 <!-- Sugestões de temas pela IA -->
                 <button type="button" id="btn-suggest" class="btn-suggest">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 2.4-1.2 4.5-3 5.7V17a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-2.3C6.2 13.5 5 11.4 5 9a7 7 0 0 1 7-7z"/><line x1="10" y1="22" x2="14" y2="22"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M12 2a7 7 0 0 1 7 7c0 2.4-1.2 4.5-3 5.7V17a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-2.3C6.2 13.5 5 11.4 5 9a7 7 0 0 1 7-7z" />
+                        <line x1="10" y1="22" x2="14" y2="22" />
+                    </svg>
                     Sugerir temas com IA
                 </button>
                 <div id="suggestions-area" class="suggestions-area hidden">
@@ -116,31 +127,72 @@
                     <span><span class="card-icon">✏️</span> Conteúdo do DSS</span>
                     <button id="btn-ia" class="btn-ia" type="button">✨ Gerar com IA</button>
                 </div>
-                <textarea id="conteudo" rows="10" placeholder="Digite o conteúdo do DSS aqui...&#10;&#10;Introdução:&#10;...&#10;&#10;Desenvolvimento:&#10;...&#10;&#10;Conclusão:&#10;..."></textarea>
+                <textarea id="conteudo" rows="10"
+                    placeholder="Digite o conteúdo do DSS aqui...&#10;&#10;Introdução:&#10;...&#10;&#10;Desenvolvimento:&#10;...&#10;&#10;Conclusão:&#10;..."></textarea>
             </div>
 
             <!-- Botões de ação -->
-            <div class="btn-group">
-                <button id="btn-imprimir" class="btn-primary">
-                    <span>🖨️</span> Imprimir / Salvar PDF
+            <div class="btn-group" style="display: flex; flex-direction: column; gap: 10px;">
+                <button id="btn-iniciar-sessao" class="btn-primary"
+                    style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); width: 100%; border: none; padding: 12px; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    Iniciar Sessão Digital
                 </button>
-                <button id="btn-word" class="btn-word">
-                    <span>📄</span> Baixar em Word (.doc)
-                </button>
+                <div style="display: flex; gap: 10px;">
+                    <button id="btn-imprimir" class="btn-primary"
+                        style="flex: 1; margin: 0; background-color: #f1f5f9; color: #334155; border: 1px solid #cbd5e1;">
+                        <span>🖨️</span> PDF
+                    </button>
+                    <button id="btn-word" class="btn-word" style="flex: 1; margin: 0;">
+                        <span>📄</span> Word
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal do QR Code (Escondido por padrão) -->
+            <div id="qr-modal"
+                style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center;">
+                <div
+                    style="background: white; padding: 30px; border-radius: 16px; text-align: center; max-width: 400px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+                    <h3 style="margin-top: 0; color: #1e293b; font-size: 20px; margin-bottom: 10px;">Sessão Ativa!</h3>
+                    <p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">Peça aos colaboradores para
+                        escanearem este QR Code para assinar a presença.</p>
+
+                    <div id="qrcode-container"
+                        style="background: #f8fafc; padding: 20px; border-radius: 12px; display: inline-block; margin-bottom: 20px;">
+                    </div>
+
+                    <p style="color: #0f172a; font-weight: bold; font-size: 18px; margin-bottom: 5px;"
+                        id="qr-tema-display">Tema: ...</p>
+                    <p style="color: #10b981; font-weight: bold; margin-bottom: 20px;">0 pessoas assinaram</p>
+
+                    <a href="dashboard.html" target="_blank"
+                        style="display: block; width: 100%; padding: 12px; background: #0f172a; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer;">
+                        Abrir Painel de Gestão
+                    </a>
+                    <button id="btn-fechar-qr"
+                        style="display: block; width: 100%; padding: 12px; background: transparent; color: #64748b; border: none; font-weight: 600; cursor: pointer; margin-top: 10px;">
+                        Fechar Aviso
+                    </button>
+                </div>
             </div>
 
             <!-- Atalhos de teclado -->
-            <div class="shortcuts-hint">
+            <div class="shortcuts-hint" style="margin-top: 15px;">
                 <span><kbd>Ctrl</kbd>+<kbd>P</kbd> Imprimir</span>
                 <span><kbd>Ctrl</kbd>+<kbd>S</kbd> Word</span>
             </div>
 
             <!-- Watermark -->
             <div class="watermark">
-                <span class="watermark-line">© 2026 · Powered by <a href="https://github.com/adrielmartinsdias2803-dotcom" target="_blank" class="watermark-link">Menino Ney</a></span>
+                <span class="watermark-line">© 2026 · Powered by <a
+                        href="https://github.com/adrielmartinsdias2803-dotcom" target="_blank"
+                        class="watermark-link">Menino Ney</a></span>
             </div>
         </aside>
-        
+
         <main class="preview-area">
             <div class="preview-hint no-print">👁️ Pré-visualização (Folha A4)</div>
             <!-- O documento A4 fica aqui dentro -->
@@ -194,9 +246,10 @@
 
             <!-- Conteúdo -->
             <div class="content-box">
-                <p><strong>Declaro para os devidos fins e efeitos ter participado do treinamento/reunião sobre os conceitos descritos abaixo:</strong></p>
+                <p><strong>Declaro para os devidos fins e efeitos ter participado do treinamento/reunião sobre os
+                        conceitos descritos abaixo:</strong></p>
                 <p><strong class="out-titulo"></strong></p>
-                
+
                 <div class="out-conteudo"></div>
             </div>
         </div>
@@ -238,8 +291,20 @@
                 </tbody>
             </table>
         </div>
-    </div>
+        <!-- Bibliotecas de Terceiros -->
+        <!-- QRCode.js para gerar o código de barras da presença -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-    <script src="script.js"></script>
+        <!-- Firebase App (o núcleo do Firebase) -->
+        <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+        <!-- Firebase Firestore (banco de dados) -->
+        <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+        <!-- Configuração centralizada do Firebase (preencha firebaseConfig.js com suas credenciais) -->
+        <script src="firebaseConfig.js"></script>
+
+        <!-- Arquivo Principal -->
+        <script src="script.js"></script>
 </body>
+
 </html>
