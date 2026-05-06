@@ -529,7 +529,7 @@ Ergonomia no posto de trabalho`;
 
             } catch (error) {
                 console.error("Erro ao iniciar sessão:", error);
-                alert("Erro ao conectar com o banco de dados. Verifique a configuração do Firebase.");
+                alert("Erro Firebase: " + error.code + "\n" + error.message);
             } finally {
                 btnIniciarSessao.disabled = false;
                 btnIniciarSessao.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Iniciar Sessão Digital`;
