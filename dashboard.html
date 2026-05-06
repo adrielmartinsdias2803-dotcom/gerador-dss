@@ -1,172 +1,150 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — DSS Mococa</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard DSS — Mococa</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-:root{--bg:#0f172a;--surface:#1e293b;--border:rgba(255,255,255,0.08);--text:#f1f5f9;--text2:#94a3b8;--muted:#64748b;--primary:#3b82f6;--green:#10b981;--red:#ef4444;--amber:#f59e0b;--purple:#8b5cf6;}
+:root{--bg:#0f172a;--s:#1e293b;--b:rgba(255,255,255,0.07);--t:#f1f5f9;--t2:#94a3b8;--m:#64748b;--p:#3b82f6;--g:#10b981;--r:#ef4444;--a:#8b5cf6;--y:#f59e0b;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-/* LAYOUT */
-.layout{display:flex;min-height:100vh;}
-.sidebar{width:240px;background:rgba(30,41,59,0.95);border-right:1px solid var(--border);padding:24px 16px;position:fixed;height:100vh;display:flex;flex-direction:column;gap:8px;}
-.main{margin-left:240px;padding:32px;flex:1;}
-/* SIDEBAR */
-.brand{display:flex;align-items:center;gap:10px;padding:0 8px 20px;border-bottom:1px solid var(--border);margin-bottom:8px;}
-.brand img{width:40px;height:40px;background:white;border-radius:10px;padding:4px;object-fit:contain;}
-.brand-name{font-size:.85rem;font-weight:800;line-height:1.2;}
-.brand-sub{font-size:.62rem;color:var(--muted);}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:.82rem;font-weight:500;color:var(--text2);cursor:pointer;transition:all .2s;border:none;background:none;width:100%;text-align:left;}
-.nav-item:hover,.nav-item.active{background:rgba(59,130,246,.1);color:var(--primary);}
-.nav-item span{font-size:1rem;}
-.back-btn{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;font-size:.8rem;color:var(--muted);cursor:pointer;text-decoration:none;margin-top:auto;transition:color .2s;}
-.back-btn:hover{color:var(--text);}
-/* TOPBAR */
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
-.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.5px;}
-.page-sub{font-size:.8rem;color:var(--muted);margin-top:2px;}
-.badge-live{display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--green);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:5px 12px;border-radius:20px;}
-.dot-live{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 1.5s ease-in-out infinite;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-height:100vh;display:flex;}
+aside{width:220px;background:rgba(30,41,59,.97);border-right:1px solid var(--b);padding:20px 14px;display:flex;flex-direction:column;gap:6px;position:fixed;height:100vh;z-index:10;}
+.brand{display:flex;align-items:center;gap:10px;padding-bottom:18px;border-bottom:1px solid var(--b);margin-bottom:4px;}
+.brand img{width:38px;height:38px;background:#fff;border-radius:9px;padding:4px;object-fit:contain;}
+.bn{font-size:.82rem;font-weight:800;line-height:1.2;}
+.bs{font-size:.6rem;color:var(--m);}
+.ni{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;font-size:.8rem;font-weight:500;color:var(--t2);cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:all .2s;}
+.ni:hover,.ni.act{background:rgba(59,130,246,.1);color:var(--p);}
+.ni span{font-size:.95rem;}
+.bk{display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:9px;font-size:.78rem;color:var(--m);cursor:pointer;text-decoration:none;margin-top:auto;transition:color .2s;}
+.bk:hover{color:var(--t);}
+main{margin-left:220px;padding:28px;flex:1;min-height:100vh;}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.pt{font-size:1.5rem;font-weight:800;letter-spacing:-.5px;}
+.ps{font-size:.75rem;color:var(--m);margin-top:2px;}
+.live{display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--g);font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:5px 12px;border-radius:20px;}
+.dot{width:6px;height:6px;background:var(--g);border-radius:50%;animation:pulse 1.5s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
-/* STATS */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
-.stat-card{background:rgba(30,41,59,.8);border:1px solid var(--border);border-radius:14px;padding:18px;}
-.stat-label{font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;}
-.stat-number{font-size:1.8rem;font-weight:800;line-height:1;}
-.stat-desc{font-size:.7rem;color:var(--muted);margin-top:4px;}
-.stat-card.green .stat-number{color:var(--green);}
-.stat-card.blue .stat-number{color:var(--primary);}
-.stat-card.amber .stat-number{color:var(--amber);}
-.stat-card.purple .stat-number{color:var(--purple);}
-/* SESSÕES */
-.section-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.sessions-grid{display:grid;gap:14px;}
-.session-card{background:rgba(30,41,59,.8);border:1px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:all .25s;}
-.session-card:hover{border-color:rgba(59,130,246,.3);transform:translateY(-1px);box-shadow:0 8px 30px rgba(0,0,0,.2);}
-.session-card.active-session{border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.04);}
-.sc-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;}
-.sc-tema{font-size:.95rem;font-weight:700;line-height:1.3;flex:1;margin-right:12px;}
-.status-pill{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:3px 10px;border-radius:20px;white-space:nowrap;}
-.status-ativa{background:rgba(16,185,129,.1);color:var(--green);border:1px solid rgba(16,185,129,.25);}
-.status-encerrada{background:rgba(100,116,139,.1);color:var(--muted);border:1px solid rgba(100,116,139,.2);}
-.sc-meta{display:flex;gap:16px;font-size:.75rem;color:var(--muted);}
-.sc-meta span{display:flex;align-items:center;gap:4px;}
-.sc-footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);}
-.presenca-count{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--green);font-weight:600;}
-.sc-actions{display:flex;gap:8px;}
-.btn-sm{padding:6px 12px;border-radius:8px;font-size:.72rem;font-weight:600;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;}
-.btn-encerrar{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2);}
-.btn-encerrar:hover{background:var(--red);color:white;}
-.btn-ver{background:rgba(59,130,246,.1);color:var(--primary);border:1px solid rgba(59,130,246,.2);}
-.btn-ver:hover{background:var(--primary);color:white;}
-/* MODAL DE PRESENÇAS */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center;padding:20px;}
-.modal-overlay.open{display:flex;}
-.modal{background:#1e293b;border:1px solid var(--border);border-radius:18px;width:100%;max-width:560px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;}
-.modal-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.modal-title{font-size:1rem;font-weight:700;}
-.modal-close{background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;padding:4px;line-height:1;}
-.modal-close:hover{color:var(--text);}
-.modal-body{padding:20px 24px;overflow-y:auto;flex:1;}
-.presenca-row{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);}
-.presenca-row:last-child{border-bottom:none;}
-.presenca-avatar{width:36px;height:36px;background:linear-gradient(135deg,var(--primary),var(--purple));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0;}
-.presenca-info{flex:1;}
-.presenca-nome{font-size:.85rem;font-weight:600;}
-.presenca-setor{font-size:.72rem;color:var(--muted);}
-.presenca-hora{font-size:.7rem;color:var(--muted);}
-.presenca-sig img{height:36px;border:1px solid var(--border);border-radius:6px;background:white;}
-/* EMPTY / LOADING */
-.empty{text-align:center;padding:50px 20px;color:var(--muted);}
-.empty-icon{font-size:2.5rem;margin-bottom:12px;}
-.empty-text{font-size:.85rem;}
-.spinner{width:32px;height:32px;border:3px solid rgba(255,255,255,.1);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite;margin:30px auto;}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.sc{background:rgba(30,41,59,.8);border:1px solid var(--b);border-radius:14px;padding:18px;transition:border-color .2s;}
+.sc:hover{border-color:rgba(255,255,255,.12);}
+.sl{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--m);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.sn{font-size:2rem;font-weight:800;line-height:1;}
+.sd{font-size:.68rem;color:var(--m);margin-top:4px;}
+.sc.p .sn{color:var(--p);} .sc.g .sn{color:var(--g);} .sc.a .sn{color:var(--a);} .sc.y .sn{color:var(--y);}
+.charts{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:24px;}
+.cc{background:rgba(30,41,59,.8);border:1px solid var(--b);border-radius:14px;padding:18px;}
+.ct{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--m);margin-bottom:14px;}
+.rank{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+.ri{display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(15,23,42,.4);border-radius:10px;}
+.rpos{font-size:.7rem;font-weight:700;color:var(--m);width:18px;}
+.rn{flex:1;font-size:.8rem;font-weight:600;}
+.rb{font-size:.75rem;font-weight:700;color:var(--p);}
+.sec{margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
+.slist{display:grid;gap:12px;}
+.card{background:rgba(30,41,59,.8);border:1px solid var(--b);border-radius:14px;padding:18px;transition:all .25s;}
+.card:hover{border-color:rgba(59,130,246,.25);transform:translateY(-1px);}
+.card.ativa{border-color:rgba(16,185,129,.2);background:rgba(16,185,129,.03);}
+.ch{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+.ctema{font-size:.9rem;font-weight:700;flex:1;margin-right:10px;line-height:1.3;}
+.pill{font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+.pa{background:rgba(16,185,129,.1);color:var(--g);border:1px solid rgba(16,185,129,.2);}
+.pe{background:rgba(100,116,139,.1);color:var(--m);border:1px solid rgba(100,116,139,.15);}
+.cm{display:flex;gap:14px;font-size:.72rem;color:var(--m);flex-wrap:wrap;}
+.cf{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--b);}
+.cnt{font-size:.78rem;color:var(--g);font-weight:600;}
+.acts{display:flex;gap:7px;}
+.btn{padding:6px 12px;border-radius:8px;font-size:.7rem;font-weight:600;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;}
+.ba{background:rgba(16,185,129,.1);color:var(--g);border:1px solid rgba(16,185,129,.2);}
+.ba:hover{background:var(--g);color:#fff;}
+.bv{background:rgba(59,130,246,.1);color:var(--p);border:1px solid rgba(59,130,246,.2);}
+.bv:hover{background:var(--p);color:#fff;}
+.be{background:rgba(239,68,68,.1);color:var(--r);border:1px solid rgba(239,68,68,.2);}
+.be:hover{background:var(--r);color:#fff;}
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:center;justify-content:center;padding:20px;}
+.mo.open{display:flex;}
+.mb{background:#1e293b;border:1px solid var(--b);border-radius:18px;width:100%;max-width:480px;overflow:hidden;}
+.mh{padding:18px 22px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;}
+.mt{font-size:.95rem;font-weight:700;}
+.mc{padding:22px;}
+.fg{margin-bottom:14px;}
+label{display:block;font-size:.78rem;font-weight:500;color:var(--t2);margin-bottom:5px;}
+input,select{width:100%;padding:10px 14px;background:rgba(15,23,42,.6);border:1px solid rgba(255,255,255,.1);border-radius:10px;font-family:'Inter',sans-serif;font-size:.85rem;color:var(--t);transition:all .25s;}
+input:focus,select:focus{outline:none;border-color:var(--g);box-shadow:0 0 0 3px rgba(16,185,129,.2);}
+input::placeholder{color:var(--m);}
+select option{background:#1e293b;}
+.bsub{width:100%;padding:13px;background:linear-gradient(135deg,var(--g),#059669);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .3s;margin-top:4px;}
+.bsub:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(16,185,129,.3);}
+.bsub:disabled{background:linear-gradient(135deg,#475569,#334155);cursor:not-allowed;transform:none;}
+.emp{text-align:center;padding:50px 20px;color:var(--m);}
+.ei{font-size:2.5rem;margin-bottom:10px;}
+.sp{width:32px;height:32px;border:3px solid rgba(255,255,255,.1);border-top-color:var(--p);border-radius:50%;animation:spin .8s linear infinite;margin:30px auto;}
 @keyframes spin{to{transform:rotate(360deg);}}
-/* RESPONSIVO */
-@media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr);}.sidebar{display:none;}.main{margin-left:0;padding:16px;}}
+.prow{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.prow:last-child{border-bottom:none;}
+.pav{width:34px;height:34px;background:linear-gradient(135deg,var(--p),var(--a));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;}
+.pi{flex:1;}
+.pn{font-size:.82rem;font-weight:600;}
+.ps2{font-size:.68rem;color:var(--m);}
+.ph{font-size:.65rem;color:var(--m);}
+@media(max-width:900px){aside{display:none;} main{margin-left:0;padding:16px;} .stats{grid-template-columns:1fr 1fr;} .charts{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-<div class="layout">
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="brand">
-      <img src="logo.png" alt="Mococa">
-      <div><div class="brand-name">DSS Dashboard</div><div class="brand-sub">Painel de Gestão</div></div>
-    </div>
-    <button class="nav-item active" onclick="showView('sessoes')"><span>📋</span> Sessões</button>
-    <button class="nav-item" onclick="showView('presencas')"><span>✅</span> Presenças</button>
-    <a href="index.html" class="back-btn"><span>←</span> Voltar ao Gerador</a>
-  </aside>
+<aside>
+  <div class="brand"><img src="logo.png" alt="Mococa"><div><div class="bn">DSS Dashboard</div><div class="bs">Painel de Gestão</div></div></div>
+  <button class="ni act" onclick="sv('s')"><span>📋</span> Sessões</button>
+  <button class="ni" onclick="sv('i')"><span>👥</span> Instrutores</button>
+  <a href="index.html" class="bk"><span>←</span> Voltar ao Gerador</a>
+</aside>
+<main>
+  <div class="topbar"><div><div class="pt">Painel de Gestão</div><div class="ps">Diálogos Semanais de Segurança — Mococa</div></div><div class="live"><span class="dot"></span> Tempo Real</div></div>
+  <div class="stats">
+    <div class="sc p"><div class="sl">📋 Total de Sessões</div><div class="sn" id="st">—</div><div class="sd">Desde o início</div></div>
+    <div class="sc g"><div class="sl">👤 Instrutores</div><div class="sn" id="si">—</div><div class="sd">Instrutores únicos</div></div>
+    <div class="sc a"><div class="sl">✅ Presenças</div><div class="sn" id="sp">—</div><div class="sd">Total de registros</div></div>
+    <div class="sc y"><div class="sl">📊 Média/Sessão</div><div class="sn" id="sm">—</div><div class="sd">Participantes médio</div></div>
+  </div>
+  <div class="charts">
+    <div class="cc"><div class="ct">📅 DSS por Mês</div><canvas id="chartMes" height="90"></canvas></div>
+    <div class="cc"><div class="ct">🏆 Top Instrutores</div><div class="rank" id="rank"><div class="sp"></div></div></div>
+  </div>
+  <div id="v-s">
+    <div class="sec"><div class="ct" style="margin:0">📋 Sessões DSS</div></div>
+    <div id="sloading"><div class="sp"></div></div>
+    <div id="sgrid" class="slist"></div>
+    <div id="semp" class="emp" style="display:none"><div class="ei">📭</div><p>Nenhuma sessão criada ainda.</p></div>
+  </div>
+  <div id="v-i" style="display:none">
+    <div class="ct" style="margin-bottom:16px">👥 Relatório de Instrutores</div>
+    <div id="ilist" class="slist"></div>
+  </div>
+</main>
 
-  <!-- Main -->
-  <main class="main">
-    <div class="topbar">
-      <div>
-        <div class="page-title">Painel de Gestão</div>
-        <div class="page-sub">Diálogos Semanais de Segurança — Mococa</div>
+<!-- Modal Adicionar Presença -->
+<div class="mo" id="mAdd" onclick="cmClick(event)">
+  <div class="mb">
+    <div class="mh"><div class="mt">➕ Adicionar Presença</div><button onclick="closeAdd()" style="background:none;border:none;color:var(--m);font-size:1.1rem;cursor:pointer;">✕</button></div>
+    <div class="mc">
+      <div class="fg"><label>Nome completo *</label><input type="text" id="aNome" placeholder="Ex: João da Silva" autocomplete="off"></div>
+      <div class="fg"><label>Setor *</label>
+        <select id="aSetor">
+          <option value="">Selecione...</option>
+          <option>Manutenção</option><option>Almoxarifado</option><option>Produção</option>
+          <option>Administrativo</option><option>Qualidade</option><option>Logística</option><option>Outro</option>
+        </select>
       </div>
-      <div class="badge-live"><span class="dot-live"></span> Tempo Real</div>
+      <button class="bsub" id="btnAdd" onclick="salvarPresenca()">✅ Confirmar Presença</button>
     </div>
-
-    <!-- Stats -->
-    <div class="stats">
-      <div class="stat-card blue">
-        <div class="stat-label">📋 Total de Sessões</div>
-        <div class="stat-number" id="stat-total">—</div>
-        <div class="stat-desc">Desde o início</div>
-      </div>
-      <div class="stat-card green">
-        <div class="stat-label">🟢 Sessões Ativas</div>
-        <div class="stat-number" id="stat-ativas">—</div>
-        <div class="stat-desc">Em andamento agora</div>
-      </div>
-      <div class="stat-card amber">
-        <div class="stat-label">✅ Total de Presenças</div>
-        <div class="stat-number" id="stat-presencas">—</div>
-        <div class="stat-desc">Assinaturas coletadas</div>
-      </div>
-      <div class="stat-card purple">
-        <div class="stat-label">🔒 Encerradas</div>
-        <div class="stat-number" id="stat-encerradas">—</div>
-        <div class="stat-desc">Sessões concluídas</div>
-      </div>
-    </div>
-
-    <!-- Sessões View -->
-    <div id="view-sessoes">
-      <div class="section-title">📋 Todas as Sessões</div>
-      <div id="sessions-loading"><div class="spinner"></div></div>
-      <div id="sessions-grid" class="sessions-grid"></div>
-      <div id="sessions-empty" class="empty" style="display:none;">
-        <div class="empty-icon">📭</div>
-        <div class="empty-text">Nenhuma sessão criada ainda.<br>Use o Gerador de DSS para iniciar uma sessão.</div>
-      </div>
-    </div>
-
-    <!-- Presenças View -->
-    <div id="view-presencas" style="display:none;">
-      <div class="section-title">✅ Todas as Presenças</div>
-      <div id="all-presencas-list"></div>
-    </div>
-  </main>
+  </div>
 </div>
 
-<!-- Modal de Presenças -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
-  <div class="modal">
-    <div class="modal-header">
-      <div>
-        <div class="modal-title" id="modal-title">Presenças</div>
-        <div style="font-size:.72rem;color:var(--muted);margin-top:2px;" id="modal-sub"></div>
-      </div>
-      <button class="modal-close" onclick="closeModalBtn()">✕</button>
-    </div>
-    <div class="modal-body" id="modal-body">
-      <div class="spinner"></div>
-    </div>
+<!-- Modal Ver Presenças -->
+<div class="mo" id="mVer" onclick="cvClick(event)">
+  <div class="mb">
+    <div class="mh"><div><div class="mt" id="mVerTit">Presenças</div><div style="font-size:.68rem;color:var(--m);margin-top:2px" id="mVerSub"></div></div><button onclick="closeVer()" style="background:none;border:none;color:var(--m);font-size:1.1rem;cursor:pointer;">✕</button></div>
+    <div class="mc" id="mVerBody" style="max-height:400px;overflow-y:auto"><div class="sp"></div></div>
   </div>
 </div>
 
@@ -174,180 +152,140 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 <script src="firebaseConfig.js"></script>
 <script>
-// =========================================
-// DASHBOARD — LÓGICA PRINCIPAL
-// =========================================
+let sessoes=[], addSessaoId=null, chartMes=null;
 
-let allSessoes = [];
-let statPresencasTotal = 0;
+function sv(v){
+  document.getElementById('v-s').style.display=v==='s'?'block':'none';
+  document.getElementById('v-i').style.display=v==='i'?'block':'none';
+  document.querySelectorAll('.ni').forEach((el,i)=>{el.classList.toggle('act',(v==='s'&&i===0)||(v==='i'&&i===1));});
+  if(v==='i') renderInstrutores();
+}
 
-function showView(view) {
-  document.getElementById('view-sessoes').style.display = view === 'sessoes' ? 'block' : 'none';
-  document.getElementById('view-presencas').style.display = view === 'presencas' ? 'block' : 'none';
-  document.querySelectorAll('.nav-item').forEach((el,i) => {
-    el.classList.toggle('active', (view === 'sessoes' && i === 0) || (view === 'presencas' && i === 1));
+db.collection('sessoes_dss').orderBy('criadoEm','desc').onSnapshot(async snap=>{
+  document.getElementById('sloading').style.display='none';
+  sessoes=snap.docs.map(d=>({id:d.id,...d.data()}));
+  document.getElementById('semp').style.display=sessoes.length?'none':'block';
+  renderCards();
+  await calcStats();
+});
+
+function fmtData(s){if(!s)return'—';const p=s.split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:s;}
+
+function renderCards(){
+  document.getElementById('sgrid').innerHTML=sessoes.map(s=>`
+  <div class="card ${s.status==='ativa'?'ativa':''}">
+    <div class="ch"><div class="ctema">${s.titulo||s.tema||'—'}</div><span class="pill ${s.status==='ativa'?'pa':'pe'}">${s.status==='ativa'?'🟢 Ativa':'🔒 Encerrada'}</span></div>
+    <div class="cm"><span>📅 ${fmtData(s.data)}</span><span>🏭 ${s.setor||'—'}</span><span>👤 ${s.responsavel||'—'}</span></div>
+    <div class="cf">
+      <div class="cnt" id="c-${s.id}">⏳ carregando...</div>
+      <div class="acts">
+        <button class="btn ba" onclick="openAdd('${s.id}')">➕ Adicionar</button>
+        <button class="btn bv" onclick="openVer('${s.id}','${(s.titulo||s.tema||'').replace(/'/g,"\\'")}','${fmtData(s.data)}')">👁️ Ver</button>
+        ${s.status==='ativa'?`<button class="btn be" onclick="encerrar('${s.id}')">🔒</button>`:''}
+      </div>
+    </div>
+  </div>`).join('');
+  sessoes.forEach(s=>watchCount(s.id));
+}
+
+function watchCount(id){
+  db.collection('sessoes_dss').doc(id).collection('presencas').onSnapshot(snap=>{
+    const el=document.getElementById('c-'+id);
+    if(el) el.textContent='✅ '+snap.size+' presença(s)';
   });
-  if (view === 'presencas') loadAllPresencas();
 }
 
-// ---- Carrega Sessões em Tempo Real ----
-db.collection('sessoes_dss')
-  .orderBy('criadoEm', 'desc')
-  .onSnapshot(async snapshot => {
-    document.getElementById('sessions-loading').style.display = 'none';
-    allSessoes = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+async function calcStats(){
+  let totalP=0, instSet=new Set(), meses={};
+  for(const s of sessoes){
+    if(s.responsavel) instSet.add(s.responsavel);
+    const mes=s.data?s.data.substring(0,7):'?';
+    meses[mes]=(meses[mes]||0)+1;
+    const snap=await db.collection('sessoes_dss').doc(s.id).collection('presencas').get();
+    totalP+=snap.size;
+  }
+  document.getElementById('st').textContent=sessoes.length;
+  document.getElementById('si').textContent=instSet.size||'—';
+  document.getElementById('sp').textContent=totalP;
+  document.getElementById('sm').textContent=sessoes.length?Math.round(totalP/sessoes.length):0;
+  renderChart(meses);
+  renderRank();
+}
 
-    const total = allSessoes.length;
-    const ativas = allSessoes.filter(s => s.status === 'ativa').length;
-    const encerradas = allSessoes.filter(s => s.status === 'encerrada').length;
+function renderChart(meses){
+  const labels=Object.keys(meses).sort().map(m=>{const[y,mo]=m.split('-');const ms=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];return ms[+mo-1]+'/'+y.slice(2);});
+  const data=Object.keys(meses).sort().map(k=>meses[k]);
+  if(chartMes) chartMes.destroy();
+  const ctx=document.getElementById('chartMes').getContext('2d');
+  chartMes=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'Sessões',data,backgroundColor:'rgba(59,130,246,.5)',borderColor:'#3b82f6',borderWidth:2,borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{color:'#64748b',stepSize:1},grid:{color:'rgba(255,255,255,.05)'}},x:{ticks:{color:'#64748b'},grid:{color:'rgba(255,255,255,.05)'}}}}});
+}
 
-    document.getElementById('stat-total').textContent = total;
-    document.getElementById('stat-ativas').textContent = ativas;
-    document.getElementById('stat-encerradas').textContent = encerradas;
+async function renderRank(){
+  const cnt={};
+  for(const s of sessoes){if(s.responsavel) cnt[s.responsavel]=(cnt[s.responsavel]||0)+1;}
+  const sorted=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const medals=['🥇','🥈','🥉','4️⃣','5️⃣'];
+  document.getElementById('rank').innerHTML=sorted.length?sorted.map(([n,c],i)=>`<div class="ri"><span class="rpos">${medals[i]}</span><span class="rn">${n}</span><span class="rb">${c} DSS</span></div>`).join(''):'<p style="font-size:.75rem;color:var(--m);text-align:center;padding:20px">Nenhum dado ainda</p>';
+}
 
-    if (total === 0) {
-      document.getElementById('sessions-empty').style.display = 'block';
-      document.getElementById('sessions-grid').innerHTML = '';
-      return;
-    }
-    document.getElementById('sessions-empty').style.display = 'none';
-    renderSessoes(allSessoes);
-  }, err => {
-    document.getElementById('sessions-loading').innerHTML = '<p style="color:#ef4444;text-align:center;font-size:.8rem;">Erro ao carregar: ' + err.message + '</p>';
+async function renderInstrutores(){
+  const el=document.getElementById('ilist');
+  el.innerHTML='<div class="sp"></div>';
+  const cnt={};
+  for(const s of sessoes){
+    const resp=s.responsavel||'Não informado';
+    if(!cnt[resp]) cnt[resp]={total:0,setores:new Set(),presencas:0};
+    cnt[resp].total++;
+    if(s.setor) cnt[resp].setores.add(s.setor);
+    const snap=await db.collection('sessoes_dss').doc(s.id).collection('presencas').get();
+    cnt[resp].presencas+=snap.size;
+  }
+  el.innerHTML=Object.entries(cnt).sort((a,b)=>b[1].total-a[1].total).map(([n,d])=>`
+  <div class="card">
+    <div class="ch"><div class="ctema">👤 ${n}</div><span class="pill pa">${d.total} DSS</span></div>
+    <div class="cm"><span>🏭 Setores: ${[...d.setores].join(', ')||'—'}</span><span>✅ ${d.presencas} presenças</span></div>
+  </div>`).join('')||'<div class="emp"><div class="ei">👤</div><p>Nenhum instrutor ainda</p></div>';
+}
+
+async function encerrar(id){
+  if(!confirm('Encerrar esta sessão?')) return;
+  await db.collection('sessoes_dss').doc(id).update({status:'encerrada'});
+}
+
+function openAdd(id){addSessaoId=id;document.getElementById('aNome').value='';document.getElementById('aSetor').value='';document.getElementById('mAdd').classList.add('open');}
+function closeAdd(){document.getElementById('mAdd').classList.remove('open');}
+function cmClick(e){if(e.target===document.getElementById('mAdd')) closeAdd();}
+
+async function salvarPresenca(){
+  const nome=document.getElementById('aNome').value.trim();
+  const setor=document.getElementById('aSetor').value;
+  if(!nome){alert('Informe o nome!');return;}
+  if(!setor){alert('Selecione o setor!');return;}
+  const btn=document.getElementById('btnAdd');
+  btn.disabled=true;btn.textContent='Salvando...';
+  try{
+    await db.collection('sessoes_dss').doc(addSessaoId).collection('presencas').add({nome,setor,assinadoEm:firebase.firestore.FieldValue.serverTimestamp(),modo:'manual'});
+    closeAdd();
+  }catch(e){alert('Erro: '+e.message);}
+  finally{btn.disabled=false;btn.textContent='✅ Confirmar Presença';}
+}
+
+function openVer(id,titulo,data){
+  document.getElementById('mVerTit').textContent=titulo;
+  document.getElementById('mVerSub').textContent='📅 '+data;
+  document.getElementById('mVerBody').innerHTML='<div class="sp"></div>';
+  document.getElementById('mVer').classList.add('open');
+  db.collection('sessoes_dss').doc(id).collection('presencas').orderBy('assinadoEm','asc').onSnapshot(snap=>{
+    if(snap.empty){document.getElementById('mVerBody').innerHTML='<div class="emp"><div class="ei">🙈</div><p style="font-size:.8rem">Nenhuma presença ainda</p></div>';return;}
+    document.getElementById('mVerBody').innerHTML=snap.docs.map(d=>{
+      const p=d.data();
+      const h=p.assinadoEm?p.assinadoEm.toDate().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'—';
+      return`<div class="prow"><div class="pav">${(p.nome||'?')[0].toUpperCase()}</div><div class="pi"><div class="pn">${p.nome||'—'}</div><div class="ps2">${p.setor||'—'} ${p.modo==='manual'?'· Manual':''}</div></div><div class="ph">⏰ ${h}</div></div>`;
+    }).join('');
   });
-
-function renderSessoes(sessoes) {
-  const grid = document.getElementById('sessions-grid');
-  grid.innerHTML = sessoes.map(s => {
-    const isAtiva = s.status === 'ativa';
-    const dataFmt = s.data ? s.data.split('-').reverse().join('/') : '—';
-    return `
-    <div class="session-card ${isAtiva ? 'active-session' : ''}" id="card-${s.id}">
-      <div class="sc-header">
-        <div class="sc-tema">${s.titulo || s.tema || '—'}</div>
-        <span class="status-pill ${isAtiva ? 'status-ativa' : 'status-encerrada'}">${isAtiva ? '🟢 Ativa' : '🔒 Encerrada'}</span>
-      </div>
-      <div class="sc-meta">
-        <span>📅 ${dataFmt}</span>
-        <span>🏭 ${s.setor || '—'}</span>
-        <span>👤 ${s.responsavel || '—'}</span>
-      </div>
-      <div class="sc-footer">
-        <div class="presenca-count" id="count-${s.id}">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          Carregando...
-        </div>
-        <div class="sc-actions">
-          <button class="btn-sm btn-ver" onclick="abrirPresencas('${s.id}','${(s.titulo||s.tema||'').replace(/'/g,"\\'")}','${dataFmt}')">👁️ Ver Presenças</button>
-          ${isAtiva ? `<button class="btn-sm btn-encerrar" onclick="encerrarSessao('${s.id}')">🔒 Encerrar</button>` : ''}
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-
-  // Carrega contagem de presenças por sessão
-  sessoes.forEach(s => carregarContagem(s.id));
 }
-
-function carregarContagem(sessaoId) {
-  db.collection('sessoes_dss').doc(sessaoId).collection('presencas')
-    .onSnapshot(snap => {
-      const el = document.getElementById('count-' + sessaoId);
-      if (el) el.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> ${snap.size} presença(s)`;
-    });
-}
-
-// ---- Encerrar Sessão ----
-async function encerrarSessao(sessaoId) {
-  if (!confirm('Deseja encerrar esta sessão? Colaboradores não poderão mais assinar após isso.')) return;
-  try {
-    await db.collection('sessoes_dss').doc(sessaoId).update({ status: 'encerrada' });
-  } catch(e) {
-    alert('Erro ao encerrar: ' + e.message);
-  }
-}
-
-// ---- Modal de Presenças ----
-function abrirPresencas(sessaoId, titulo, data) {
-  document.getElementById('modal-title').textContent = titulo;
-  document.getElementById('modal-sub').textContent = '📅 ' + data;
-  document.getElementById('modal-body').innerHTML = '<div class="spinner"></div>';
-  document.getElementById('modal-overlay').classList.add('open');
-
-  db.collection('sessoes_dss').doc(sessaoId).collection('presencas')
-    .orderBy('assinadoEm', 'asc')
-    .onSnapshot(snap => {
-      if (snap.empty) {
-        document.getElementById('modal-body').innerHTML = '<div class="empty"><div class="empty-icon">🙈</div><div class="empty-text">Nenhuma presença registrada ainda.</div></div>';
-        return;
-      }
-      document.getElementById('modal-body').innerHTML = snap.docs.map((d, i) => {
-        const p = d.data();
-        const hora = p.assinadoEm ? p.assinadoEm.toDate().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}) : '—';
-        const inicial = (p.nome || '?')[0].toUpperCase();
-        const sigHtml = p.assinatura ? `<div class="presenca-sig"><img src="${p.assinatura}" alt="Assinatura"></div>` : '';
-        return `<div class="presenca-row">
-          <div class="presenca-avatar">${inicial}</div>
-          <div class="presenca-info">
-            <div class="presenca-nome">${p.nome || '—'}</div>
-            <div class="presenca-setor">${p.setor || '—'}</div>
-          </div>
-          <div class="presenca-hora">⏰ ${hora}</div>
-          ${sigHtml}
-        </div>`;
-      }).join('');
-    });
-}
-
-function closeModal(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModalBtn();
-}
-function closeModalBtn() {
-  document.getElementById('modal-overlay').classList.remove('open');
-}
-
-// ---- View de Todas as Presenças ----
-async function loadAllPresencas() {
-  const container = document.getElementById('all-presencas-list');
-  container.innerHTML = '<div class="spinner"></div>';
-  
-  try {
-    const sessoes = await db.collection('sessoes_dss').orderBy('criadoEm','desc').get();
-    let html = '';
-    let totalPres = 0;
-
-    for (const s of sessoes.docs) {
-      const sd = s.data();
-      const presSnap = await s.ref.collection('presencas').orderBy('assinadoEm','asc').get();
-      totalPres += presSnap.size;
-
-      html += `<div style="margin-bottom:24px;">
-        <div class="section-title">${sd.titulo || sd.tema || '—'} <span style="font-size:.65rem;font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0;">(${presSnap.size} presença(s))</span></div>`;
-
-      if (presSnap.empty) {
-        html += `<div style="font-size:.75rem;color:var(--muted);padding:8px 0;">Nenhuma presença registrada.</div>`;
-      } else {
-        html += `<div style="background:rgba(30,41,59,.8);border:1px solid var(--border);border-radius:14px;overflow:hidden;">`;
-        presSnap.docs.forEach((d, i) => {
-          const p = d.data();
-          const hora = p.assinadoEm ? p.assinadoEm.toDate().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) : '—';
-          html += `<div class="presenca-row" style="padding:10px 16px;">
-            <div class="presenca-avatar">${(p.nome||'?')[0].toUpperCase()}</div>
-            <div class="presenca-info"><div class="presenca-nome">${p.nome||'—'}</div><div class="presenca-setor">${p.setor||'—'}</div></div>
-            <div class="presenca-hora">⏰ ${hora}</div>
-          </div>`;
-        });
-        html += `</div>`;
-      }
-      html += `</div>`;
-    }
-
-    document.getElementById('stat-presencas').textContent = totalPres;
-    container.innerHTML = html || '<div class="empty"><div class="empty-icon">📭</div><div class="empty-text">Nenhuma sessão encontrada.</div></div>';
-  } catch(e) {
-    container.innerHTML = '<p style="color:#ef4444;font-size:.8rem;">Erro: ' + e.message + '</p>';
-  }
-}
+function closeVer(){document.getElementById('mVer').classList.remove('open');}
+function cvClick(e){if(e.target===document.getElementById('mVer')) closeVer();}
 </script>
 </body>
 </html>
