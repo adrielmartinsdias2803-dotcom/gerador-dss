@@ -313,9 +313,7 @@ small {
     flex: 1;
     background: var(--preview-bg);
     padding: 40px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
+    display: block;
     overflow: auto;
     height: 100vh;
 }
