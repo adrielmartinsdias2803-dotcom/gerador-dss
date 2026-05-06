@@ -534,6 +534,9 @@ Ergonomia no posto de trabalho`;
             btnIniciarSessao.textContent = "Iniciando...";
 
             try {
+                const printArea = document.getElementById('printable-area');
+                const htmlImpressao = printArea ? printArea.innerHTML : "";
+
                 // Cria a sessão no Firebase Firestore como "agendado"
                 const docRef = await db.collection("sessoes_dss").add({
                     titulo: titulo,
@@ -546,6 +549,7 @@ Ergonomia no posto de trabalho`;
                     status: "agendado",
                     quiz: window._lastQuiz || [],
                     conteudo: inputConteudo.value,
+                    html_impressao: htmlImpressao,
                     criadoEm: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
