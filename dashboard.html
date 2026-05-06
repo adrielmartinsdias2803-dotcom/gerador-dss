@@ -1,291 +1,39 @@
-﻿<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard DSS — Mococa</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-:root{--bg:#0f172a;--s:#1e293b;--b:rgba(255,255,255,0.07);--t:#f1f5f9;--t2:#94a3b8;--m:#64748b;--p:#3b82f6;--g:#10b981;--r:#ef4444;--a:#8b5cf6;--y:#f59e0b;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-height:100vh;display:flex;}
-aside{width:220px;background:rgba(30,41,59,.97);border-right:1px solid var(--b);padding:20px 14px;display:flex;flex-direction:column;gap:6px;position:fixed;height:100vh;z-index:10;}
-.brand{display:flex;align-items:center;gap:10px;padding-bottom:18px;border-bottom:1px solid var(--b);margin-bottom:4px;}
-.brand img{width:38px;height:38px;background:#fff;border-radius:9px;padding:4px;object-fit:contain;}
-.bn{font-size:.82rem;font-weight:800;line-height:1.2;}
-.bs{font-size:.6rem;color:var(--m);}
-.ni{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;font-size:.8rem;font-weight:500;color:var(--t2);cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:all .2s;}
-.ni:hover,.ni.act{background:rgba(59,130,246,.1);color:var(--p);}
-.ni span{font-size:.95rem;}
-.bk{display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:9px;font-size:.78rem;color:var(--m);cursor:pointer;text-decoration:none;margin-top:auto;transition:color .2s;}
-.bk:hover{color:var(--t);}
-main{margin-left:220px;padding:28px;flex:1;min-height:100vh;}
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
-.pt{font-size:1.5rem;font-weight:800;letter-spacing:-.5px;}
-.ps{font-size:.75rem;color:var(--m);margin-top:2px;}
-.live{display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--g);font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:5px 12px;border-radius:20px;}
-.dot{width:6px;height:6px;background:var(--g);border-radius:50%;animation:pulse 1.5s ease-in-out infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
-.sc{background:rgba(30,41,59,.8);border:1px solid var(--b);border-radius:14px;padding:18px;transition:border-color .2s;}
-.sc:hover{border-color:rgba(255,255,255,.12);}
-.sl{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--m);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-.sn{font-size:2rem;font-weight:800;line-height:1;}
-.sd{font-size:.68rem;color:var(--m);margin-top:4px;}
-.sc.p .sn{color:var(--p);} .sc.g .sn{color:var(--g);} .sc.a .sn{color:var(--a);} .sc.y .sn{color:var(--y);}
-.charts{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:24px;}
-.cc{background:rgba(30,41,59,.8);border:1px solid var(--b);border-radius:14px;padding:18px;}
-.ct{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--m);margin-bottom:14px;}
-.rank{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
-.ri{display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(15,23,42,.4);border-radius:10px;}
-.rpos{font-size:.7rem;font-weight:700;color:var(--m);width:18px;}
-.rn{flex:1;font-size:.8rem;font-weight:600;}
-.rb{font-size:.75rem;font-weight:700;color:var(--p);}
-.sec{margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
-.slist{display:grid;gap:12px;}
-.card{background:rgba(30,41,59,.8);border:1px solid var(--b);border-radius:14px;padding:18px;transition:all .25s;}
-.card:hover{border-color:rgba(59,130,246,.25);transform:translateY(-1px);}
-.card.ativa{border-color:rgba(16,185,129,.2);background:rgba(16,185,129,.03);}
-.ch{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
-.ctema{font-size:.9rem;font-weight:700;flex:1;margin-right:10px;line-height:1.3;}
-.pill{font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:3px 9px;border-radius:20px;white-space:nowrap;}
-.pa{background:rgba(16,185,129,.1);color:var(--g);border:1px solid rgba(16,185,129,.2);}
-.pe{background:rgba(100,116,139,.1);color:var(--m);border:1px solid rgba(100,116,139,.15);}
-.cm{display:flex;gap:14px;font-size:.72rem;color:var(--m);flex-wrap:wrap;}
-.cf{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--b);}
-.cnt{font-size:.78rem;color:var(--g);font-weight:600;}
-.acts{display:flex;gap:7px;}
-.btn{padding:6px 12px;border-radius:8px;font-size:.7rem;font-weight:600;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;}
-.ba{background:rgba(16,185,129,.1);color:var(--g);border:1px solid rgba(16,185,129,.2);}
-.ba:hover{background:var(--g);color:#fff;}
-.bv{background:rgba(59,130,246,.1);color:var(--p);border:1px solid rgba(59,130,246,.2);}
-.bv:hover{background:var(--p);color:#fff;}
-.be{background:rgba(239,68,68,.1);color:var(--r);border:1px solid rgba(239,68,68,.2);}
-.be:hover{background:var(--r);color:#fff;}
-.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:center;justify-content:center;padding:20px;}
-.mo.open{display:flex;}
-.mb{background:#1e293b;border:1px solid var(--b);border-radius:18px;width:100%;max-width:480px;overflow:hidden;}
-.mh{padding:18px 22px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;}
-.mt{font-size:.95rem;font-weight:700;}
-.mc{padding:22px;}
-.fg{margin-bottom:14px;}
-label{display:block;font-size:.78rem;font-weight:500;color:var(--t2);margin-bottom:5px;}
-input,select{width:100%;padding:10px 14px;background:rgba(15,23,42,.6);border:1px solid rgba(255,255,255,.1);border-radius:10px;font-family:'Inter',sans-serif;font-size:.85rem;color:var(--t);transition:all .25s;}
-input:focus,select:focus{outline:none;border-color:var(--g);box-shadow:0 0 0 3px rgba(16,185,129,.2);}
-input::placeholder{color:var(--m);}
-select option{background:#1e293b;}
-.bsub{width:100%;padding:13px;background:linear-gradient(135deg,var(--g),#059669);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .3s;margin-top:4px;}
-.bsub:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(16,185,129,.3);}
-.bsub:disabled{background:linear-gradient(135deg,#475569,#334155);cursor:not-allowed;transform:none;}
-.emp{text-align:center;padding:50px 20px;color:var(--m);}
-.ei{font-size:2.5rem;margin-bottom:10px;}
-.sp{width:32px;height:32px;border:3px solid rgba(255,255,255,.1);border-top-color:var(--p);border-radius:50%;animation:spin .8s linear infinite;margin:30px auto;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.prow{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);}
-.prow:last-child{border-bottom:none;}
-.pav{width:34px;height:34px;background:linear-gradient(135deg,var(--p),var(--a));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;}
-.pi{flex:1;}
-.pn{font-size:.82rem;font-weight:600;}
-.ps2{font-size:.68rem;color:var(--m);}
-.ph{font-size:.65rem;color:var(--m);}
-@media(max-width:900px){aside{display:none;} main{margin-left:0;padding:16px;} .stats{grid-template-columns:1fr 1fr;} .charts{grid-template-columns:1fr;}}
-</style>
-</head>
-<body>
-<aside>
-  <div class="brand"><img src="logo.png" alt="Mococa"><div><div class="bn">DSS Dashboard</div><div class="bs">Painel de Gestão</div></div></div>
-  <button class="ni act" onclick="sv('s')"><span>📋</span> Sessões</button>
-  <button class="ni" onclick="sv('i')"><span>👥</span> Instrutores</button>
-  <a href="index.html" class="bk"><span>←</span> Voltar ao Gerador</a>
-</aside>
-<main>
-  <div class="topbar"><div><div class="pt">Painel de Gestão</div><div class="ps">Diálogos Semanais de Segurança — Mococa</div></div><div class="live"><span class="dot"></span> Tempo Real</div></div>
-  <div class="stats">
-    <div class="sc p"><div class="sl">📋 Total de Sessões</div><div class="sn" id="st">—</div><div class="sd">Desde o início</div></div>
-    <div class="sc g"><div class="sl">👤 Instrutores</div><div class="sn" id="si">—</div><div class="sd">Instrutores únicos</div></div>
-    <div class="sc a"><div class="sl">✅ Presenças</div><div class="sn" id="sp">—</div><div class="sd">Total de registros</div></div>
-    <div class="sc y"><div class="sl">📊 Média/Sessão</div><div class="sn" id="sm">—</div><div class="sd">Participantes médio</div></div>
-  </div>
-  <div class="charts">
-    <div class="cc"><div class="ct">📅 DSS por Mês</div><canvas id="chartMes" height="90"></canvas></div>
-    <div class="cc"><div class="ct">🏆 Top Instrutores</div><div class="rank" id="rank"><div class="sp"></div></div></div>
-  </div>
-  <div id="v-s">
-    <div class="sec"><div class="ct" style="margin:0">📋 Sessões DSS</div></div>
-    <div id="sloading"><div class="sp"></div></div>
-    <div id="sgrid" class="slist"></div>
-    <div id="semp" class="emp" style="display:none"><div class="ei">📭</div><p>Nenhuma sessão criada ainda.</p></div>
-  </div>
-  <div id="v-i" style="display:none">
-    <div class="ct" style="margin-bottom:16px">👥 Relatório de Instrutores</div>
-    <div id="ilist" class="slist"></div>
-  </div>
-</main>
-
-<!-- Modal Adicionar Presença -->
-<div class="mo" id="mAdd" onclick="cmClick(event)">
-  <div class="mb">
-    <div class="mh"><div class="mt">➕ Adicionar Presença</div><button onclick="closeAdd()" style="background:none;border:none;color:var(--m);font-size:1.1rem;cursor:pointer;">✕</button></div>
-    <div class="mc">
-      <div class="fg"><label>Nome completo *</label><input type="text" id="aNome" placeholder="Ex: João da Silva" autocomplete="off"></div>
-      <div class="fg"><label>Setor *</label>
-        <select id="aSetor">
-          <option value="">Selecione...</option>
-          <option>Manutenção</option><option>Almoxarifado</option><option>Produção</option>
-          <option>Administrativo</option><option>Qualidade</option><option>Logística</option><option>Outro</option>
-        </select>
-      </div>
-      <button class="bsub" id="btnAdd" onclick="salvarPresenca()">✅ Confirmar Presença</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Ver Presenças -->
-<div class="mo" id="mVer" onclick="cvClick(event)">
-  <div class="mb">
-    <div class="mh"><div><div class="mt" id="mVerTit">Presenças</div><div style="font-size:.68rem;color:var(--m);margin-top:2px" id="mVerSub"></div></div><button onclick="closeVer()" style="background:none;border:none;color:var(--m);font-size:1.1rem;cursor:pointer;">✕</button></div>
-    <div class="mc" id="mVerBody" style="max-height:400px;overflow-y:auto"><div class="sp"></div></div>
-  </div>
-</div>
-
+﻿<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard DSS</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/chart.js"><\/script><style>:root{--bg:#0f172a;--s:#1e293b;--b:rgba(255,255,255,.07);--t:#f1f5f9;--t2:#94a3b8;--m:#64748b;--p:#3b82f6;--g:#10b981;--r:#ef4444;--a:#8b5cf6;--y:#f59e0b}*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,sans-serif;background:var(--bg);color:var(--t);display:flex;min-height:100vh}aside{width:220px;background:rgba(30,41,59,.97);border-right:1px solid var(--b);padding:20px 14px;display:flex;flex-direction:column;gap:6px;position:fixed;height:100vh;z-index:10}.brand{display:flex;align-items:center;gap:10px;padding-bottom:18px;border-bottom:1px solid var(--b);margin-bottom:4px}.bn{font-size:.82rem;font-weight:800;line-height:1.2}.bs{font-size:.6rem;color:var(--m)}.ni{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;font-size:.8rem;font-weight:500;color:var(--t2);cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:all .2s}.ni:hover,.ni.act{background:rgba(59,130,246,.1);color:var(--p)}.bk{display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:9px;font-size:.78rem;color:var(--m);cursor:pointer;text-decoration:none;margin-top:auto;transition:color .2s}.bk:hover{color:var(--t)}main{margin-left:220px;padding:28px;flex:1}.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}.pt{font-size:1.5rem;font-weight:800;letter-spacing:-.5px}.live{display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--g);font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:5px 12px;border-radius:20px}.dot{width:6px;height:6px;background:var(--g);border-radius:50%;animation:pulse 1.5s ease-in-out infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}.sc{background:rgba(30,41,59,.8);border:1px solid var(--b);border-radius:14px;padding:18px}.sl{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--m);margin-bottom:10px}.sn{font-size:2rem;font-weight:800}.sd{font-size:.68rem;color:var(--m);margin-top:4px}.sc.p .sn{color:var(--p)}.sc.g .sn{color:var(--g)}.sc.a .sn{color:var(--a)}.sc.y .sn{color:var(--y)}.charts{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:24px}.cc{background:rgba(30,41,59,.8);border:1px solid var(--b);border-radius:14px;padding:18px}.ct{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--m);margin-bottom:14px}.rank{display:flex;flex-direction:column;gap:8px}.ri{display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(15,23,42,.4);border-radius:10px}.rpos{font-size:.7rem;font-weight:700;color:var(--m);width:18px}.rn{flex:1;font-size:.8rem;font-weight:600}.rb{font-size:.75rem;font-weight:700;color:var(--p)}.slist{display:grid;gap:12px}.card{background:rgba(30,41,59,.8);border:1px solid var(--b);border-radius:14px;padding:18px;transition:all .25s}.card:hover{border-color:rgba(59,130,246,.25)}.card.ag{border-color:rgba(245,158,11,.2);background:rgba(245,158,11,.03)}.card.at{border-color:rgba(16,185,129,.2);background:rgba(16,185,129,.03)}.ch{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}.ctema{font-size:.9rem;font-weight:700;flex:1;margin-right:10px}.pill{font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:3px 9px;border-radius:20px;white-space:nowrap}.pag{background:rgba(245,158,11,.1);color:var(--y);border:1px solid rgba(245,158,11,.2)}.pat{background:rgba(16,185,129,.1);color:var(--g);border:1px solid rgba(16,185,129,.2)}.pen{background:rgba(100,116,139,.1);color:var(--m);border:1px solid rgba(100,116,139,.15)}.cm{display:flex;gap:14px;font-size:.72rem;color:var(--m);flex-wrap:wrap}.cf{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--b)}.cnt{font-size:.78rem;color:var(--g);font-weight:600}.acts{display:flex;gap:6px;flex-wrap:wrap}.btn{padding:6px 12px;border-radius:8px;font-size:.7rem;font-weight:600;border:none;cursor:pointer;font-family:Inter,sans-serif;transition:all .2s}.ba{background:rgba(16,185,129,.1);color:var(--g);border:1px solid rgba(16,185,129,.2)}.ba:hover{background:var(--g);color:#fff}.bv{background:rgba(59,130,246,.1);color:var(--p);border:1px solid rgba(59,130,246,.2)}.bv:hover{background:var(--p);color:#fff}.bq{background:rgba(139,92,246,.1);color:var(--a);border:1px solid rgba(139,92,246,.2)}.bq:hover{background:var(--a);color:#fff}.by{background:rgba(245,158,11,.1);color:var(--y);border:1px solid rgba(245,158,11,.2)}.by:hover{background:var(--y);color:#fff}.be{background:rgba(239,68,68,.1);color:var(--r);border:1px solid rgba(239,68,68,.2)}.be:hover{background:var(--r);color:#fff}.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:center;justify-content:center;padding:20px}.mo.open{display:flex}.mb{background:#1e293b;border:1px solid var(--b);border-radius:18px;width:100%;max-width:520px;overflow:hidden;max-height:90vh;display:flex;flex-direction:column}.mh{padding:18px 22px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}.mt{font-size:.95rem;font-weight:700}.mc{padding:22px;overflow-y:auto}.fg{margin-bottom:14px}label{display:block;font-size:.78rem;font-weight:500;color:var(--t2);margin-bottom:5px}input,select,textarea{width:100%;padding:10px 14px;background:rgba(15,23,42,.6);border:1px solid rgba(255,255,255,.1);border-radius:10px;font-family:Inter,sans-serif;font-size:.85rem;color:var(--t)}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--g);box-shadow:0 0 0 3px rgba(16,185,129,.2)}input::placeholder,textarea::placeholder{color:var(--m)}select option{background:#1e293b}.bsub{width:100%;padding:13px;background:linear-gradient(135deg,var(--g),#059669);color:#fff;border:none;border-radius:12px;font-family:Inter,sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .3s;margin-top:4px}.bsub:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(16,185,129,.3)}.bsub:disabled{background:linear-gradient(135deg,#475569,#334155);cursor:not-allowed;transform:none}.emp{text-align:center;padding:50px 20px;color:var(--m)}.ei{font-size:2.5rem;margin-bottom:10px}.sp{width:32px;height:32px;border:3px solid rgba(255,255,255,.1);border-top-color:var(--p);border-radius:50%;animation:spin .8s linear infinite;margin:30px auto}@keyframes spin{to{transform:rotate(360deg)}}.prow{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04)}.prow:last-child{border-bottom:none}.pav{width:34px;height:34px;background:linear-gradient(135deg,var(--p),var(--a));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0}.pi{flex:1}.pn{font-size:.82rem;font-weight:600}.ps2{font-size:.68rem;color:var(--m)}.upload-zone{border:2px dashed rgba(255,255,255,.1);border-radius:12px;padding:30px;text-align:center;cursor:pointer;transition:all .2s}.upload-zone:hover{border-color:var(--a);background:rgba(139,92,246,.05)}.qbox{background:rgba(15,23,42,.5);border-radius:12px;padding:14px;margin-bottom:12px}.qnum{font-size:.65rem;font-weight:700;text-transform:uppercase;color:var(--m);letter-spacing:1px}.qperg{font-size:.88rem;font-weight:600;margin:6px 0 10px}.qopts{display:flex;flex-direction:column;gap:6px}.qopt{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);font-size:.8rem;cursor:pointer;transition:all .2s}.qopt:hover{background:rgba(255,255,255,.06)}.qopt.certa{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.3);color:var(--g)}.qopt.errada{background:rgba(239,68,68,.05);border-color:rgba(239,68,68,.15)}.secbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.coltag{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:600;padding:3px 8px;border-radius:6px;background:rgba(139,92,246,.1);color:var(--a)}.prog-bar{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-top:6px}.prog-fill{height:100%;background:linear-gradient(90deg,var(--p),var(--a));border-radius:3px;transition:width .5s}@media(max-width:900px){aside{display:none}main{margin-left:0;padding:16px}.stats{grid-template-columns:1fr 1fr}.charts{grid-template-columns:1fr}}<\/style><\/head>
+<body><aside><div class="brand"><img src="logo.png" alt="Mococa" style="width:38px;height:38px;background:#fff;border-radius:9px;padding:4px;object-fit:contain"><div><div class="bn">DSS Dashboard</div><div class="bs">Painel de Gestao</div></div></div><button class="ni act" onclick="sv('s')"><span>📋</span>Sessoes</button><button class="ni" onclick="sv('q')"><span>🎯</span>Quiz</button><button class="ni" onclick="sv('c')"><span>👥</span>Colaboradores</button><button class="ni" onclick="sv('i')"><span>🏆</span>Instrutores</button><a href="index.html" class="bk"><span>←</span>Voltar ao Gerador</a></aside><main><div class="topbar"><div><div class="pt">Painel de Gestao DSS</div><div style="font-size:.75rem;color:var(--m);margin-top:2px">Mococa — Tempo Real</div></div><div class="live"><span class="dot"></span>ONLINE</div></div><div class="stats"><div class="sc p"><div class="sl">📋 Total Sessoes</div><div class="sn" id="st">—</div><div class="sd">Desde o inicio</div></div><div class="sc y"><div class="sl">📅 Agendadas</div><div class="sn" id="sag">—</div><div class="sd">Pendentes de execucao</div></div><div class="sc a"><div class="sl">✅ Presencas</div><div class="sn" id="sp">—</div><div class="sd">Total de registros</div></div><div class="sc g"><div class="sl">👤 Instrutores</div><div class="sn" id="si">—</div><div class="sd">Unicos</div></div></div><div class="charts"><div class="cc"><div class="ct">📅 DSS por Mes</div><canvas id="chartMes" height="90"></canvas></div><div class="cc"><div class="ct">🏆 Top Instrutores</div><div class="rank" id="rank"><div class="sp"></div></div></div></div>
+<div id="v-s"><div class="secbar"><span class="ct" style="margin:0">📋 Sessoes DSS</span></div><div id="sl2"><div class="sp"></div></div><div id="sg" class="slist"></div><div id="semp" class="emp" style="display:none"><div class="ei">📭</div><p>Nenhuma sessao criada ainda.</p></div></div><div id="v-q" style="display:none"><div class="secbar"><span class="ct" style="margin:0">🎯 Quiz Interativo</span></div><div id="ql" class="emp"><div class="ei">🎯</div><p>Selecione uma sessao na aba Sessoes e clique em Quiz para conduzir a dinamica.</p></div></div><div id="v-c" style="display:none"><div class="secbar"><span class="ct" style="margin:0">👥 Ranking de Colaboradores</span></div><div id="cl" class="slist"><div class="sp"></div></div></div><div id="v-i" style="display:none"><div class="ct" style="margin-bottom:16px">🏆 Relatorio de Instrutores</div><div id="il" class="slist"></div></div></main>
+<!-- Modal Add Presenca --><div class="mo" id="mAdd" onclick="if(event.target===this)closeAdd()"><div class="mb"><div class="mh"><div class="mt">➕ Adicionar Presenca</div><button onclick="closeAdd()" style="background:none;border:none;color:var(--m);font-size:1.1rem;cursor:pointer">✕</button></div><div class="mc"><div class="fg"><label>Nome completo *</label><input type="text" id="aNome" placeholder="Ex: Joao da Silva" autocomplete="off"></div><div class="fg"><label>RE (Registro do Empregado)</label><input type="text" id="aRE" placeholder="Ex: 12345" autocomplete="off"></div><div class="fg"><label>Setor *</label><select id="aSetor"><option value="">Selecione...</option><option>Manutencao</option><option>Almoxarifado</option><option>Producao</option><option>Administrativo</option><option>Qualidade</option><option>Logistica</option><option>Outro</option></select></div><button class="bsub" id="btnAdd" onclick="salvarPresenca()">✅ Confirmar Presenca</button></div></div></div>
+<!-- Modal Ver Presencas --><div class="mo" id="mVer" onclick="if(event.target===this)closeVer()"><div class="mb"><div class="mh"><div><div class="mt" id="mVerTit">Presencas</div><div style="font-size:.68rem;color:var(--m);margin-top:2px" id="mVerSub"></div></div><button onclick="closeVer()" style="background:none;border:none;color:var(--m);font-size:1.1rem;cursor:pointer">✕</button></div><div class="mc" id="mVerBody" style="max-height:70vh;overflow-y:auto"><div class="sp"></div></div></div></div><!-- Modal OCR --><div class="mo" id="mOCR" onclick="if(event.target===this)closeOCR()"><div class="mb"><div class="mh"><div><div class="mt">📷 Leitura da Lista com IA</div><div style="font-size:.68rem;color:var(--m);margin-top:2px" id="ocrSessaoTit"></div></div><button onclick="closeOCR()" style="background:none;border:none;color:var(--m);font-size:1.1rem;cursor:pointer">✕</button></div><div class="mc"><p style="font-size:.78rem;color:var(--m);margin-bottom:14px">Tire uma foto da lista de presenca preenchida. A IA vai ler os Nomes e REs automaticamente.</p><div class="fg"><label>📎 Foto da Lista</label><input type="file" id="ocrFile" accept="image/*" style="padding:8px"></div><div id="ocrPreview" style="display:none;margin-bottom:14px;text-align:center"><img id="ocrImg" src="" style="max-width:100%;border-radius:10px;max-height:200px;object-fit:contain"></div><button class="bsub" id="btnOCR" onclick="processarOCR()" style="background:linear-gradient(135deg,var(--a),#7c3aed)" disabled>🤖 Analisar com IA</button><div id="ocrResultado" style="margin-top:16px;display:none"><div style="font-size:.78rem;font-weight:600;margin-bottom:8px;color:var(--t2)">✅ Pessoas encontradas — revise e confirme:</div><div id="ocrLista"></div><button class="bsub" id="btnSalvarOCR" onclick="salvarOCR()" style="margin-top:12px">💾 Salvar Presenças</button></div></div></div></div>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 <script src="firebaseConfig.js"></script>
 <script>
-let sessoes=[], addSessaoId=null, chartMes=null;
-
-function sv(v){
-  document.getElementById('v-s').style.display=v==='s'?'block':'none';
-  document.getElementById('v-i').style.display=v==='i'?'block':'none';
-  document.querySelectorAll('.ni').forEach((el,i)=>{el.classList.toggle('act',(v==='s'&&i===0)||(v==='i'&&i===1));});
-  if(v==='i') renderInstrutores();
-}
-
-db.collection('sessoes_dss').orderBy('criadoEm','desc').onSnapshot(async snap=>{
-  document.getElementById('sloading').style.display='none';
-  sessoes=snap.docs.map(d=>({id:d.id,...d.data()}));
-  document.getElementById('semp').style.display=sessoes.length?'none':'block';
-  renderCards();
-  await calcStats();
-});
-
-function fmtData(s){if(!s)return'—';const p=s.split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:s;}
-
-function renderCards(){
-  document.getElementById('sgrid').innerHTML=sessoes.map(s=>`
-  <div class="card ${s.status==='ativa'?'ativa':''}">
-    <div class="ch"><div class="ctema">${s.titulo||s.tema||'—'}</div><span class="pill ${s.status==='ativa'?'pa':'pe'}">${s.status==='ativa'?'🟢 Ativa':'🔒 Encerrada'}</span></div>
-    <div class="cm"><span>📅 ${fmtData(s.data)}</span><span>🏭 ${s.setor||'—'}</span><span>👤 ${s.responsavel||'—'}</span></div>
-    <div class="cf">
-      <div class="cnt" id="c-${s.id}">⏳ carregando...</div>
-      <div class="acts">
-        <button class="btn ba" onclick="openAdd('${s.id}')">➕ Adicionar</button>
-        <button class="btn bv" onclick="openVer('${s.id}','${(s.titulo||s.tema||'').replace(/'/g,"\\'")}','${fmtData(s.data)}')">👁️ Ver</button>
-        ${s.status==='ativa'?`<button class="btn be" onclick="encerrar('${s.id}')">🔒</button>`:''}
-      </div>
-    </div>
-  </div>`).join('');
-  sessoes.forEach(s=>watchCount(s.id));
-}
-
-function watchCount(id){
-  db.collection('sessoes_dss').doc(id).collection('presencas').onSnapshot(snap=>{
-    const el=document.getElementById('c-'+id);
-    if(el) el.textContent='✅ '+snap.size+' presença(s)';
-  });
-}
-
-async function calcStats(){
-  let totalP=0, instSet=new Set(), meses={};
-  for(const s of sessoes){
-    if(s.responsavel) instSet.add(s.responsavel);
-    const mes=s.data?s.data.substring(0,7):'?';
-    meses[mes]=(meses[mes]||0)+1;
-    const snap=await db.collection('sessoes_dss').doc(s.id).collection('presencas').get();
-    totalP+=snap.size;
-  }
-  document.getElementById('st').textContent=sessoes.length;
-  document.getElementById('si').textContent=instSet.size||'—';
-  document.getElementById('sp').textContent=totalP;
-  document.getElementById('sm').textContent=sessoes.length?Math.round(totalP/sessoes.length):0;
-  renderChart(meses);
-  renderRank();
-}
-
-function renderChart(meses){
-  const labels=Object.keys(meses).sort().map(m=>{const[y,mo]=m.split('-');const ms=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];return ms[+mo-1]+'/'+y.slice(2);});
-  const data=Object.keys(meses).sort().map(k=>meses[k]);
-  if(chartMes) chartMes.destroy();
-  const ctx=document.getElementById('chartMes').getContext('2d');
-  chartMes=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'Sessões',data,backgroundColor:'rgba(59,130,246,.5)',borderColor:'#3b82f6',borderWidth:2,borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{color:'#64748b',stepSize:1},grid:{color:'rgba(255,255,255,.05)'}},x:{ticks:{color:'#64748b'},grid:{color:'rgba(255,255,255,.05)'}}}}});
-}
-
-async function renderRank(){
-  const cnt={};
-  for(const s of sessoes){if(s.responsavel) cnt[s.responsavel]=(cnt[s.responsavel]||0)+1;}
-  const sorted=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  const medals=['🥇','🥈','🥉','4️⃣','5️⃣'];
-  document.getElementById('rank').innerHTML=sorted.length?sorted.map(([n,c],i)=>`<div class="ri"><span class="rpos">${medals[i]}</span><span class="rn">${n}</span><span class="rb">${c} DSS</span></div>`).join(''):'<p style="font-size:.75rem;color:var(--m);text-align:center;padding:20px">Nenhum dado ainda</p>';
-}
-
-async function renderInstrutores(){
-  const el=document.getElementById('ilist');
-  el.innerHTML='<div class="sp"></div>';
-  const cnt={};
-  for(const s of sessoes){
-    const resp=s.responsavel||'Não informado';
-    if(!cnt[resp]) cnt[resp]={total:0,setores:new Set(),presencas:0};
-    cnt[resp].total++;
-    if(s.setor) cnt[resp].setores.add(s.setor);
-    const snap=await db.collection('sessoes_dss').doc(s.id).collection('presencas').get();
-    cnt[resp].presencas+=snap.size;
-  }
-  el.innerHTML=Object.entries(cnt).sort((a,b)=>b[1].total-a[1].total).map(([n,d])=>`
-  <div class="card">
-    <div class="ch"><div class="ctema">👤 ${n}</div><span class="pill pa">${d.total} DSS</span></div>
-    <div class="cm"><span>🏭 Setores: ${[...d.setores].join(', ')||'—'}</span><span>✅ ${d.presencas} presenças</span></div>
-  </div>`).join('')||'<div class="emp"><div class="ei">👤</div><p>Nenhum instrutor ainda</p></div>';
-}
-
-async function encerrar(id){
-  if(!confirm('Encerrar esta sessão?')) return;
-  await db.collection('sessoes_dss').doc(id).update({status:'encerrada'});
-}
-
-function openAdd(id){addSessaoId=id;document.getElementById('aNome').value='';document.getElementById('aSetor').value='';document.getElementById('mAdd').classList.add('open');}
-function closeAdd(){document.getElementById('mAdd').classList.remove('open');}
-function cmClick(e){if(e.target===document.getElementById('mAdd')) closeAdd();}
-
-async function salvarPresenca(){
-  const nome=document.getElementById('aNome').value.trim();
-  const setor=document.getElementById('aSetor').value;
-  if(!nome){alert('Informe o nome!');return;}
-  if(!setor){alert('Selecione o setor!');return;}
-  const btn=document.getElementById('btnAdd');
-  btn.disabled=true;btn.textContent='Salvando...';
-  try{
-    await db.collection('sessoes_dss').doc(addSessaoId).collection('presencas').add({nome,setor,assinadoEm:firebase.firestore.FieldValue.serverTimestamp(),modo:'manual'});
-    closeAdd();
-  }catch(e){alert('Erro: '+e.message);}
-  finally{btn.disabled=false;btn.textContent='✅ Confirmar Presença';}
-}
-
-function openVer(id,titulo,data){
-  document.getElementById('mVerTit').textContent=titulo;
-  document.getElementById('mVerSub').textContent='📅 '+data;
-  document.getElementById('mVerBody').innerHTML='<div class="sp"></div>';
-  document.getElementById('mVer').classList.add('open');
-  db.collection('sessoes_dss').doc(id).collection('presencas').orderBy('assinadoEm','asc').onSnapshot(snap=>{
-    if(snap.empty){document.getElementById('mVerBody').innerHTML='<div class="emp"><div class="ei">🙈</div><p style="font-size:.8rem">Nenhuma presença ainda</p></div>';return;}
-    document.getElementById('mVerBody').innerHTML=snap.docs.map(d=>{
-      const p=d.data();
-      const h=p.assinadoEm?p.assinadoEm.toDate().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'—';
-      return`<div class="prow"><div class="pav">${(p.nome||'?')[0].toUpperCase()}</div><div class="pi"><div class="pn">${p.nome||'—'}</div><div class="ps2">${p.setor||'—'} ${p.modo==='manual'?'· Manual':''}</div></div><div class="ph">⏰ ${h}</div></div>`;
-    }).join('');
-  });
-}
-function closeVer(){document.getElementById('mVer').classList.remove('open');}
-function cvClick(e){if(e.target===document.getElementById('mVer')) closeVer();}
-</script>
-</body>
-</html>
+let sessoes=[],addSessaoId=null,ocrSessaoId=null,quizSessaoId=null,chartMes=null,quizPergs=[],ocrPessoas=[];
+const _k="QUl6YVN5RG1lTXdqNUYtMTJrZXJ3bWJ3QU1odGlZOHlSMm5fOTVV";const AK=atob(_k);
+function sv(v){["s","q","c","i"].forEach(x=>{const el=document.getElementById("v-"+x);if(el)el.style.display=v===x?"block":"none"});document.querySelectorAll(".ni").forEach((el,i)=>{el.classList.toggle("act",["s","q","c","i"][i]===v)});if(v==="c")renderColabs();if(v==="i")renderInst()}
+db.collection("sessoes_dss").orderBy("criadoEm","desc").onSnapshot(async snap=>{document.getElementById("sl2").style.display="none";sessoes=snap.docs.map(d=>({id:d.id,...d.data()}));document.getElementById("semp").style.display=sessoes.length?"none":"block";renderCards();await calcStats()});
+function fd(s){if(!s)return"—";const p=s.split("-");return p.length===3?p[2]+"/"+p[1]+"/"+p[0]:s}
+function mkBtn(cls,text,onclick){return '<button class="btn '+cls+'" onclick="'+onclick+'">'+text+'</button>'}
+function renderCards(){document.getElementById("sg").innerHTML=sessoes.map(s=>{const q=s.quiz&&s.quiz.length>0;const enc=s.status==="encerrada";const ag=s.status==="agendado";const at=s.status==="ativa";const esc=JSON.stringify(s.quiz||[]).replace(/'/g,"&#39;").replace(/"/g,"&quot;");return '<div class="card '+(ag?"ag":at?"at":"")+'"><div class="ch"><div class="ctema">'+(s.titulo||s.tema||"—")+'</div><span class="pill '+(ag?"pag":at?"pat":"pen")+'">'+(ag?"📅 Agendado":at?"🟢 Ativa":"🔒 Encerrada")+'</span></div><div class="cm"><span>📅 '+fd(s.data)+'</span><span>🏭 '+(s.setor||"—")+'</span><span>👤 '+(s.responsavel||"—")+'</span>'+(s.duracao?'<span>⏱ '+s.duracao+'</span>':'')+'</div><div class="cf"><div class="cnt" id="c-'+s.id+'">⏳ carregando...</div><div class="acts">'+(ag?mkBtn("by","▶️ Executar","executar('"+s.id+"')"):"")+(enc?"":mkBtn("ba","➕ Add","openAdd('"+s.id+"')"))+(q?'<button class="btn bq" onclick="openQuiz(\''+s.id+'\')">🎯 Quiz</button>':"")+mkBtn("bv","👁 Ver","openVer('"+s.id+"','"+((s.titulo||s.tema||"").replace(/'/g,"\\'"))+"','"+fd(s.data)+"')")+mkBtn("bq","📷","openOCR('"+s.id+"','"+((s.titulo||"DSS").replace(/'/g,"\\'"))+"')")+(enc?"":mkBtn("be","🔒","encerrar('"+s.id+"')"))+'</div></div></div>'}
+).join("");sessoes.forEach(s=>watchCount(s.id))}
+function watchCount(id){db.collection("sessoes_dss").doc(id).collection("presencas").onSnapshot(snap=>{const el=document.getElementById("c-"+id);if(el)el.textContent="✅ "+snap.size+" presença(s)"})}
+async function calcStats(){let tp=0,inst=new Set(),meses={},ag=0;for(const s of sessoes){if(s.responsavel)inst.add(s.responsavel);if(s.status==="agendado")ag++;const mes=s.data?s.data.substring(0,7):"?";meses[mes]=(meses[mes]||0)+1;const sn=await db.collection("sessoes_dss").doc(s.id).collection("presencas").get();tp+=sn.size}document.getElementById("st").textContent=sessoes.length;document.getElementById("sag").textContent=ag;document.getElementById("sp").textContent=tp;document.getElementById("si").textContent=inst.size||"—";renderChart(meses);renderRank()}
+function renderChart(m){const labels=Object.keys(m).sort().map(k=>{const[y,mo]=k.split("-");return["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"][+mo-1]+"/"+y.slice(2)});const data=Object.keys(m).sort().map(k=>m[k]);if(chartMes)chartMes.destroy();const ctx=document.getElementById("chartMes").getContext("2d");chartMes=new Chart(ctx,{type:"bar",data:{labels,datasets:[{label:"Sessoes",data,backgroundColor:"rgba(59,130,246,.5)",borderColor:"#3b82f6",borderWidth:2,borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{color:"#64748b",stepSize:1},grid:{color:"rgba(255,255,255,.05)"}},x:{ticks:{color:"#64748b"},grid:{color:"rgba(255,255,255,.05)"}}}}})}
+async function renderRank(){const cnt={};for(const s of sessoes){if(s.responsavel)cnt[s.responsavel]=(cnt[s.responsavel]||0)+1}const sorted=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5);const medals=["🥇","🥈","🥉","4️⃣","5️⃣"];document.getElementById("rank").innerHTML=sorted.length?sorted.map(([n,c],i)=>'<div class="ri"><span class="rpos">'+medals[i]+'</span><span class="rn">'+n+'</span><span class="rb">'+c+' DSS</span></div>').join(''):'<p style="font-size:.75rem;color:var(--m);text-align:center;padding:20px">Nenhum dado ainda</p>'}
+async function encerrar(id){if(!confirm("Encerrar esta sessao?"))return;await db.collection("sessoes_dss").doc(id).update({status:"encerrada"})}
+async function executar(id){if(!confirm("Marcar esta sessao como ATIVA agora?"))return;await db.collection("sessoes_dss").doc(id).update({status:"ativa"})}
+function openAdd(id){addSessaoId=id;document.getElementById("aNome").value="";document.getElementById("aRE").value="";document.getElementById("aSetor").value="";document.getElementById("mAdd").classList.add("open")}
+function closeAdd(){document.getElementById("mAdd").classList.remove("open")}
+async function salvarPresenca(){const nome=document.getElementById("aNome").value.trim();const re=document.getElementById("aRE").value.trim();const setor=document.getElementById("aSetor").value;if(!nome){alert("Informe o nome!");return}if(!setor){alert("Selecione o setor!");return}const btn=document.getElementById("btnAdd");btn.disabled=true;btn.textContent="Salvando...";try{await db.collection("sessoes_dss").doc(addSessaoId).collection("presencas").add({nome,re,setor,assinadoEm:firebase.firestore.FieldValue.serverTimestamp(),modo:"manual"});closeAdd()}catch(e){alert("Erro: "+e.message)}finally{btn.disabled=false;btn.textContent="✅ Confirmar Presenca"}}
+function openVer(id,titulo,data){document.getElementById("mVerTit").textContent=titulo;document.getElementById("mVerSub").textContent="📅 "+data;document.getElementById("mVerBody").innerHTML='<div class="sp"></div>';document.getElementById("mVer").classList.add("open");db.collection("sessoes_dss").doc(id).collection("presencas").orderBy("assinadoEm","asc").onSnapshot(snap=>{if(snap.empty){document.getElementById("mVerBody").innerHTML='<div class="emp"><div class="ei">🙈</div><p style="font-size:.8rem">Nenhuma presenca ainda</p></div>';return}document.getElementById("mVerBody").innerHTML=snap.docs.map(d=>{const p=d.data();const h=p.assinadoEm?p.assinadoEm.toDate().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}):"—";const pts=p.pontos||0;return'<div class="prow"><div class="pav">'+(p.nome||"?")[0].toUpperCase()+'</div><div class="pi"><div class="pn">'+(p.nome||"—")+'</div><div class="ps2">'+(p.re?"RE: "+p.re+" · ":"")+(p.setor||"—")+(p.modo==="manual"?" · Manual":"")+'</div></div><div style="text-align:right"><div style="font-size:.75rem;color:var(--y);font-weight:700">'+( pts>0?"⭐ "+pts+" pts":"")+'</div><div class="ph">⏰ '+h+'</div></div></div>'}).join("")})}
+function closeVer(){document.getElementById("mVer").classList.remove("open")}
+function openOCR(id,titulo){ocrSessaoId=id;document.getElementById("ocrSessaoTit").textContent=titulo;document.getElementById("ocrFile").value="";document.getElementById("ocrPreview").style.display="none";document.getElementById("ocrResultado").style.display="none";document.getElementById("btnOCR").disabled=true;ocrPessoas=[];document.getElementById("mOCR").classList.add("open");document.getElementById("ocrFile").onchange=function(){const f=this.files[0];if(f){const r=new FileReader();r.onload=e=>{document.getElementById("ocrImg").src=e.target.result;document.getElementById("ocrPreview").style.display="block";document.getElementById("btnOCR").disabled=false};r.readAsDataURL(f)}}}
+function closeOCR(){document.getElementById("mOCR").classList.remove("open")}
+async function processarOCR(){const img=document.getElementById("ocrImg").src;if(!img||img===window.location.href)return;const btn=document.getElementById("btnOCR");btn.disabled=true;btn.textContent="🤖 Analisando...";try{const b64=img.split(",")[1];const mime=img.split(";")[0].split(":")[1];const resp=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+AK,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:"Esta e uma lista de presenca de um treinamento de seguranca do trabalho. Identifique TODAS as pessoas listadas. Para cada pessoa, extraia o NOME e o RE (numero de registro). Retorne APENAS um JSON valido no formato: [{\"nome\":\"NOME\",\"re\":\"RE\"}]. Se nao encontrar RE, use string vazia. Nao adicione texto fora do JSON."},{inline_data:{mime_type:mime,data:b64}}]}]})});const data=await resp.json();let raw=data.candidates[0].content.parts[0].text.trim();raw=raw.replace(/`json|`/g,"").trim();ocrPessoas=JSON.parse(raw);document.getElementById("ocrLista").innerHTML=ocrPessoas.map((p,i)=>'<div class="prow"><div class="pav">'+(p.nome||"?")[0].toUpperCase()+'</div><div class="pi"><input value="'+p.nome+'" onchange="ocrPessoas['+i+'].nome=this.value" style="margin-bottom:4px"><input value="'+(p.re||"")+'" placeholder="RE" onchange="ocrPessoas['+i+'].re=this.value"></div></div>').join("");document.getElementById("ocrResultado").style.display="block"}catch(e){alert("Erro IA: "+e.message)}finally{btn.disabled=false;btn.textContent="🤖 Analisar com IA"}}
+async function salvarOCR(){const btn=document.getElementById("btnSalvarOCR");btn.disabled=true;btn.textContent="Salvando...";try{const batch=db.batch();ocrPessoas.forEach(p=>{if(p.nome&&p.nome.trim()){const ref=db.collection("sessoes_dss").doc(ocrSessaoId).collection("presencas").doc();batch.set(ref,{nome:p.nome.trim(),re:p.re||"",setor:"Nao informado",assinadoEm:firebase.firestore.FieldValue.serverTimestamp(),modo:"ocr"})}});await batch.commit();closeOCR();alert("✅ "+ocrPessoas.length+" presencas salvas com sucesso!")}catch(e){alert("Erro: "+e.message)}finally{btn.disabled=false;btn.textContent="💾 Salvar Presenças"}}
+function openQuiz(id){quizSessaoId=id;const s=sessoes.find(x=>x.id===id);quizPergs=s&&s.quiz?s.quiz:[];sv("q");renderQuiz(s)}
+function renderQuiz(s){const el=document.getElementById("ql");if(!quizPergs||quizPergs.length===0){el.innerHTML='<div class="emp"><div class="ei">❓</div><p>Este DSS nao tem quiz. Gere o conteudo com IA para criar perguntas automaticamente.</p></div>';return}el.innerHTML='<div style="margin-bottom:16px"><div class="ct">🎯 Quiz — '+(s?s.titulo||s.tema:"DSS")+'</div><p style="font-size:.75rem;color:var(--m);margin-bottom:16px">Faca as perguntas em voz alta. O verde indica a resposta correta.</p></div>'+quizPergs.map((q,qi)=>'<div class="qbox"><div class="qnum">Pergunta '+(qi+1)+'</div><div class="qperg">'+q.pergunta+'</div><div class="qopts">'+["A","B","C"].map(op=>'<div class="qopt '+(q.resposta===op?"certa":"errada")+'" onclick="this.style.opacity=1"><span style="font-weight:700;margin-right:6px">'+op+')</span>'+(q.opcoes&&q.opcoes[op]?q.opcoes[op]:"—")+(q.resposta===op?' <span style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--g)">✅ CORRETA</span>':'')+'</div>').join("")+'</div></div>').join("")+'<div style="margin-top:20px"><div class="ct">🏅 Marcar Pontuacao</div><div id="pontForm"><div class="sp"></div></div></div>';loadPontForm(s?s.id:quizSessaoId)}
+async function loadPontForm(id){db.collection("sessoes_dss").doc(id).collection("presencas").orderBy("assinadoEm","asc").onSnapshot(snap=>{const el=document.getElementById("pontForm");if(!el)return;if(snap.empty){el.innerHTML='<p style="font-size:.75rem;color:var(--m)">Nenhum participante registrado ainda. Adicione presencas na aba Sessoes.</p>';return}el.innerHTML='<div style="display:grid;gap:8px">'+snap.docs.map(d=>{const p=d.data();const pts=p.pontos||0;return'<div class="prow"><div class="pav">'+(p.nome||"?")[0].toUpperCase()+'</div><div class="pi"><div class="pn">'+(p.nome||"—")+'</div><div class="ps2">'+(p.re?"RE: "+p.re+" · ":"")+( p.setor||"")+'</div></div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:.85rem;font-weight:700;color:var(--y);min-width:40px">'+pts+' pts</span><button class="btn ba" style="padding:4px 8px;font-size:.65rem" onclick="pontuar(\''+id+'\',\''+d.id+'\','+pts+',1)">+1</button><button class="btn be" style="padding:4px 8px;font-size:.65rem" onclick="pontuar(\''+id+'\',\''+d.id+'\','+pts+',-1)">-1</button></div></div>'}).join("")+'</div>'})}
+async function pontuar(sessId,docId,atual,delta){const novo=Math.max(0,atual+delta);await db.collection("sessoes_dss").doc(sessId).collection("presencas").doc(docId).update({pontos:novo})}
+async function renderColabs(){const el=document.getElementById("cl");el.innerHTML='<div class="sp"></div>';const mapa={};for(const s of sessoes){const snp=await db.collection("sessoes_dss").doc(s.id).collection("presencas").get();snp.docs.forEach(d=>{const p=d.data();const re=p.re||p.nome||"?";if(!mapa[re])mapa[re]={nome:p.nome||"—",re:p.re||"",total:0,pontos:0,temas:[]};mapa[re].total++;mapa[re].pontos+=(p.pontos||0);if(s.titulo)mapa[re].temas.push(s.titulo)})}const lista=Object.values(mapa).sort((a,b)=>b.pontos-a.pontos||b.total-a.total);el.innerHTML=lista.length?lista.map((c,i)=>'<div class="card"><div class="ch"><div class="ctema">'+(i<3?["🥇","🥈","🥉"][i]+" ":"")+c.nome+'</div>'+(c.re?'<span class="coltag">RE: '+c.re+'</span>':'')+' </div><div class="cm"><span>✅ '+c.total+' DSS</span>'+(c.pontos>0?'<span>⭐ '+c.pontos+' pontos</span>':'')+'</div>'+(c.temas.length?'<div style="margin-top:8px"><div style="font-size:.65rem;color:var(--m);margin-bottom:4px">ULTIMOS DSS:</div><div style="font-size:.72rem;color:var(--t2)">'+c.temas.slice(-3).join(" · ")+'</div></div>':'')+'</div>').join(""):'<div class="emp"><div class="ei">👥</div><p>Nenhum colaborador registrado ainda.</p></div>'}
+async function renderInst(){const el=document.getElementById("il");el.innerHTML='<div class="sp"></div>';const cnt={};for(const s of sessoes){const resp=s.responsavel||"Nao informado";if(!cnt[resp])cnt[resp]={total:0,setores:new Set(),presencas:0};cnt[resp].total++;if(s.setor)cnt[resp].setores.add(s.setor);const sn=await db.collection("sessoes_dss").doc(s.id).collection("presencas").get();cnt[resp].presencas+=sn.size}el.innerHTML=Object.entries(cnt).sort((a,b)=>b[1].total-a[1].total).map(([n,d])=>'<div class="card"><div class="ch"><div class="ctema">👤 '+n+'</div><span class="pill pat">'+d.total+' DSS</span></div><div class="cm"><span>🏭 Setores: '+[...d.setores].join(", ")+'</span><span>✅ '+d.presencas+' presenças</span><span>📊 Media: '+(d.total?Math.round(d.presencas/d.total):0)+'/sessao</span></div></div>').join("")||'<div class="emp"><div class="ei">👤</div><p>Nenhum instrutor ainda</p></div>'}
+</script></body></html>

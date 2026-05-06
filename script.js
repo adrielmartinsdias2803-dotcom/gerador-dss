@@ -226,7 +226,27 @@ Boas práticas de segurança:
 • [prática 3]
 
 Conclusão:
-[texto final de impacto e conscientização]`;
+[texto final de impacto e conscientização]
+
+---QUIZ---
+Após o texto, gere exatamente 3 perguntas de múltipla escolha sobre o tema para uma dinâmica interativa com os colaboradores. Use este formato EXATO (não mude o formato):
+P1: [pergunta]
+A) [opção correta]
+B) [opção errada]
+C) [opção errada]
+RESPOSTA: A
+
+P2: [pergunta]
+A) [opção errada]
+B) [opção correta]
+C) [opção errada]
+RESPOSTA: B
+
+P3: [pergunta]
+A) [opção errada]
+B) [opção errada]
+C) [opção correta]
+RESPOSTA: C`;
 
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${API_KEY}`, {
                     method: 'POST',
@@ -243,9 +263,31 @@ Conclusão:
                     throw new Error(errMsg);
                 }
 
-                const textoGerado = data.candidates[0].content.parts[0].text;
-                
-                inputConteudo.value = textoGerado.trim();
+                // Separa o conteúdo DSS do quiz
+                let textoConteudo = textoGerado.trim();
+                let quizData = [];
+                const quizSep = textoGerado.indexOf('---QUIZ---');
+                if (quizSep !== -1) {
+                    textoConteudo = textoGerado.substring(0, quizSep).trim();
+                    const quizRaw = textoGerado.substring(quizSep + 10).trim();
+                    // Parsear as perguntas
+                    const blocos = quizRaw.split(/\n\nP\d+:/).map((b,i) => i === 0 ? b.replace(/^P\d+:/,'').trim() : b.trim());
+                    blocos.forEach((bloco, i) => {
+                        const linhas = bloco.split('\n').map(l => l.trim()).filter(Boolean);
+                        if (linhas.length >= 5) {
+                            const respLinha = linhas.find(l => l.startsWith('RESPOSTA:'));
+                            quizData.push({
+                                pergunta: linhas[0],
+                                opcoes: { A: linhas[1].replace(/^A\)/,'').trim(), B: linhas[2].replace(/^B\)/,'').trim(), C: linhas[3].replace(/^C\)/,'').trim() },
+                                resposta: respLinha ? respLinha.replace('RESPOSTA:','').trim() : 'A'
+                            });
+                        }
+                    });
+                    // Salva no localStorage para o dashboard acessar
+                    window._lastQuiz = quizData;
+                }
+
+                inputConteudo.value = textoConteudo;
                 updatePreview();
                 updateProgress();
 
@@ -491,14 +533,16 @@ Ergonomia no posto de trabalho`;
             btnIniciarSessao.textContent = "Iniciando...";
 
             try {
-                // Cria a sessão no Firebase Firestore
+                // Cria a sessão no Firebase Firestore como "agendado"
                 const docRef = await db.collection("sessoes_dss").add({
                     titulo: titulo,
                     tema: inputTema.value.trim(),
                     setor: setor,
                     data: inputData.value,
                     responsavel: inputResponsavel.value || "Não informado",
-                    status: "ativa",
+                    duracao: inputDuracao.value || "10 MINUTOS",
+                    status: "agendado",
+                    quiz: window._lastQuiz || [],
                     criadoEm: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
@@ -507,7 +551,7 @@ Ergonomia no posto de trabalho`;
 
                 // Mostra o Modal
                 qrModal.style.display = "flex";
-                qrTemaDisplay.textContent = titulo;
+                qrTemaDisplay.textContent = titulo || tema;
 
                 // Limpa QRCode anterior se houver
                 qrcodeContainer.innerHTML = "";
@@ -528,11 +572,11 @@ Ergonomia no posto de trabalho`;
                 });
 
             } catch (error) {
-                console.error("Erro ao iniciar sessão:", error);
+                console.error("Erro ao agendar sessão:", error);
                 alert("Erro Firebase: " + error.code + "\n" + error.message);
             } finally {
                 btnIniciarSessao.disabled = false;
-                btnIniciarSessao.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Iniciar Sessão Digital`;
+                btnIniciarSessao.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Agendar / Salvar DSS`;
             }
         });
     }
