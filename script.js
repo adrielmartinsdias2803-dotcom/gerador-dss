@@ -545,6 +545,7 @@ Ergonomia no posto de trabalho`;
                     duracao: inputDuracao.value || "10 MINUTOS",
                     status: "agendado",
                     quiz: window._lastQuiz || [],
+                    conteudo: inputConteudo.value,
                     criadoEm: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
