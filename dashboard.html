@@ -918,8 +918,9 @@ function closeAdd(){document.getElementById("mAdd").classList.remove("open")}
 async function salvarPresenca(){const nome=document.getElementById("aNome").value.trim();const re=document.getElementById("aRE").value.trim();const setor=document.getElementById("aSetor").value;if(!nome){alert("Informe o nome!");return}if(!setor){alert("Selecione o setor!");return}const btn=document.getElementById("btnAdd");btn.disabled=true;btn.textContent="Salvando...";try{await db.collection("sessoes_dss").doc(addSessaoId).collection("presencas").add({nome,re,setor,assinadoEm:firebase.firestore.FieldValue.serverTimestamp(),modo:"manual"});closeAdd()}catch(e){alert("Erro: "+e.message)}finally{btn.disabled=false;btn.textContent="✅ Confirmar Presenca"}}
 function openVer(id,titulo,data){document.getElementById("mVerTit").textContent=titulo;document.getElementById("mVerSub").textContent="📅 "+data;document.getElementById("mVerBody").innerHTML='<div class="sp"></div>';document.getElementById("mVer").classList.add("open");db.collection("sessoes_dss").doc(id).collection("presencas").orderBy("assinadoEm","asc").onSnapshot(snap=>{if(snap.empty){document.getElementById("mVerBody").innerHTML='<div class="emp"><div class="ei">🙈</div><p style="font-size:.8rem">Nenhuma presenca ainda</p></div>';return}document.getElementById("mVerBody").innerHTML=snap.docs.map(d=>{const p=d.data();const h=p.assinadoEm?p.assinadoEm.toDate().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}):"—";const pts=p.pontos||0;return'<div class="prow"><div class="pav">'+(p.nome||"?")[0].toUpperCase()+'</div><div class="pi"><div class="pn">'+(p.nome||"—")+'</div><div class="ps2">'+(p.re?"RE: "+p.re+" · ":"")+(p.setor||"—")+(p.modo==="manual"?" · Manual":"")+'</div></div><div style="text-align:right"><div style="font-size:.75rem;color:var(--y);font-weight:700">'+( pts>0?"⭐ "+pts+" pts":"")+'</div><div class="ph">⏰ '+h+'</div></div></div>'}).join("")})}
 function closeVer(){document.getElementById("mVer").classList.remove("open")}
-function openConteudo(id){const s=sessoes.find(x=>x.id===id);if(!s)return;document.getElementById("conteudoTit").textContent=s.titulo||s.tema||"DSS";document.getElementById("conteudoSub").textContent="📅 "+(s.hora?fd(s.data)+" às "+s.hora:fd(s.data));const b=document.getElementById("conteudoBody");if(s.html_impressao){b.innerHTML='<div style="background:white;color:black;padding:40px;font-family:Arial,sans-serif;font-size:14px;line-height:1.6;box-shadow:0 0 10px rgba(0,0,0,0.1);max-width:794px;margin:0 auto;min-height:1122px;">'+s.html_impressao+'</div>'}else{b.innerHTML='<div style="background:white;color:black;padding:40px;font-family:Arial,sans-serif;font-size:14px;line-height:1.6;box-shadow:0 0 10px rgba(0,0,0,0.1);max-width:794px;margin:0 auto;min-height:1122px;">'+(s.conteudo?s.conteudo.replace(/\n/g,"<br>"):"Sem conteúdo salvo.")+'</div>'}document.getElementById("mConteudo").classList.add("open")}
-function closeConteudo(){document.getElementById("mConteudo").classList.remove("open")}
+let currentConteudoSessaoId = null;
+function openConteudo(id){currentConteudoSessaoId = id; const s=sessoes.find(x=>x.id===id);if(!s)return;document.getElementById("conteudoTit").textContent=s.titulo||s.tema||"DSS";document.getElementById("conteudoSub").textContent="📅 "+(s.hora?fd(s.data)+" às "+s.hora:fd(s.data));const b=document.getElementById("conteudoBody");if(s.html_impressao){b.innerHTML='<div style="background:white;color:black;padding:40px;font-family:Arial,sans-serif;font-size:14px;line-height:1.6;box-shadow:0 0 10px rgba(0,0,0,0.1);max-width:794px;margin:0 auto;min-height:1122px;">'+s.html_impressao+'</div>'}else{b.innerHTML='<div style="background:white;color:black;padding:40px;font-family:Arial,sans-serif;font-size:14px;line-height:1.6;box-shadow:0 0 10px rgba(0,0,0,0.1);max-width:794px;margin:0 auto;min-height:1122px;">'+(s.conteudo?s.conteudo.replace(/\n/g,"<br>"):"Sem conteúdo salvo.")+'</div>'}document.getElementById("mConteudo").classList.add("open")}
+function closeConteudo(){currentConteudoSessaoId = null; document.getElementById("mConteudo").classList.remove("open")}
 function openOCR(id,titulo){ocrSessaoId=id;document.getElementById("ocrSessaoTit").textContent=titulo;document.getElementById("ocrFile").value="";document.getElementById("ocrPreview").style.display="none";document.getElementById("ocrResultado").style.display="none";document.getElementById("btnOCR").disabled=true;ocrPessoas=[];document.getElementById("mOCR").classList.add("open");document.getElementById("ocrFile").onchange=function(){const f=this.files[0];if(f){const r=new FileReader();r.onload=e=>{document.getElementById("ocrImg").src=e.target.result;document.getElementById("ocrPreview").style.display="block";document.getElementById("btnOCR").disabled=false};r.readAsDataURL(f)}}}
 function closeOCR(){document.getElementById("mOCR").classList.remove("open")}
 async function processarOCR(){const img=document.getElementById("ocrImg").src;if(!img||img===window.location.href)return;const btn=document.getElementById("btnOCR");btn.disabled=true;btn.textContent="🤖 Analisando...";try{const b64=img.split(",")[1];const mime=img.split(";")[0].split(":")[1];const resp=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+AK,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:"Esta e uma lista de presenca de um treinamento de seguranca do trabalho. Identifique TODAS as pessoas listadas. Para cada pessoa, extraia o NOME e o RE (numero de registro). Retorne APENAS um JSON valido no formato: [{\"nome\":\"NOME\",\"re\":\"RE\"}]. Se nao encontrar RE, use string vazia. Nao adicione texto fora do JSON."},{inline_data:{mime_type:mime,data:b64}}]}]})});const data=await resp.json();let raw=data.candidates[0].content.parts[0].text.trim();raw=raw.replace(/`json|`/g,"").trim();ocrPessoas=JSON.parse(raw);document.getElementById("ocrLista").innerHTML=ocrPessoas.map((p,i)=>'<div class="prow"><div class="pav">'+(p.nome||"?")[0].toUpperCase()+'</div><div class="pi"><input value="'+p.nome+'" onchange="ocrPessoas['+i+'].nome=this.value" style="margin-bottom:4px"><input value="'+(p.re||"")+'" placeholder="RE" onchange="ocrPessoas['+i+'].re=this.value"></div></div>').join("");document.getElementById("ocrResultado").style.display="block"}catch(e){alert("Erro IA: "+e.message)}finally{btn.disabled=false;btn.textContent="🤖 Analisar com IA"}}
@@ -985,54 +986,83 @@ async function renderAnalytics(){
   }).join(""):'<p style="font-size:.8rem;color:var(--text-muted)">Nenhuma sessão encerrada ainda.</p>';
 }
 function printConteudo(){
-  const b=document.getElementById("conteudoBody");
+  const s = sessoes.find(x => x.id === currentConteudoSessaoId);
+  if (!s || !s.html_impressao) {
+      alert("Nenhum conteúdo de impressão salvo para esta sessão.");
+      return;
+  }
+  
   const w=window.open("","_blank","width=900,height=700");
   if(!w)return;
   
   const css = `
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #fff; font-family: Arial, sans-serif; color: #000; }
-    
-    .a4-page {
-        width: 100%;
-        max-width: 210mm;
-        margin: 0 auto;
-        padding: 15mm;
-        font-family: Arial, sans-serif;
-        font-size: 10pt;
-        position: relative;
-    }
-    
-    .header-table { width: 100%; border-collapse: collapse; margin-bottom: 0; }
-    .header-table td { border: 1.5px solid #000; padding: 6px 8px; font-size: 9.5pt; }
-    .col-logo { width: 110px; text-align: center; vertical-align: middle; }
-    .logo-img { max-width: 95px; height: auto; display: block; margin: 0 auto; }
-    .col-form-title { background-color: #c0c0c0; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-weight: bold; text-align: center; font-size: 10pt; vertical-align: middle; }
-    .col-doc-name { text-align: left; font-weight: bold; vertical-align: middle; font-size: 9.5pt; }
-    .col-rev { width: 130px; text-align: center; font-weight: bold; vertical-align: middle; font-size: 9pt; }
-    .col-dept { width: 110px; font-weight: bold; vertical-align: middle; font-size: 9pt; }
-    .col-dept-name { text-align: left; vertical-align: middle; font-size: 9pt; }
-    .col-rev-date { width: 180px; text-align: right; vertical-align: middle; font-size: 9pt; padding-right: 10px; }
-    
-    .info-table { width: 100%; border-collapse: collapse; margin-top: 12px; margin-bottom: 0; }
-    .info-table td { border: 1.5px solid #000; padding: 7px 12px; font-size: 9.5pt; vertical-align: middle; }
-    
-    .content-box { border: 1.5px solid #000; border-top: none; padding: 20px; min-height: 350px; }
-    
-    .presence-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    .presence-table th, .presence-table td { border: 1.5px solid black; padding: 6px; font-size: 0.85rem; }
-    .presence-table th { background-color: #e5e5e5; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; }
-    .presence-table td { height: 28px; }
-    
-    @media print {
-        body { margin: 0; padding: 0; }
-        .a4-page { width: 100%; min-height: auto; padding: 0; border: none; box-shadow: none; page-break-after: always; }
-        .a4-page:last-child { page-break-after: avoid; }
-        .page-break { page-break-before: always; margin-top: 40px; }
-    }
+          /* ==== CSS IGUAL AO GERADOR ==== */
+          * { box-sizing: border-box; margin: 0; padding: 0; }
+          body { background: #fff; font-family: Arial, sans-serif; color: #000; }
+          
+          .preview-area {
+              background: #fff;
+              display: block;
+              height: auto;
+          }
+          .page-container {
+              display: flex;
+              flex-direction: column;
+              gap: 30px;
+              align-items: flex-start;
+          }
+          .a4-page {
+              width: 210mm;
+              min-height: 297mm;
+              background-color: #fff;
+              padding: 15mm;
+              font-family: Arial, sans-serif;
+              font-size: 10pt;
+              color: #000;
+              box-shadow: none;
+              border-radius: 3px;
+              position: relative;
+          }
+  
+          /* Cabeçalho do Documento */
+          .header-table { width: 100%; border-collapse: collapse; margin-bottom: 0; }
+          .header-table td { border: 1.5px solid #000; padding: 6px 8px; font-size: 9.5pt; font-family: Arial, sans-serif; }
+          .col-logo { width: 110px; text-align: center; vertical-align: middle; }
+          .logo-img { max-width: 95px; height: auto; display: block; margin: 0 auto; }
+          .col-form-title { background-color: #c0c0c0; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-weight: bold; text-align: center; font-size: 10pt; vertical-align: middle; }
+          .col-doc-name { text-align: left; font-weight: bold; vertical-align: middle; font-size: 9.5pt; }
+          .col-rev { width: 130px; text-align: center; font-weight: bold; vertical-align: middle; font-size: 9pt; }
+          .col-dept { width: 110px; font-weight: bold; vertical-align: middle; font-size: 9pt; }
+          .col-dept-name { text-align: left; vertical-align: middle; font-size: 9pt; }
+          .col-rev-date { width: 180px; text-align: right; vertical-align: middle; font-size: 9pt; padding-right: 10px; }
+          
+          .info-table { width: 100%; border-collapse: collapse; margin-top: 12px; margin-bottom: 0; }
+          .info-table td { border: 1.5px solid #000; padding: 7px 12px; font-size: 9.5pt; vertical-align: middle; }
+          .col-label { font-weight: bold; width: 1%; white-space: nowrap; }
+          
+          .content-box { border: 1.5px solid #000; border-top: none; padding: 20px; min-height: 350px; }
+          .content-box p { margin-bottom: 15px; line-height: 1.6; text-align: justify; font-size: 0.95rem; }
+          
+          .presence-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+          .presence-table th, .presence-table td { border: 1.5px solid black; padding: 6px; font-size: 0.85rem; }
+          .presence-table th { background-color: #e5e5e5; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; }
+          .presence-table td { height: 28px; }
+          .col-num { width: 40px; text-align: center; font-weight: bold;}
+          .col-nome { width: 50%; }
+          .col-ass { width: 30%; }
+          .col-setor { width: auto; }
+          
+          .page-break { page-break-before: always; margin-top: 40px; }
+  
+          @media print {
+              body, main.preview-area { margin: 0; padding: 0; background: #fff; height: auto; overflow: visible; }
+              .page-container { gap: 0; margin-left: 0; align-items: center; }
+              .a4-page { box-shadow: none; width: 100%; min-height: auto; border: none; page-break-after: always; padding: 0; margin: 0; }
+              .a4-page:last-child { page-break-after: avoid; }
+          }
   `;
 
-  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>DSS - Impressão</title><style>'+css+'</style></head><body>'+b.innerHTML+'</body></html>');
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>DSS - Impressão</title><style>'+css+'</style></head><body><main class="preview-area"><div class="page-container">'+s.html_impressao+'</div></main></body></html>');
   w.document.close();
   w.focus();
   setTimeout(()=>w.print(),500);
