@@ -308,27 +308,46 @@ small {
 /* =========================================
    ÁREA DE VISUALIZAÇÃO (PREVIEW)
    ========================================= */
-.preview-container {
+.preview-area {
     margin-left: var(--sidebar-width);
     flex: 1;
     background: var(--preview-bg);
-    padding: 40px;
+    padding: 40px 40px 60px;
     display: block;
-    overflow: auto;
+    overflow-y: auto;
     height: 100vh;
 }
 
-/* O A4 na tela */
-.printable-area {
+.preview-hint {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--m);
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+/* Container das páginas A4 */
+.page-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+}
+
+/* Cada página A4 */
+.a4-page {
     width: 210mm;
     min-height: 297mm;
     background-color: white;
     padding: 15mm;
-    margin: 0 auto;
     font-family: Arial, sans-serif;
+    font-size: 10pt;
     color: black;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-    border-radius: 2px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.12), 0 1px 6px rgba(0,0,0,0.08);
+    border-radius: 3px;
+    position: relative;
 }
 
 /* =========================================
@@ -337,27 +356,91 @@ small {
 .header-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-bottom: 0;
 }
 .header-table td {
     border: 1.5px solid black;
-    padding: 8px;
+    padding: 6px 8px;
+    font-size: 9.5pt;
+    font-family: Arial, sans-serif;
+}
+
+/* Coluna do logo */
+.col-logo {
+    width: 110px;
+    text-align: center;
+    vertical-align: middle;
+}
+.logo-img {
+    max-width: 95px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Coluna "Formulário" — título do formulário */
+.col-form-title {
+    background-color: #c0c0c0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-weight: bold;
+    text-align: center;
+    font-size: 10pt;
+    vertical-align: middle;
+}
+
+/* Coluna nome do documento */
+.col-doc-name {
+    text-align: left;
+    font-weight: bold;
+    vertical-align: middle;
+    font-size: 9.5pt;
+}
+
+/* Coluna revisão */
+.col-rev {
+    width: 130px;
     text-align: center;
     font-weight: bold;
+    vertical-align: middle;
+    font-size: 9pt;
 }
-.logo-cell { width: 120px; }
-.logo-cell img { width: 100%; max-width: 100px; height: auto; }
-.doc-name { font-size: 1.4rem; font-family: "Times New Roman", Times, serif; }
+
+/* Coluna departamento label */
+.col-dept {
+    width: 110px;
+    font-weight: bold;
+    vertical-align: middle;
+    font-size: 9pt;
+}
+
+/* Coluna nome do departamento */
+.col-dept-name {
+    text-align: left;
+    vertical-align: middle;
+    font-size: 9pt;
+}
+
+/* Coluna data de revisão */
+.col-rev-date {
+    width: 180px;
+    text-align: right;
+    vertical-align: middle;
+    font-size: 9pt;
+    padding-right: 10px;
+}
 
 .info-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 0px;
+    margin-bottom: 0;
+    margin-top: 12px;
 }
 .info-table td {
     border: 1.5px solid black;
-    padding: 8px 12px;
-    font-size: 0.95rem;
+    padding: 7px 12px;
+    font-size: 9.5pt;
+    vertical-align: middle;
 }
 .col-label { font-weight: bold; width: 1%; white-space: nowrap; }
 
@@ -586,7 +669,7 @@ small {
     body { background-color: white; margin: 0; padding: 0; }
     .sidebar, .btn-group, .no-print { display: none !important; }
     .app-container { display: block; }
-    .preview-container {
+    .preview-area {
         margin: 0;
         padding: 0;
         background: white;
@@ -594,12 +677,19 @@ small {
         overflow: visible;
         display: block;
     }
-    .printable-area {
+    .page-container {
+        gap: 0;
+    }
+    .a4-page {
         box-shadow: none;
         margin: 0;
         width: 100%;
         min-height: auto;
         border: none;
+        page-break-after: always;
+    }
+    .a4-page:last-child {
+        page-break-after: avoid;
     }
 }
 
@@ -617,10 +707,15 @@ small {
         padding: 20px;
         box-shadow: none;
     }
-    .preview-container {
+    .preview-area {
         margin-left: 0;
         padding: 20px;
         height: auto;
         overflow: visible;
+    }
+    .a4-page {
+        width: 100%;
+        min-height: auto;
+        padding: 10mm;
     }
 }
