@@ -625,6 +625,62 @@
         .pn { font-size: 0.95rem; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
         .ps2 { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
 
+        /* ── QUIZ STYLES ── */
+        .qbox {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        .qnum {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--mococa-blue);
+            margin-bottom: 8px;
+        }
+        .qperg {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+        .qopts {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .qopt {
+            padding: 12px 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        .qopt:hover {
+            border-color: var(--mococa-blue);
+            background: var(--surface);
+            color: var(--text-dark);
+        }
+        .qopt.certa {
+            border-color: var(--green);
+            background: var(--green-light);
+            color: var(--green);
+        }
+        .qopt.errada {
+            opacity: 0.6;
+        }
+
         /* RANKING */
         .rank .ri {
             display: flex;
@@ -927,7 +983,7 @@ async function processarOCR(){const img=document.getElementById("ocrImg").src;if
 async function salvarOCR(){const btn=document.getElementById("btnSalvarOCR");btn.disabled=true;btn.textContent="Salvando...";try{const batch=db.batch();ocrPessoas.forEach(p=>{if(p.nome&&p.nome.trim()){const ref=db.collection("sessoes_dss").doc(ocrSessaoId).collection("presencas").doc();batch.set(ref,{nome:p.nome.trim(),re:p.re||"",setor:"Nao informado",assinadoEm:firebase.firestore.FieldValue.serverTimestamp(),modo:"ocr"})}});await batch.commit();closeOCR();alert("✅ "+ocrPessoas.length+" presencas salvas com sucesso!")}catch(e){alert("Erro: "+e.message)}finally{btn.disabled=false;btn.textContent="💾 Salvar Presenças"}}
 function openQuiz(id){quizSessaoId=id;const s=sessoes.find(x=>x.id===id);quizPergs=s&&s.quiz?s.quiz:[];document.getElementById("quizSessaoTit").textContent=s?s.titulo||s.tema:"DSS";document.getElementById("mQuiz").classList.add("open");renderQuiz(s)}
 function closeQuiz(){document.getElementById("mQuiz").classList.remove("open")}
-function renderQuiz(s){const el=document.getElementById("ql");if(!quizPergs||quizPergs.length===0){el.innerHTML='<div class="emp"><div class="ei">❓</div><p>Este DSS nao tem quiz. Gere o conteudo com IA.</p></div>';return}el.innerHTML=quizPergs.map((q,qi)=>'<div class="qbox"><div class="qnum">Pergunta '+(qi+1)+'</div><div class="qperg">'+q.pergunta+'</div><div class="qopts">'+["A","B","C"].map(op=>'<div class="qopt '+(q.resposta===op?"certa":"errada")+'" onclick="this.style.opacity=1"><span style="font-weight:700;margin-right:6px">'+op+')</span>'+(q.opcoes&&q.opcoes[op]?q.opcoes[op]:"—")+(q.resposta===op?' <span style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--g)">✅ CORRETA</span>':'')+'</div>').join("")+'</div></div>').join("");loadPontForm(s?s.id:quizSessaoId)}
+function renderQuiz(s){const el=document.getElementById("ql");if(!quizPergs||quizPergs.length===0){el.innerHTML='<div class="emp"><div class="ei">❓</div><p>Este DSS nao tem quiz. Gere o conteudo com IA.</p></div>';return}el.innerHTML=quizPergs.map((q,qi)=>'<div class="qbox"><div class="qnum">Pergunta '+(qi+1)+'</div><div class="qperg">'+q.pergunta+'</div><div class="qopts">'+["A","B","C"].map(op=>'<div class="qopt '+(q.resposta===op?"certa":"errada")+'"><span style="font-weight:700;margin-right:6px">'+op+')</span>'+(q.opcoes&&q.opcoes[op]?q.opcoes[op]:"—")+(q.resposta===op?' <span style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--green)">✅ CORRETA</span>':'')+'</div>').join("")+'</div></div>').join("");loadPontForm(s?s.id:quizSessaoId)}
 async function loadPontForm(id){db.collection("sessoes_dss").doc(id).collection("presencas").orderBy("assinadoEm","asc").onSnapshot(snap=>{const el=document.getElementById("pontForm");const rk=document.getElementById("quizRanking");if(!el)return;if(snap.empty){el.innerHTML='<p style="font-size:.75rem;color:var(--m)">Nenhum participante registrado ainda. Adicione presencas para dar pontos.</p>';rk.innerHTML='<p style="font-size:.75rem;color:var(--m)">Sem dados</p>';return}const arr=snap.docs.map(d=>({id:d.id,...d.data(),pts:d.data().pontos||0}));el.innerHTML='<div style="display:grid;gap:8px">'+arr.map(p=>'<div class="prow" style="background:rgba(255,255,255,.02); border-radius:8px; padding:6px 12px; cursor:pointer; transition:all .2s" onclick="pontuar(\''+id+'\',\''+p.id+'\','+p.pts+',1)"><div class="pav" style="width:28px;height:28px;font-size:.65rem">'+(p.nome||"?")[0].toUpperCase()+'</div><div class="pi"><div class="pn" style="font-size:.78rem">'+(p.nome||"—")+'</div></div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:.8rem;font-weight:700;color:var(--y);min-width:30px">'+p.pts+' pts</span><button class="btn ba" style="padding:4px 8px;font-size:.65rem;border-radius:6px">+1 Ponto</button></div></div>').join("")+'</div>';const ranking=arr.filter(p=>p.pts>0).sort((a,b)=>b.pts-a.pts);rk.innerHTML=ranking.length?ranking.map((p,i)=>'<div class="prow"><div class="rpos" style="width:16px">'+["🥇","🥈","🥉"][i]||(i+1)+'</div><div class="pi"><div class="pn" style="font-size:.75rem">'+p.nome+'</div></div><span style="font-size:.75rem;font-weight:700;color:var(--p)">'+p.pts+' pts</span></div>').join(""):'<p style="font-size:.75rem;color:var(--m)">Ninguem pontuou ainda.</p>'})}
 async function pontuar(sessId,docId,atual,delta){const novo=Math.max(0,atual+delta);await db.collection("sessoes_dss").doc(sessId).collection("presencas").doc(docId).update({pontos:novo})}
 async function renderColabs(){const el=document.getElementById("cl");el.innerHTML='<div class="sp"></div>';const mapa={};for(const s of sessoes){const snp=await db.collection("sessoes_dss").doc(s.id).collection("presencas").get();snp.docs.forEach(d=>{const p=d.data();const re=p.re||p.nome||"?";if(!mapa[re])mapa[re]={nome:p.nome||"—",re:p.re||"",total:0,pontos:0,temas:[]};mapa[re].total++;mapa[re].pontos+=(p.pontos||0);if(s.titulo)mapa[re].temas.push(s.titulo)})}const lista=Object.values(mapa).sort((a,b)=>b.pontos-a.pontos||b.total-a.total);el.innerHTML=lista.length?lista.map((c,i)=>'<div class="card"><div class="ch"><div class="ctema">'+(i<3?["🥇","🥈","🥉"][i]+" ":"")+c.nome+'</div>'+(c.re?'<span class="coltag">RE: '+c.re+'</span>':'')+' </div><div class="cm"><span>✅ '+c.total+' DSS</span>'+(c.pontos>0?'<span>⭐ '+c.pontos+' pontos</span>':'')+'</div>'+(c.temas.length?'<div style="margin-top:8px"><div style="font-size:.65rem;color:var(--m);margin-bottom:4px">ULTIMOS DSS:</div><div style="font-size:.72rem;color:var(--t2)">'+c.temas.slice(-3).join(" · ")+'</div></div>':'')+'</div>').join(""):'<div class="emp"><div class="ei">👥</div><p>Nenhum colaborador registrado ainda.</p></div>'}
