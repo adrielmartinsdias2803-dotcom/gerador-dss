@@ -454,12 +454,43 @@ Ergonomia no posto de trabalho`;
     });
 
     // =========================================
-    // ATALHOS DE TECLADO
+    // BOTÃO IMPRIMIR — auto-salva no Firestore antes de imprimir
     // =========================================
-    document.addEventListener('keydown', (e) => {
-        // Ctrl+P → Imprimir
+    if (btnImprimir) {
+        btnImprimir.addEventListener('click', async () => {
+            const printArea = document.getElementById('printable-area');
+            const htmlImpressao = printArea ? printArea.innerHTML : "";
+
+            // Se houver sessão recém criada, atualiza o html_impressao automaticamente
+            if (window._lastSessionId && db) {
+                try {
+                    await db.collection("sessoes_dss").doc(window._lastSessionId).update({
+                        html_impressao: htmlImpressao
+                    });
+                    console.log("✅ html_impressao atualizado no agendamento:", window._lastSessionId);
+                } catch(e) {
+                    console.warn("Não foi possível atualizar Firestore antes de imprimir:", e.message);
+                }
+            }
+
+            window.print();
+        });
+    }
+
+    // Atalhos de teclado
+    document.addEventListener('keydown', async (e) => {
+        // Ctrl+P → Imprimir (com auto-save)
         if (e.ctrlKey && e.key === 'p') {
             e.preventDefault();
+            const printArea = document.getElementById('printable-area');
+            const htmlImpressao = printArea ? printArea.innerHTML : "";
+            if (window._lastSessionId && db) {
+                try {
+                    await db.collection("sessoes_dss").doc(window._lastSessionId).update({
+                        html_impressao: htmlImpressao
+                    });
+                } catch(e) { /* silencioso */ }
+            }
             window.print();
         }
         // Ctrl+S → Baixar Word
@@ -554,10 +585,12 @@ Ergonomia no posto de trabalho`;
                 });
 
                 const sessionId = docRef.id;
+                // Guarda ID para automação do botão Imprimir
+                window._lastSessionId = sessionId;
                 console.log("Sessão criada com ID: ", sessionId);
 
                 // Mostra alerta de sucesso
-                alert("✅ DSS agendado com sucesso! Acesse o Painel de Gestão para acompanhar.");
+                alert("✅ DSS agendado com sucesso! Agora, clique em 🖨️ PDF para imprimir — o arquivo será salvo automaticamente neste agendamento.");
 
             } catch (error) {
                 console.error("Erro ao agendar sessão:", error);
