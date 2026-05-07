@@ -715,6 +715,7 @@
         </div>
         <button class="ni act" onclick="sv('s')"><span>📋</span> Sessões Ativas</button>
         <button class="ni" onclick="sv('a')"><span>📅</span> Agendamentos</button>
+        <button class="ni" onclick="sv('ca')"><span>🗓️</span> Calendário</button>
         <button class="ni" onclick="sv('c')"><span>👥</span> Colaboradores</button>
         <button class="ni" onclick="sv('i')"><span>🏆</span> Instrutores</button>
         <button class="ni" onclick="sv('an')"><span>📊</span> Análises</button>
@@ -829,6 +830,25 @@
             <div class="cc">
                 <div class="ct">🏭 Presenças por Setor</div>
                 <div id="an-presenca-setor" style="display:grid;gap:10px;margin-top:4px"></div>
+            </div>
+        <div id="v-ca" style="display:none">
+            <div class="ct" style="margin-bottom: 24px; font-size: 0.9rem;">🗓️ Calendário de Agendamentos</div>
+            <div class="cc" style="padding:0; overflow:hidden;">
+                <div id="calendar-header" style="display:flex; justify-content:space-between; align-items:center; padding:15px 20px; background:var(--mococa-blue); color:white;">
+                    <button onclick="changeMonth(-1)" style="background:none; border:none; color:white; cursor:pointer; font-size:1.2rem;">❮</button>
+                    <h3 id="currentMonthYear" style="font-size:1rem; font-weight:700;">Maio 2024</h3>
+                    <button onclick="changeMonth(1)" style="background:none; border:none; color:white; cursor:pointer; font-size:1.2rem;">❯</button>
+                </div>
+                <div style="display:grid; grid-template-columns:repeat(7, 1fr); background:var(--bg); border-bottom:1px solid var(--border);">
+                    <div style="padding:10px; text-align:center; font-size:0.7rem; font-weight:800; color:var(--text-light);">DOM</div>
+                    <div style="padding:10px; text-align:center; font-size:0.7rem; font-weight:800; color:var(--text-light);">SEG</div>
+                    <div style="padding:10px; text-align:center; font-size:0.7rem; font-weight:800; color:var(--text-light);">TER</div>
+                    <div style="padding:10px; text-align:center; font-size:0.7rem; font-weight:800; color:var(--text-light);">QUA</div>
+                    <div style="padding:10px; text-align:center; font-size:0.7rem; font-weight:800; color:var(--text-light);">QUI</div>
+                    <div style="padding:10px; text-align:center; font-size:0.7rem; font-weight:800; color:var(--text-light);">SEX</div>
+                    <div style="padding:10px; text-align:center; font-size:0.7rem; font-weight:800; color:var(--text-light);">SÁB</div>
+                </div>
+                <div id="calendar-grid" style="display:grid; grid-template-columns:repeat(7, 1fr); min-height:400px;"></div>
             </div>
         </div>
     </main>
@@ -958,11 +978,11 @@
 <script>
 let sessoes=[],addSessaoId=null,ocrSessaoId=null,quizSessaoId=null,chartMes=null,quizPergs=[],ocrPessoas=[];
 const _k="QUl6YVN5RG1lTXdqNUYtMTJrZXJ3bWJ3QU1odGlZOHlSMm5fOTVV";const AK=atob(_k);
-function sv(v){["s","a","c","i","an"].forEach(x=>{const el=document.getElementById("v-"+x);if(el)el.style.display=v===x?"block":"none"});document.querySelectorAll(".ni").forEach((el,i)=>{el.classList.toggle("act",["s","a","c","i","an"][i]===v)});if(v==="c")renderColabs();if(v==="i")renderInst();if(v==="an")renderAnalytics()}
+function sv(v){["s","a","ca","c","i","an"].forEach(x=>{const el=document.getElementById("v-"+x);if(el)el.style.display=v===x?"block":"none"});document.querySelectorAll(".ni").forEach((el,i)=>{el.classList.toggle("act",["s","a","ca","c","i","an"][i]===v)});if(v==="c")renderColabs();if(v==="i")renderInst();if(v==="an")renderAnalytics();if(v==="ca")renderCalendar()}
 db.collection("sessoes_dss").orderBy("criadoEm","desc").onSnapshot(async snap=>{sessoes=snap.docs.map(d=>({id:d.id,...d.data()}));renderCards();await calcStats()});
 function fd(s){if(!s)return"—";const p=s.split("-");return p.length===3?p[2]+"/"+p[1]+"/"+p[0]:s}
 function mkBtn(cls,text,onclick){return '<button class="btn '+cls+'" onclick="'+onclick+'">'+text+'</button>'}
-function renderCards(){const agendadas=sessoes.filter(s=>s.status==="agendado");const ativas=sessoes.filter(s=>s.status!=="agendado");document.getElementById("semp-ag").style.display=agendadas.length?"none":"block";document.getElementById("semp-at").style.display=ativas.length?"none":"block";const rc=(s)=>{const q=s.quiz&&s.quiz.length>0;const c=!!s.html_impressao||!!s.conteudo;const enc=s.status==="encerrada";const ag=s.status==="agendado";const at=s.status==="ativa";const dStr=fd(s.data);return '<div class="card '+(ag?"ag":at?"at":"")+'"><div class="ch"><div class="ctema">'+(s.titulo||s.tema||"—")+'</div><span class="pill '+(ag?"pag":at?"pat":"pen")+'">'+(ag?"📅 Agendado":at?"🟢 Ativa":"🔒 Encerrada")+'</span></div>'+(ag&&s.hora?'<div style="font-size:1.1rem;font-weight:800;color:var(--t);margin-bottom:12px;display:flex;align-items:center;gap:6px"><span style="font-size:1.2rem">⏰</span> '+s.hora+'</div>':'')+'<div class="cm"><span>📅 '+dStr+'</span><span>🏭 '+(s.setor||"—")+'</span><span>👤 '+(s.responsavel||"—")+'</span>'+(s.duracao?'<span>⏱ '+s.duracao+'</span>':'')+'</div><div class="cf"><div class="cnt" id="c-'+s.id+'">⏳ carregando...</div><div class="acts">'+(ag?mkBtn("by","▶️ Executar","ativarSessao('"+s.id+"')"):"")+(enc?"":mkBtn("ba","➕ Add","openAdd('"+s.id+"')"))+(c?mkBtn("bv","📄 Arquivo","openConteudo('"+s.id+"')"):"")+(q?'<button class="btn bq" onclick="openQuiz(\''+s.id+'\')">🎯 Quiz</button>':"")+mkBtn("bv","👥 Lista","openVer('"+s.id+"','"+((s.titulo||s.tema||"").replace(/'/g,"\\'"))+"','"+fd(s.data)+"')")+mkBtn("bq","📷 OCR","openOCR('"+s.id+"','"+((s.titulo||"DSS").replace(/'/g,"\\'"))+"')")+(enc?"":mkBtn("be","🔒","encerrar('"+s.id+"')"))+'</div></div></div>'};document.getElementById("sg-agendadas").innerHTML=agendadas.map(rc).join("");document.getElementById("sg-ativas").innerHTML=ativas.map(rc).join("");sessoes.forEach(s=>watchCount(s.id))}
+function renderCards(){const agendadas=sessoes.filter(s=>s.status==="agendado");const ativas=sessoes.filter(s=>s.status!=="agendado");document.getElementById("semp-ag").style.display=agendadas.length?"none":"block";document.getElementById("semp-at").style.display=ativas.length?"none":"block";const rc=(s)=>{const q=s.quiz&&s.quiz.length>0;const c=!!s.html_impressao||!!s.conteudo;const enc=s.status==="encerrada";const ag=s.status==="agendado";const at=s.status==="ativa";const dStr=fd(s.data);return '<div class="card '+(ag?"ag":at?"at":"")+'"><div class="ch"><div class="ctema">'+(s.titulo||s.tema||"—")+'</div><span class="pill '+(ag?"pag":at?"pat":"pen")+'">'+(ag?"📅 Agendado":at?"🟢 Ativa":"🔒 Encerrada")+'</span></div>'+(ag&&s.hora?'<div style="font-size:1.1rem;font-weight:800;color:var(--t);margin-bottom:12px;display:flex;align-items:center;gap:6px"><span style="font-size:1.2rem">⏰</span> '+s.hora+'</div>':'')+'<div class="cm"><span>📅 '+dStr+'</span><span>🏭 '+(s.setor||"—")+'</span><span>👤 '+(s.responsavel||"—")+'</span>'+(s.duracao?'<span>⏱ '+s.duracao+'</span>':'')+'</div><div class="cf"><div class="cnt" id="c-'+s.id+'">⏳ carregando...</div><div class="acts">'+(ag?mkBtn("by","▶️ Executar","ativarSessao('"+s.id+"')"):"")+(enc?"":mkBtn("ba","➕ Add","openAdd('"+s.id+"')"))+(c?mkBtn("bv","📄 Arquivo","openConteudo('"+s.id+"')"):"")+(q?'<button class="btn bq" onclick="openQuiz(\''+s.id+'\')">🎯 Quiz</button>':"")+mkBtn("bv","👥 Lista","openVer('"+s.id+"','"+((s.titulo||s.tema||"").replace(/'/g,"\\'"))+"','"+fd(s.data)+"')")+mkBtn("bq","📷 OCR","openOCR('"+s.id+"','"+((s.titulo||"DSS").replace(/'/g,"\\'"))+"')")+'<button class="btn ba" style="background:#25D366;color:#white;border:none;color:white" onclick="shareWhatsApp(\''+s.id+'\')">📲 WhatsApp</button>'+(enc?"":mkBtn("be","🔒","encerrar('"+s.id+"')"))+'</div></div></div>'};document.getElementById("sg-agendadas").innerHTML=agendadas.map(rc).join("");document.getElementById("sg-ativas").innerHTML=ativas.map(rc).join("");sessoes.forEach(s=>watchCount(s.id))}
 function watchCount(id){db.collection("sessoes_dss").doc(id).collection("presencas").onSnapshot(snap=>{const el=document.getElementById("c-"+id);if(el)el.textContent="✅ "+snap.size+" presença(s)"})}
 async function calcStats(){let tp=0,inst=new Set(),meses={},ag=0;for(const s of sessoes){if(s.responsavel)inst.add(s.responsavel);if(s.status==="agendado")ag++;const mes=s.data?s.data.substring(0,7):"?";meses[mes]=(meses[mes]||0)+1;const sn=await db.collection("sessoes_dss").doc(s.id).collection("presencas").get();tp+=sn.size}document.getElementById("st").textContent=sessoes.length;document.getElementById("sag").textContent=ag;document.getElementById("sp").textContent=tp;document.getElementById("si").textContent=inst.size||"—";renderChart(meses);renderRank()}
 function renderChart(m){const labels=Object.keys(m).sort().map(k=>{const[y,mo]=k.split("-");return["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"][+mo-1]+"/"+y.slice(2)});const data=Object.keys(m).sort().map(k=>m[k]);if(chartMes)chartMes.destroy();const ctx=document.getElementById("chartMes").getContext("2d");chartMes=new Chart(ctx,{type:"bar",data:{labels,datasets:[{label:"Sessoes",data,backgroundColor:"rgba(0, 71, 143, 0.6)",borderColor:"#00478F",borderWidth:2,borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{color:"#64748b",stepSize:1},grid:{color:"rgba(255,255,255,.05)"}},x:{ticks:{color:"#64748b"},grid:{color:"rgba(255,255,255,.05)"}}}}})}
@@ -1122,5 +1142,50 @@ function printConteudo(){
   w.document.close();
   w.focus();
   setTimeout(()=>w.print(),500);
+}
+function shareWhatsApp(id){
+  const s=sessoes.find(x=>x.id===id);
+  if(!s)return;
+  const countEl=document.getElementById("c-"+id);
+  const total=countEl?countEl.textContent:"Nenhuma";
+  const msg=`*🚨 Relatório de DSS - Mococa*\n\n*📌 Tema:* ${s.titulo||s.tema}\n*🏭 Setor:* ${s.setor||"Não informado"}\n*👤 Instrutor:* ${s.responsavel}\n*📅 Data:* ${fd(s.data)}\n*✅ Presenças:* ${total}\n\n_Enviado via Dashboard DSS Gestão_`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,"_blank");
+}
+
+let calDate = new Date();
+function changeMonth(delta){
+  calDate.setMonth(calDate.getMonth()+delta);
+  renderCalendar();
+}
+
+function renderCalendar(){
+  const grid = document.getElementById("calendar-grid");
+  const monthYear = document.getElementById("currentMonthYear");
+  const mesesArr = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+  
+  monthYear.textContent = `${mesesArr[calDate.getMonth()]} ${calDate.getFullYear()}`;
+  grid.innerHTML = "";
+  
+  const firstDay = new Date(calDate.getFullYear(), calDate.getMonth(), 1).getDay();
+  const daysInMonth = new Date(calDate.getFullYear(), calDate.getMonth()+1, 0).getDate();
+  
+  // Dias vazios do mês anterior
+  for(let i=0; i<firstDay; i++){
+    grid.innerHTML += '<div style="background:var(--bg); border:1px solid var(--border); opacity:0.3"></div>';
+  }
+  
+  // Dias do mês
+  for(let d=1; d<=daysInMonth; d++){
+    const dataStr = `${calDate.getFullYear()}-${String(calDate.getMonth()+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const sessoesDia = sessoes.filter(s => s.data === dataStr);
+    
+    let htmlSess = sessoesDia.map(s => `<div style="font-size:0.6rem; background:var(--mococa-blue-light); color:var(--mococa-blue); padding:2px 4px; border-radius:4px; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${s.tema}">${s.tema}</div>`).join("");
+    
+    grid.innerHTML += `
+      <div style="background:var(--surface); border:1px solid var(--border); padding:8px; min-height:80px; position:relative;">
+        <span style="font-size:0.75rem; font-weight:700; color:var(--text-light);">${d}</span>
+        ${htmlSess}
+      </div>`;
+  }
 }
 </script></body></html>
