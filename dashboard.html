@@ -1,22 +1,915 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard DSS</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><style>:root{--bg:#f8fafc;--s:#ffffff;--b:#e2e8f0;--t:#0f172a;--t2:#475569;--m:#64748b;--p:#2563eb;--g:#059669;--r:#dc2626;--a:#7c3aed;--y:#d97706;--sd:0 4px 6px -1px rgba(0,0,0,0.05),0 2px 4px -2px rgba(0,0,0,0.05)}*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,sans-serif;background:var(--bg);color:var(--t);display:flex;min-height:100vh}aside{width:220px;background:#ffffff;border-right:1px solid var(--b);padding:20px 14px;display:flex;flex-direction:column;gap:6px;position:fixed;height:100vh;z-index:10;box-shadow:2px 0 10px rgba(0,0,0,.02)}.brand{display:flex;align-items:center;gap:10px;padding-bottom:18px;border-bottom:1px solid var(--b);margin-bottom:4px}.bn{font-size:.82rem;font-weight:800;line-height:1.2;color:var(--t)}.bs{font-size:.6rem;color:var(--m)}.ni{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;font-size:.8rem;font-weight:600;color:var(--t2);cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:all .2s}.ni:hover,.ni.act{background:rgba(37,99,235,.08);color:var(--p)}.bk{display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:9px;font-size:.78rem;font-weight:600;color:var(--m);cursor:pointer;text-decoration:none;margin-top:auto;transition:color .2s}.bk:hover{color:var(--t)}main{margin-left:220px;padding:32px;flex:1;max-width:1400px;margin-right:auto}.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}.pt{font-size:1.6rem;font-weight:800;letter-spacing:-.5px;color:var(--t)}.live{display:inline-flex;align-items:center;gap:6px;background:rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.2);color:var(--g);font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:5px 12px;border-radius:20px}.dot{width:6px;height:6px;background:var(--g);border-radius:50%;animation:pulse 1.5s ease-in-out infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}.sc{background:var(--s);border:1px solid var(--b);border-radius:16px;padding:20px;box-shadow:var(--sd)}.sl{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--m);margin-bottom:10px}.sn{font-size:2.2rem;font-weight:800}.sd{font-size:.68rem;color:var(--m);margin-top:4px}.sc.p .sn{color:var(--p)}.sc.g .sn{color:var(--g)}.sc.a .sn{color:var(--a)}.sc.y .sn{color:var(--y)}.charts{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:28px}.cc{background:var(--s);border:1px solid var(--b);border-radius:16px;padding:20px;box-shadow:var(--sd)}.ct{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--m);margin-bottom:16px}.rank{display:flex;flex-direction:column;gap:8px}.ri{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#f8fafc;border-radius:10px;border:1px solid var(--b)}.rpos{font-size:.75rem;font-weight:700;color:var(--m);width:20px}.rn{flex:1;font-size:.85rem;font-weight:600;color:var(--t)}.rb{font-size:.75rem;font-weight:800;color:var(--p)}.slist{display:grid;gap:16px}.card{background:var(--s);border:1px solid var(--b);border-radius:16px;padding:20px;transition:all .25s;box-shadow:0 1px 3px rgba(0,0,0,.03)}.card:hover{border-color:#bfdbfe;box-shadow:0 4px 12px rgba(37,99,235,.08);transform:translateY(-2px)}.card.ag{border-color:rgba(217,119,6,.3);background:rgba(245,158,11,.01)}.card.ag:hover{border-color:var(--y);box-shadow:0 4px 12px rgba(245,158,11,.08)}.card.at{border-color:rgba(5,150,105,.3);background:rgba(16,185,129,.01)}.card.at:hover{border-color:var(--g);box-shadow:0 4px 12px rgba(16,185,129,.08)}.ch{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}.ctema{font-size:.95rem;font-weight:800;flex:1;margin-right:10px;color:var(--t);line-height:1.3}.pill{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:4px 10px;border-radius:20px;white-space:nowrap}.pag{background:rgba(245,158,11,.15);color:var(--y);border:1px solid rgba(245,158,11,.3)}.pat{background:rgba(16,185,129,.15);color:var(--g);border:1px solid rgba(16,185,129,.3)}.pen{background:#f1f5f9;color:var(--m);border:1px solid var(--b)}.cm{display:flex;gap:16px;font-size:.75rem;color:var(--t2);flex-wrap:wrap;font-weight:500}.cf{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:16px;border-top:1px solid var(--b)}.cnt{font-size:.8rem;color:var(--g);font-weight:700}.acts{display:flex;gap:8px;flex-wrap:wrap}.btn{padding:7px 14px;border-radius:8px;font-size:.75rem;font-weight:700;border:none;cursor:pointer;font-family:Inter,sans-serif;transition:all .2s}.ba{background:rgba(5,150,105,.1);color:var(--g);border:1px solid rgba(5,150,105,.2)}.ba:hover{background:var(--g);color:#fff}.bv{background:rgba(37,99,235,.1);color:var(--p);border:1px solid rgba(37,99,235,.2)}.bv:hover{background:var(--p);color:#fff}.bq{background:rgba(124,58,237,.1);color:var(--a);border:1px solid rgba(124,58,237,.2)}.bq:hover{background:var(--a);color:#fff}.by{background:rgba(217,119,6,.1);color:var(--y);border:1px solid rgba(217,119,6,.2)}.by:hover{background:var(--y);color:#fff}.be{background:rgba(220,38,38,.1);color:var(--r);border:1px solid rgba(220,38,38,.2)}.be:hover{background:var(--r);color:#fff}.mo{display:none;position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(4px);z-index:100;align-items:center;justify-content:center;padding:20px}.mo.open{display:flex}.mb{background:var(--s);border:1px solid var(--b);border-radius:20px;width:100%;max-width:520px;overflow:hidden;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25)}.mh{padding:20px 24px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:#f8fafc}.mt{font-size:1.05rem;font-weight:800;color:var(--t)}.mc{padding:24px;overflow-y:auto}.fg{margin-bottom:16px}label{display:block;font-size:.8rem;font-weight:600;color:var(--t2);margin-bottom:6px}input,select,textarea{width:100%;padding:10px 14px;background:#f8fafc;border:1px solid var(--b);border-radius:10px;font-family:Inter,sans-serif;font-size:.9rem;color:var(--t);transition:all .2s}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px rgba(37,99,235,.15);background:#fff}input::placeholder,textarea::placeholder{color:var(--m)}select option{background:var(--s)}.bsub{width:100%;padding:14px;background:linear-gradient(135deg,var(--p),#1d4ed8);color:#fff;border:none;border-radius:10px;font-family:Inter,sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .2s;margin-top:8px;box-shadow:0 4px 12px rgba(37,99,235,.2)}.bsub:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(37,99,235,.3)}.bsub:disabled{background:#94a3b8;cursor:not-allowed;transform:none;box-shadow:none}.emp{text-align:center;padding:60px 20px;color:var(--m)}.ei{font-size:3rem;margin-bottom:12px;opacity:.7}.sp{width:36px;height:36px;border:3px solid var(--b);border-top-color:var(--p);border-radius:50%;animation:spin .8s linear infinite;margin:30px auto}@keyframes spin{to{transform:rotate(360deg)}}.prow{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--b)}.prow:last-child{border-bottom:none}.pav{width:36px;height:36px;background:var(--bg);color:var(--p);border:1px solid var(--b);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:800;flex-shrink:0}.pi{flex:1}.pn{font-size:.85rem;font-weight:700;color:var(--t)}.ps2{font-size:.7rem;color:var(--m)}.upload-zone{border:2px dashed var(--b);border-radius:12px;padding:30px;text-align:center;cursor:pointer;transition:all .2s;background:#f8fafc}.upload-zone:hover{border-color:var(--p);background:#eff6ff}.qbox{background:#f8fafc;border:1px solid var(--b);border-radius:12px;padding:16px;margin-bottom:16px}.qnum{font-size:.65rem;font-weight:800;text-transform:uppercase;color:var(--p);letter-spacing:1px}.qperg{font-size:.9rem;font-weight:700;margin:8px 0 12px;color:var(--t)}.qopts{display:flex;flex-direction:column;gap:8px}.qopt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;background:var(--s);border:1px solid var(--b);font-size:.85rem;font-weight:500;cursor:pointer;transition:all .2s;color:var(--t2)}.qopt:hover{border-color:var(--p);color:var(--p)}.qopt.certa{background:rgba(5,150,105,.05);border-color:var(--g);color:var(--g)}.qopt.errada{background:rgba(220,38,38,.05);border-color:var(--r);color:var(--r)}.secbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}.coltag{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:700;padding:4px 8px;border-radius:6px;background:rgba(37,99,235,.1);color:var(--p)}.prog-bar{height:6px;background:var(--b);border-radius:3px;overflow:hidden;margin-top:6px}.prog-fill{height:100%;background:linear-gradient(90deg,var(--p),#60a5fa);border-radius:3px;transition:width .5s}@media(max-width:900px){aside{display:none}main{margin-left:0;padding:20px}.stats{grid-template-columns:1fr 1fr}.charts{grid-template-columns:1fr}}</style></head>
-<body><aside><div class="brand"><img src="logo.png" alt="Mococa" style="width:38px;height:38px;background:#fff;border-radius:9px;padding:4px;object-fit:contain"><div><div class="bn">DSS Dashboard</div><div class="bs">Painel de Gestao</div></div></div><button class="ni act" onclick="sv('s')"><span>📋</span>Sessoes Ativas</button><button class="ni" onclick="sv('a')"><span>📅</span>Agendamentos</button><button class="ni" onclick="sv('c')"><span>👥</span>Colaboradores</button><button class="ni" onclick="sv('i')"><span>🏆</span>Instrutores</button><a href="index.html" class="bk"><span>←</span>Voltar ao Gerador</a></aside><main><div class="topbar"><div><div class="pt">Painel de Gestao DSS</div><div style="font-size:.75rem;color:var(--m);margin-top:2px">Mococa — Tempo Real</div></div><div class="live"><span class="dot"></span>ONLINE</div></div><div class="stats"><div class="sc p"><div class="sl">📋 Total Sessoes</div><div class="sn" id="st">—</div><div class="sd">Desde o inicio</div></div><div class="sc y"><div class="sl">📅 Agendadas</div><div class="sn" id="sag">—</div><div class="sd">Pendentes de execucao</div></div><div class="sc a"><div class="sl">✅ Presencas</div><div class="sn" id="sp">—</div><div class="sd">Total de registros</div></div><div class="sc g"><div class="sl">👤 Instrutores</div><div class="sn" id="si">—</div><div class="sd">Unicos</div></div></div><div class="charts"><div class="cc"><div class="ct">📅 DSS por Mes</div><canvas id="chartMes" height="90"></canvas></div><div class="cc"><div class="ct">🏆 Top Instrutores</div><div class="rank" id="rank"><div class="sp"></div></div></div></div>
-<div id="v-s"><div class="secbar"><span class="ct" style="margin:0">🟢 Sessões Ativas e Histórico</span></div><div id="sg-ativas" class="slist"></div><div id="semp-at" class="emp" style="display:none"><div class="ei">📭</div><p>Nenhuma sessão ativa ou encerrada.</p></div></div><div id="v-a" style="display:none"><div class="secbar"><span class="ct" style="margin:0">📅 Próximos Agendamentos</span></div><div id="sg-agendadas" class="slist"></div><div id="semp-ag" class="emp" style="display:none"><div class="ei">📅</div><p>Sem agendamentos no momento.</p></div></div><div id="v-c" style="display:none"><div class="secbar"><span class="ct" style="margin:0">👥 Ranking de Colaboradores</span></div><div id="cl" class="slist"><div class="sp"></div></div></div><div id="v-i" style="display:none"><div class="ct" style="margin-bottom:16px">🏆 Relatorio de Instrutores</div><div id="il" class="slist"></div></div></main>
-<!-- Modal Add Presenca --><div class="mo" id="mAdd" onclick="if(event.target===this)closeAdd()"><div class="mb"><div class="mh"><div class="mt">➕ Adicionar Presenca</div><button onclick="closeAdd()" style="background:none;border:none;color:var(--m);font-size:1.1rem;cursor:pointer">✕</button></div><div class="mc"><div class="fg"><label>Nome completo *</label><input type="text" id="aNome" placeholder="Ex: Joao da Silva" autocomplete="off"></div><div class="fg"><label>RE (Registro do Empregado)</label><input type="text" id="aRE" placeholder="Ex: 12345" autocomplete="off"></div><div class="fg"><label>Setor *</label><select id="aSetor"><option value="">Selecione...</option><option>Manutencao</option><option>Almoxarifado</option><option>Producao</option><option>Administrativo</option><option>Qualidade</option><option>Logistica</option><option>Outro</option></select></div><button class="bsub" id="btnAdd" onclick="salvarPresenca()">✅ Confirmar Presenca</button></div></div></div>
-<!-- Modal Ver Presencas --><div class="mo" id="mVer" onclick="if(event.target===this)closeVer()"><div class="mb"><div class="mh"><div><div class="mt" id="mVerTit">Presencas</div><div style="font-size:.68rem;color:var(--m);margin-top:2px" id="mVerSub"></div></div><button onclick="closeVer()" style="background:none;border:none;color:var(--m);font-size:1.1rem;cursor:pointer">✕</button></div><div class="mc" id="mVerBody" style="max-height:70vh;overflow-y:auto"><div class="sp"></div></div></div></div><!-- Modal OCR --><div class="mo" id="mOCR" onclick="if(event.target===this)closeOCR()"><div class="mb"><div class="mh"><div><div class="mt">📷 Leitura da Lista com IA</div><div style="font-size:.68rem;color:var(--m);margin-top:2px" id="ocrSessaoTit"></div></div><button onclick="closeOCR()" style="background:none;border:none;color:var(--m);font-size:1.1rem;cursor:pointer">✕</button></div><div class="mc"><p style="font-size:.78rem;color:var(--m);margin-bottom:14px">Tire uma foto da lista de presenca preenchida. A IA vai ler os Nomes e REs automaticamente.</p><div class="fg"><label>📎 Foto da Lista</label><input type="file" id="ocrFile" accept="image/*" style="padding:8px"></div><div id="ocrPreview" style="display:none;margin-bottom:14px;text-align:center"><img id="ocrImg" src="" style="max-width:100%;border-radius:10px;max-height:200px;object-fit:contain"></div><button class="bsub" id="btnOCR" onclick="processarOCR()" style="background:linear-gradient(135deg,var(--a),#7c3aed)" disabled>🤖 Analisar com IA</button><div id="ocrResultado" style="margin-top:16px;display:none"><div style="font-size:.78rem;font-weight:600;margin-bottom:8px;color:var(--t2)">✅ Pessoas encontradas — revise e confirme:</div><div id="ocrLista"></div><button class="bsub" id="btnSalvarOCR" onclick="salvarOCR()" style="margin-top:12px">💾 Salvar Presenças</button></div></div></div></div><!-- Modal Quiz --><div class="mo" id="mQuiz" onclick="if(event.target===this)closeQuiz()"><div class="mb" style="max-width:800px; width:95%"><div class="mh"><div><div class="mt">🎯 Quiz Interativo</div><div style="font-size:.68rem;color:var(--m);margin-top:2px" id="quizSessaoTit"></div></div><button onclick="closeQuiz()" style="background:none;border:none;color:var(--m);font-size:1.1rem;cursor:pointer">✕</button></div><div class="mc" style="display:grid; gap:20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));" id="quizBody"><div id="ql"></div><div><div class="ct" style="margin-bottom:12px">🏅 Marcar Pontuação Rápida</div><div class="qbox" style="margin-bottom:16px"><p style="font-size:0.75rem; color:var(--m); margin-bottom:10px">Selecione quem acertou a pergunta e dê o ponto na hora!</p><div id="pontForm"><div class="sp"></div></div></div><div class="ct" style="margin-bottom:12px; color:var(--y)">🏆 Top Acertos (Esta sessão)</div><div id="quizRanking"><p style="font-size:0.75rem; color:var(--m);">Nenhum ponto registrado.</p></div></div></div></div></div><!-- Modal Conteudo --><div class="mo" id="mConteudo" onclick="if(event.target===this)closeConteudo()"><div class="mb" style="max-width:880px; width:95%"><div class="mh"><div><div class="mt" id="conteudoTit">Texto do DSS</div><div style="font-size:.68rem;color:var(--m);margin-top:2px" id="conteudoSub"></div></div><button onclick="closeConteudo()" style="background:none;border:none;color:var(--m);font-size:1.1rem;cursor:pointer">✕</button></div><div class="mc" id="conteudoBody" style="max-height:75vh;overflow-y:auto; font-size:.9rem; line-height:1.6; color:var(--t); background:#f1f5f9; padding:24px;"></div></div></div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Dashboard DSS - Mococa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            /* Branding Mococa */
+            --mococa-blue: #00478F;
+            --mococa-blue-light: rgba(0, 71, 143, 0.08);
+            --mococa-blue-hover: #003366;
+            --mococa-yellow: #FDB913;
+            --mococa-yellow-light: rgba(253, 185, 19, 0.15);
+            --mococa-yellow-hover: #E5A700;
+            
+            /* Theme Colors */
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --text-light: #94a3b8;
+            
+            /* Semantic Colors */
+            --green: #059669;
+            --green-light: rgba(5, 150, 105, 0.1);
+            --red: #dc2626;
+            --red-light: rgba(220, 38, 38, 0.1);
+            --purple: #7c3aed;
+            --purple-light: rgba(124, 58, 237, 0.1);
+
+            /* Shadows & Effects */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text-dark);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── SIDEBAR ── */
+        aside {
+            width: 260px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 24px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: fixed;
+            height: 100vh;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-bottom: 24px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand img {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            padding: 4px;
+            object-fit: contain;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+        }
+
+        .brand-text .bn {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.3px;
+        }
+
+        .brand-text .bs {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .ni {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            transition: all 0.25s ease;
+        }
+
+        .ni:hover {
+            background: var(--bg);
+            color: var(--text-dark);
+            transform: translateX(4px);
+        }
+
+        .ni.act {
+            background: var(--mococa-blue-light);
+            color: var(--mococa-blue);
+            box-shadow: inset 3px 0 0 var(--mococa-blue);
+        }
+
+        .bk {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-decoration: none;
+            margin-top: auto;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            transition: all 0.25s ease;
+            justify-content: center;
+        }
+
+        .bk:hover {
+            color: var(--text-dark);
+            border-color: var(--text-light);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ── MAIN CONTENT ── */
+        main {
+            margin-left: 260px;
+            padding: 40px;
+            flex: 1;
+            max-width: 1400px;
+            margin-right: auto;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 36px;
+        }
+
+        .topbar .pt {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-dark);
+        }
+
+        .topbar .ps {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .live {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 16px;
+            border-radius: 30px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.4); }
+            50% { opacity: 0.5; box-shadow: 0 0 0 6px rgba(5, 150, 105, 0); }
+        }
+
+        /* ── STATS CARDS ── */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 36px;
+        }
+
+        .sc {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .sc:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Accent lines on top of stat cards */
+        .sc::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+        }
+        .sc.p::before { background: var(--mococa-blue); }
+        .sc.y::before { background: var(--mococa-yellow); }
+        .sc.a::before { background: var(--green); }
+        .sc.g::before { background: var(--purple); }
+
+        .sl {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sn {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .sd {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .sc.p .sn { color: var(--mococa-blue); }
+        .sc.y .sn { color: var(--mococa-yellow); }
+        .sc.a .sn { color: var(--green); }
+        .sc.g .sn { color: var(--purple); }
+
+        /* ── CHARTS SECTION ── */
+        .charts {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 36px;
+        }
+
+        .cc {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .ct {
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ── LIST CARDS (SESSÕES, COLABORADORES) ── */
+        .slist {
+            display: grid;
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px 24px;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+
+        .card:hover {
+            border-color: rgba(0, 71, 143, 0.3);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+            z-index: 2;
+        }
+
+        .card.ag { border-left: 4px solid var(--mococa-yellow); }
+        .card.at { border-left: 4px solid var(--green); }
+
+        .ch {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .ctema {
+            font-size: 1.05rem;
+            font-weight: 800;
+            flex: 1;
+            margin-right: 16px;
+            color: var(--text-dark);
+            line-height: 1.4;
+        }
+
+        .pill {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .pag { background: var(--mococa-yellow-light); color: var(--mococa-yellow-hover); border: 1px solid rgba(253, 185, 19, 0.3); }
+        .pat { background: var(--green-light); color: var(--green); border: 1px solid rgba(5, 150, 105, 0.3); }
+        .pen { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+
+        .cm {
+            display: flex;
+            gap: 16px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+            font-weight: 500;
+        }
+        
+        .cm span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg);
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .cf {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px dashed var(--border);
+        }
+
+        .cnt {
+            font-size: 0.85rem;
+            color: var(--mococa-blue);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .acts {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ba { background: var(--green-light); color: var(--green); border: 1px solid rgba(5, 150, 105, 0.2); }
+        .ba:hover { background: var(--green); color: #fff; transform: scale(1.02); }
+        
+        .bv { background: var(--mococa-blue-light); color: var(--mococa-blue); border: 1px solid rgba(0, 71, 143, 0.2); }
+        .bv:hover { background: var(--mococa-blue); color: #fff; transform: scale(1.02); }
+        
+        .bq { background: var(--purple-light); color: var(--purple); border: 1px solid rgba(124, 58, 237, 0.2); }
+        .bq:hover { background: var(--purple); color: #fff; transform: scale(1.02); }
+        
+        .by { background: var(--mococa-yellow-light); color: var(--mococa-yellow-hover); border: 1px solid rgba(253, 185, 19, 0.3); }
+        .by:hover { background: var(--mococa-yellow); color: #fff; transform: scale(1.02); }
+        
+        .be { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+        .be:hover { background: var(--text-dark); border-color: var(--text-dark); transform: scale(1.02); }
+
+        /* ── MODALS (GLASSMORPHISM) ── */
+        .mo {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mo.open {
+            display: flex;
+            opacity: 1;
+        }
+
+        .mb {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 520px;
+            overflow: hidden;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-glass);
+            transform: translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .mo.open .mb {
+            transform: translateY(0);
+        }
+
+        .mh {
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            background: var(--surface);
+        }
+
+        .mt {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.3px;
+        }
+
+        .mc {
+            padding: 24px;
+            overflow-y: auto;
+            background: var(--bg);
+        }
+
+        /* ── FORMS ── */
+        .fg { margin-bottom: 20px; }
+        
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--mococa-blue);
+            box-shadow: 0 0 0 4px var(--mococa-blue-light);
+        }
+
+        .bsub {
+            width: 100%;
+            padding: 16px;
+            background: var(--mococa-blue);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 8px;
+            box-shadow: 0 4px 14px 0 rgba(0, 71, 143, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bsub:hover {
+            transform: translateY(-2px);
+            background: var(--mococa-blue-hover);
+            box-shadow: 0 6px 20px rgba(0, 71, 143, 0.35);
+        }
+
+        .bsub:disabled {
+            background: var(--text-light);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* ── UTILS & EMPTY STATES ── */
+        .emp {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-muted);
+            background: var(--surface);
+            border: 1px dashed var(--border);
+            border-radius: 16px;
+            margin-top: 20px;
+        }
+
+        .ei {
+            font-size: 3.5rem;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05));
+        }
+
+        .sp {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--mococa-blue);
+            border-radius: 50%;
+            animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            margin: 40px auto;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .prow {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: transform 0.2s;
+        }
+        
+        .prow:hover {
+            transform: translateX(4px);
+            border-color: var(--mococa-blue-light);
+        }
+
+        .pav {
+            width: 42px;
+            height: 42px;
+            background: var(--mococa-blue-light);
+            color: var(--mococa-blue);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .pi { flex: 1; }
+        .pn { font-size: 0.95rem; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+        .ps2 { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
+
+        /* RANKING */
+        .rank .ri {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        .rank .ri:hover { background: var(--surface); border-color: var(--mococa-yellow); }
+        .rpos { font-size: 1.2rem; width: 24px; text-align: center; }
+
+        /* RESPONSIVE */
+        @media(max-width: 900px) {
+            aside { display: none; }
+            main { margin-left: 0; padding: 20px; }
+            .stats { grid-template-columns: 1fr 1fr; }
+            .charts { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <aside>
+        <div class="brand">
+            <img src="logo.png" alt="Mococa">
+            <div class="brand-text">
+                <div class="bn">DSS Gestão</div>
+                <div class="bs">Painel de Gestão</div>
+            </div>
+        </div>
+        <button class="ni act" onclick="sv('s')"><span>📋</span> Sessões Ativas</button>
+        <button class="ni" onclick="sv('a')"><span>📅</span> Agendamentos</button>
+        <button class="ni" onclick="sv('c')"><span>👥</span> Colaboradores</button>
+        <button class="ni" onclick="sv('i')"><span>🏆</span> Instrutores</button>
+        <button class="ni" onclick="sv('an')"><span>📊</span> Análises</button>
+        <a href="index.html" class="bk" style="margin-top:auto;"><span>←</span> Voltar ao Gerador</a>
+    </aside>
+
+    <main>
+        <div class="topbar">
+            <div>
+                <div class="pt">Painel de Gestão DSS</div>
+                <div class="ps">Visão Geral Corporativa • Tempo Real</div>
+            </div>
+            <div class="live"><span class="dot"></span> ONLINE</div>
+        </div>
+
+        <div class="stats">
+            <div class="sc p">
+                <div class="sl">📋 Total Sessões</div>
+                <div class="sn" id="st">—</div>
+                <div class="sd">Desde o início</div>
+            </div>
+            <div class="sc y">
+                <div class="sl">📅 Agendadas</div>
+                <div class="sn" id="sag">—</div>
+                <div class="sd">Pendentes de execução</div>
+            </div>
+            <div class="sc a">
+                <div class="sl">✅ Presenças</div>
+                <div class="sn" id="sp">—</div>
+                <div class="sd">Total de registros</div>
+            </div>
+            <div class="sc g">
+                <div class="sl">👤 Instrutores</div>
+                <div class="sn" id="si">—</div>
+                <div class="sd">Únicos na plataforma</div>
+            </div>
+        </div>
+
+        <div class="charts">
+            <div class="cc">
+                <div class="ct">📊 Volume de DSS por Mês</div>
+                <canvas id="chartMes" height="90"></canvas>
+            </div>
+            <div class="cc">
+                <div class="ct">🏆 Top Instrutores</div>
+                <div class="rank" id="rank"><div class="sp"></div></div>
+            </div>
+        </div>
+
+        <div id="v-s">
+            <div class="ct" style="margin-bottom: 20px; font-size: 0.9rem;">🟢 Sessões Ativas e Histórico</div>
+            <div id="sg-ativas" class="slist"></div>
+            <div id="semp-at" class="emp" style="display:none"><div class="ei">📭</div><p>Nenhuma sessão ativa ou encerrada.</p></div>
+        </div>
+        
+        <div id="v-a" style="display:none">
+            <div class="ct" style="margin-bottom: 20px; font-size: 0.9rem;">📅 Próximos Agendamentos</div>
+            <div id="sg-agendadas" class="slist"></div>
+            <div id="semp-ag" class="emp" style="display:none"><div class="ei">📅</div><p>Sem agendamentos no momento.</p></div>
+        </div>
+        
+        <div id="v-c" style="display:none">
+            <div class="ct" style="margin-bottom: 20px; font-size: 0.9rem;">👥 Ranking de Colaboradores</div>
+            <div id="cl" class="slist"><div class="sp"></div></div>
+        </div>
+        
+        <div id="v-i" style="display:none">
+            <div class="ct" style="margin-bottom: 20px; font-size: 0.9rem;">🏆 Relatório de Instrutores</div>
+            <div id="il" class="slist"></div>
+        </div>
+
+        <div id="v-an" style="display:none">
+            <div class="ct" style="margin-bottom: 24px; font-size: 0.9rem;">📊 Análises e Indicadores</div>
+            <!-- KPI analíticos -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:28px">
+                <div class="sc p" style="padding:20px">
+                    <div class="sl">🏭 Setor Mais Ativo</div>
+                    <div class="sn" id="an-setor" style="font-size:1.3rem;line-height:1.3">—</div>
+                    <div class="sd" id="an-setor-qtd"></div>
+                </div>
+                <div class="sc y" style="padding:20px">
+                    <div class="sl">📌 Tema Mais Abordado</div>
+                    <div class="sn" id="an-tema" style="font-size:1rem;line-height:1.4">—</div>
+                    <div class="sd" id="an-tema-qtd"></div>
+                </div>
+                <div class="sc a" style="padding:20px">
+                    <div class="sl">📅 Dia da Semana Mais Comum</div>
+                    <div class="sn" id="an-dia" style="font-size:1.3rem">—</div>
+                    <div class="sd" id="an-dia-qtd"></div>
+                </div>
+                <div class="sc g" style="padding:20px">
+                    <div class="sl">👥 Média de Presenças/Sessão</div>
+                    <div class="sn" id="an-media">—</div>
+                    <div class="sd">Por sessão encerrada</div>
+                </div>
+            </div>
+            <!-- Breakdowns em grid -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px">
+                <div class="cc">
+                    <div class="ct">🏭 DSS por Setor</div>
+                    <canvas id="chartSetor" height="160"></canvas>
+                </div>
+                <div class="cc">
+                    <div class="ct">🔄 Status das Sessões</div>
+                    <canvas id="chartStatus" height="160"></canvas>
+                </div>
+            </div>
+            <div class="cc" style="margin-bottom:28px">
+                <div class="ct">📌 Top 10 Temas Mais Usados</div>
+                <div id="an-temas-list" style="display:grid;gap:10px;margin-top:4px"></div>
+            </div>
+            <div class="cc">
+                <div class="ct">🏭 Presenças por Setor</div>
+                <div id="an-presenca-setor" style="display:grid;gap:10px;margin-top:4px"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div class="mo" id="mAdd" onclick="if(event.target===this)closeAdd()">
+        <div class="mb">
+            <div class="mh">
+                <div class="mt">➕ Adicionar Presença</div>
+                <button onclick="closeAdd()" style="background:none;border:none;color:var(--text-light);font-size:1.4rem;cursor:pointer">×</button>
+            </div>
+            <div class="mc">
+                <div class="fg">
+                    <label>Nome completo *</label>
+                    <input type="text" id="aNome" placeholder="Ex: João da Silva" autocomplete="off">
+                </div>
+                <div class="fg">
+                    <label>RE (Registro do Empregado)</label>
+                    <input type="text" id="aRE" placeholder="Ex: 12345" autocomplete="off">
+                </div>
+                <div class="fg">
+                    <label>Setor *</label>
+                    <select id="aSetor">
+                        <option value="">Selecione...</option>
+                        <option>Manutenção</option>
+                        <option>Almoxarifado</option>
+                        <option>Produção</option>
+                        <option>Administrativo</option>
+                        <option>Qualidade</option>
+                        <option>Logística</option>
+                        <option>Outro</option>
+                    </select>
+                </div>
+                <button class="bsub" id="btnAdd" onclick="salvarPresenca()">✅ Confirmar Presença</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="mo" id="mVer" onclick="if(event.target===this)closeVer()">
+        <div class="mb">
+            <div class="mh">
+                <div>
+                    <div class="mt" id="mVerTit">Presenças</div>
+                    <div style="font-size:0.8rem;color:var(--text-muted);margin-top:4px" id="mVerSub"></div>
+                </div>
+                <button onclick="closeVer()" style="background:none;border:none;color:var(--text-light);font-size:1.4rem;cursor:pointer">×</button>
+            </div>
+            <div class="mc" id="mVerBody" style="max-height:70vh;overflow-y:auto">
+                <div class="sp"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mo" id="mOCR" onclick="if(event.target===this)closeOCR()">
+        <div class="mb">
+            <div class="mh">
+                <div>
+                    <div class="mt">📷 Leitura com Inteligência Artificial</div>
+                    <div style="font-size:0.8rem;color:var(--text-muted);margin-top:4px" id="ocrSessaoTit"></div>
+                </div>
+                <button onclick="closeOCR()" style="background:none;border:none;color:var(--text-light);font-size:1.4rem;cursor:pointer">×</button>
+            </div>
+            <div class="mc">
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:20px;line-height:1.5;">Tire uma foto da lista de presença preenchida. A IA vai extrair os Nomes e REs automaticamente.</p>
+                <div class="fg">
+                    <label>📎 Foto da Lista</label>
+                    <input type="file" id="ocrFile" accept="image/*" style="padding:10px">
+                </div>
+                <div id="ocrPreview" style="display:none;margin-bottom:20px;text-align:center">
+                    <img id="ocrImg" src="" style="max-width:100%;border-radius:12px;max-height:220px;object-fit:cover;box-shadow:var(--shadow-sm);">
+                </div>
+                <button class="bsub" id="btnOCR" onclick="processarOCR()" style="background:linear-gradient(135deg,var(--purple),#6d28d9)" disabled>🤖 Iniciar Análise</button>
+                <div id="ocrResultado" style="margin-top:24px;display:none">
+                    <div style="font-size:0.85rem;font-weight:700;margin-bottom:12px;color:var(--text-dark)">✅ Dados Encontrados (Revise):</div>
+                    <div id="ocrLista"></div>
+                    <button class="bsub" id="btnSalvarOCR" onclick="salvarOCR()" style="margin-top:16px;background:var(--green)">💾 Salvar no Banco de Dados</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mo" id="mQuiz" onclick="if(event.target===this)closeQuiz()">
+        <div class="mb" style="max-width:850px; width:95%">
+            <div class="mh">
+                <div>
+                    <div class="mt">🎯 Quiz Interativo (Gamificação)</div>
+                    <div style="font-size:0.8rem;color:var(--text-muted);margin-top:4px" id="quizSessaoTit"></div>
+                </div>
+                <button onclick="closeQuiz()" style="background:none;border:none;color:var(--text-light);font-size:1.4rem;cursor:pointer">×</button>
+            </div>
+            <div class="mc" style="display:grid; gap:24px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));" id="quizBody">
+                <div id="ql"></div>
+                <div style="background:var(--surface); padding:20px; border-radius:16px; border:1px solid var(--border);">
+                    <div class="ct" style="margin-bottom:16px; color:var(--text-dark);">🏅 Atribuir Pontos</div>
+                    <div style="margin-bottom:24px">
+                        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px">Selecione quem acertou a pergunta e dê o ponto na hora!</p>
+                        <div id="pontForm"><div class="sp"></div></div>
+                    </div>
+                    <div class="ct" style="margin-bottom:16px; color:var(--mococa-yellow);">🏆 Top Acertos (Nesta sessão)</div>
+                    <div id="quizRanking">
+                        <p style="font-size:0.8rem; color:var(--text-muted);">Nenhum ponto registrado.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mo" id="mConteudo" onclick="if(event.target===this)closeConteudo()">
+        <div class="mb" style="max-width:900px; width:95%">
+            <div class="mh">
+                <div>
+                    <div class="mt" id="conteudoTit">Documento Original</div>
+                    <div style="font-size:0.8rem;color:var(--text-muted);margin-top:4px" id="conteudoSub"></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                    <button onclick="printConteudo()" class="btn bv" style="font-size:0.85rem;padding:8px 16px">🖨️ Imprimir PDF</button>
+                    <button onclick="closeConteudo()" style="background:none;border:none;color:var(--text-light);font-size:1.4rem;cursor:pointer">×</button>
+                </div>
+            </div>
+            <div class="mc" id="conteudoBody" style="max-height:75vh;overflow-y:auto; font-size:0.95rem; line-height:1.7; color:var(--text-dark); background:#f1f5f9; padding:32px;"></div>
+        </div>
+    </div>
+
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 <script src="firebaseConfig.js"></script>
 <script>
 let sessoes=[],addSessaoId=null,ocrSessaoId=null,quizSessaoId=null,chartMes=null,quizPergs=[],ocrPessoas=[];
 const _k="QUl6YVN5RG1lTXdqNUYtMTJrZXJ3bWJ3QU1odGlZOHlSMm5fOTVV";const AK=atob(_k);
-function sv(v){["s","a","c","i"].forEach(x=>{const el=document.getElementById("v-"+x);if(el)el.style.display=v===x?"block":"none"});document.querySelectorAll(".ni").forEach((el,i)=>{el.classList.toggle("act",["s","a","c","i"][i]===v)});if(v==="c")renderColabs();if(v==="i")renderInst()}
+function sv(v){["s","a","c","i","an"].forEach(x=>{const el=document.getElementById("v-"+x);if(el)el.style.display=v===x?"block":"none"});document.querySelectorAll(".ni").forEach((el,i)=>{el.classList.toggle("act",["s","a","c","i","an"][i]===v)});if(v==="c")renderColabs();if(v==="i")renderInst();if(v==="an")renderAnalytics()}
 db.collection("sessoes_dss").orderBy("criadoEm","desc").onSnapshot(async snap=>{sessoes=snap.docs.map(d=>({id:d.id,...d.data()}));renderCards();await calcStats()});
 function fd(s){if(!s)return"—";const p=s.split("-");return p.length===3?p[2]+"/"+p[1]+"/"+p[0]:s}
 function mkBtn(cls,text,onclick){return '<button class="btn '+cls+'" onclick="'+onclick+'">'+text+'</button>'}
 function renderCards(){const agendadas=sessoes.filter(s=>s.status==="agendado");const ativas=sessoes.filter(s=>s.status!=="agendado");document.getElementById("semp-ag").style.display=agendadas.length?"none":"block";document.getElementById("semp-at").style.display=ativas.length?"none":"block";const rc=(s)=>{const q=s.quiz&&s.quiz.length>0;const c=!!s.html_impressao||!!s.conteudo;const enc=s.status==="encerrada";const ag=s.status==="agendado";const at=s.status==="ativa";const dStr=fd(s.data);return '<div class="card '+(ag?"ag":at?"at":"")+'"><div class="ch"><div class="ctema">'+(s.titulo||s.tema||"—")+'</div><span class="pill '+(ag?"pag":at?"pat":"pen")+'">'+(ag?"📅 Agendado":at?"🟢 Ativa":"🔒 Encerrada")+'</span></div>'+(ag&&s.hora?'<div style="font-size:1.1rem;font-weight:800;color:var(--t);margin-bottom:12px;display:flex;align-items:center;gap:6px"><span style="font-size:1.2rem">⏰</span> '+s.hora+'</div>':'')+'<div class="cm"><span>📅 '+dStr+'</span><span>🏭 '+(s.setor||"—")+'</span><span>👤 '+(s.responsavel||"—")+'</span>'+(s.duracao?'<span>⏱ '+s.duracao+'</span>':'')+'</div><div class="cf"><div class="cnt" id="c-'+s.id+'">⏳ carregando...</div><div class="acts">'+(ag?mkBtn("by","▶️ Executar","ativarSessao('"+s.id+"')"):"")+(enc?"":mkBtn("ba","➕ Add","openAdd('"+s.id+"')"))+(c?mkBtn("bv","📄 Arquivo","openConteudo('"+s.id+"')"):"")+(q?'<button class="btn bq" onclick="openQuiz(\''+s.id+'\')">🎯 Quiz</button>':"")+mkBtn("bv","👥 Lista","openVer('"+s.id+"','"+((s.titulo||s.tema||"").replace(/'/g,"\\'"))+"','"+fd(s.data)+"')")+mkBtn("bq","📷 OCR","openOCR('"+s.id+"','"+((s.titulo||"DSS").replace(/'/g,"\\'"))+"')")+(enc?"":mkBtn("be","🔒","encerrar('"+s.id+"')"))+'</div></div></div>'};document.getElementById("sg-agendadas").innerHTML=agendadas.map(rc).join("");document.getElementById("sg-ativas").innerHTML=ativas.map(rc).join("");sessoes.forEach(s=>watchCount(s.id))}
 function watchCount(id){db.collection("sessoes_dss").doc(id).collection("presencas").onSnapshot(snap=>{const el=document.getElementById("c-"+id);if(el)el.textContent="✅ "+snap.size+" presença(s)"})}
 async function calcStats(){let tp=0,inst=new Set(),meses={},ag=0;for(const s of sessoes){if(s.responsavel)inst.add(s.responsavel);if(s.status==="agendado")ag++;const mes=s.data?s.data.substring(0,7):"?";meses[mes]=(meses[mes]||0)+1;const sn=await db.collection("sessoes_dss").doc(s.id).collection("presencas").get();tp+=sn.size}document.getElementById("st").textContent=sessoes.length;document.getElementById("sag").textContent=ag;document.getElementById("sp").textContent=tp;document.getElementById("si").textContent=inst.size||"—";renderChart(meses);renderRank()}
-function renderChart(m){const labels=Object.keys(m).sort().map(k=>{const[y,mo]=k.split("-");return["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"][+mo-1]+"/"+y.slice(2)});const data=Object.keys(m).sort().map(k=>m[k]);if(chartMes)chartMes.destroy();const ctx=document.getElementById("chartMes").getContext("2d");chartMes=new Chart(ctx,{type:"bar",data:{labels,datasets:[{label:"Sessoes",data,backgroundColor:"rgba(59,130,246,.5)",borderColor:"#3b82f6",borderWidth:2,borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{color:"#64748b",stepSize:1},grid:{color:"rgba(255,255,255,.05)"}},x:{ticks:{color:"#64748b"},grid:{color:"rgba(255,255,255,.05)"}}}}})}
+function renderChart(m){const labels=Object.keys(m).sort().map(k=>{const[y,mo]=k.split("-");return["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"][+mo-1]+"/"+y.slice(2)});const data=Object.keys(m).sort().map(k=>m[k]);if(chartMes)chartMes.destroy();const ctx=document.getElementById("chartMes").getContext("2d");chartMes=new Chart(ctx,{type:"bar",data:{labels,datasets:[{label:"Sessoes",data,backgroundColor:"rgba(0, 71, 143, 0.6)",borderColor:"#00478F",borderWidth:2,borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{color:"#64748b",stepSize:1},grid:{color:"rgba(255,255,255,.05)"}},x:{ticks:{color:"#64748b"},grid:{color:"rgba(255,255,255,.05)"}}}}})}
 async function renderRank(){const cnt={};for(const s of sessoes){if(s.responsavel)cnt[s.responsavel]=(cnt[s.responsavel]||0)+1}const sorted=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5);const medals=["🥇","🥈","🥉","4️⃣","5️⃣"];document.getElementById("rank").innerHTML=sorted.length?sorted.map(([n,c],i)=>'<div class="ri"><span class="rpos">'+medals[i]+'</span><span class="rn">'+n+'</span><span class="rb">'+c+' DSS</span></div>').join(''):'<p style="font-size:.75rem;color:var(--m);text-align:center;padding:20px">Nenhum dado ainda</p>'}
 async function encerrar(id){if(!confirm("Encerrar esta sessao?"))return;try{await db.collection("sessoes_dss").doc(id).update({status:"encerrada"})}catch(e){alert("Erro: "+e.message)}}
 async function ativarSessao(id){if(!confirm("Marcar esta sessao como ATIVA agora?"))return;try{console.log("Ativando: ", id);await db.collection("sessoes_dss").doc(id).update({status:"ativa"});console.log("Sucesso!")}catch(e){console.error(e);alert("Erro ao ativar: "+e.message)}}
@@ -38,4 +931,66 @@ async function loadPontForm(id){db.collection("sessoes_dss").doc(id).collection(
 async function pontuar(sessId,docId,atual,delta){const novo=Math.max(0,atual+delta);await db.collection("sessoes_dss").doc(sessId).collection("presencas").doc(docId).update({pontos:novo})}
 async function renderColabs(){const el=document.getElementById("cl");el.innerHTML='<div class="sp"></div>';const mapa={};for(const s of sessoes){const snp=await db.collection("sessoes_dss").doc(s.id).collection("presencas").get();snp.docs.forEach(d=>{const p=d.data();const re=p.re||p.nome||"?";if(!mapa[re])mapa[re]={nome:p.nome||"—",re:p.re||"",total:0,pontos:0,temas:[]};mapa[re].total++;mapa[re].pontos+=(p.pontos||0);if(s.titulo)mapa[re].temas.push(s.titulo)})}const lista=Object.values(mapa).sort((a,b)=>b.pontos-a.pontos||b.total-a.total);el.innerHTML=lista.length?lista.map((c,i)=>'<div class="card"><div class="ch"><div class="ctema">'+(i<3?["🥇","🥈","🥉"][i]+" ":"")+c.nome+'</div>'+(c.re?'<span class="coltag">RE: '+c.re+'</span>':'')+' </div><div class="cm"><span>✅ '+c.total+' DSS</span>'+(c.pontos>0?'<span>⭐ '+c.pontos+' pontos</span>':'')+'</div>'+(c.temas.length?'<div style="margin-top:8px"><div style="font-size:.65rem;color:var(--m);margin-bottom:4px">ULTIMOS DSS:</div><div style="font-size:.72rem;color:var(--t2)">'+c.temas.slice(-3).join(" · ")+'</div></div>':'')+'</div>').join(""):'<div class="emp"><div class="ei">👥</div><p>Nenhum colaborador registrado ainda.</p></div>'}
 async function renderInst(){const el=document.getElementById("il");el.innerHTML='<div class="sp"></div>';const cnt={};for(const s of sessoes){const resp=s.responsavel||"Nao informado";if(!cnt[resp])cnt[resp]={total:0,setores:new Set(),presencas:0};cnt[resp].total++;if(s.setor)cnt[resp].setores.add(s.setor);const sn=await db.collection("sessoes_dss").doc(s.id).collection("presencas").get();cnt[resp].presencas+=sn.size}el.innerHTML=Object.entries(cnt).sort((a,b)=>b[1].total-a[1].total).map(([n,d])=>'<div class="card"><div class="ch"><div class="ctema">👤 '+n+'</div><span class="pill pat">'+d.total+' DSS</span></div><div class="cm"><span>🏭 Setores: '+[...d.setores].join(", ")+'</span><span>✅ '+d.presencas+' presenças</span><span>📊 Media: '+(d.total?Math.round(d.presencas/d.total):0)+'/sessao</span></div></div>').join("")||'<div class="emp"><div class="ei">👤</div><p>Nenhum instrutor ainda</p></div>'}
+let chartSetor=null,chartStatus=null;
+async function renderAnalytics(){
+  // Contagens básicas
+  const setores={},temas={},dias={},statusCnt={agendado:0,ativa:0,encerrada:0};
+  let totalPresencas=0,sessEncerradas=0;
+  const presencasPorSetor={};
+  const diasNome=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+  for(const s of sessoes){
+    const setor=s.setor||"Não informado";
+    setores[setor]=(setores[setor]||0)+1;
+    const tema=(s.tema||s.titulo||"Sem tema").split(" - ").pop().trim();
+    temas[tema]=(temas[tema]||0)+1;
+    if(s.data){const d=new Date(s.data+"T12:00:00");dias[diasNome[d.getDay()]]=(dias[diasNome[d.getDay()]]||0)+1}
+    const st=s.status||"encerrada";
+    if(statusCnt[st]!==undefined)statusCnt[st]++;
+    const sn=await db.collection("sessoes_dss").doc(s.id).collection("presencas").get();
+    const nPres=sn.size;
+    totalPresencas+=nPres;
+    if(s.status==="encerrada"){sessEncerradas++;presencasPorSetor[setor]=(presencasPorSetor[setor]||0)+nPres;}
+  }
+  // KPIs
+  const topSetor=Object.entries(setores).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById("an-setor").textContent=topSetor?topSetor[0]:"—";
+  document.getElementById("an-setor-qtd").textContent=topSetor?topSetor[1]+" sessões":"";
+  const topTema=Object.entries(temas).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById("an-tema").textContent=topTema?topTema[0]:"—";
+  document.getElementById("an-tema-qtd").textContent=topTema?topTema[1]+" vez(es)":"";
+  const topDia=Object.entries(dias).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById("an-dia").textContent=topDia?topDia[0]:"—";
+  document.getElementById("an-dia-qtd").textContent=topDia?topDia[1]+" ocorrências":"";
+  document.getElementById("an-media").textContent=sessEncerradas?(Math.round(totalPresencas/sessEncerradas*10)/10):"—";
+  // Gráfico de Setores
+  const setLabels=Object.keys(setores);const setData=Object.values(setores);
+  if(chartSetor)chartSetor.destroy();
+  chartSetor=new Chart(document.getElementById("chartSetor").getContext("2d"),{type:"doughnut",data:{labels:setLabels,datasets:[{data:setData,backgroundColor:["#00478F","#FDB913","#059669","#7c3aed","#dc2626","#0ea5e9","#f97316"],borderWidth:2,borderColor:"#fff"}]},options:{responsive:true,plugins:{legend:{position:"bottom",labels:{font:{size:11},padding:12}}}}});
+  // Gráfico de Status
+  if(chartStatus)chartStatus.destroy();
+  chartStatus=new Chart(document.getElementById("chartStatus").getContext("2d"),{type:"doughnut",data:{labels:["Agendado","Ativa","Encerrada"],datasets:[{data:[statusCnt.agendado,statusCnt.ativa,statusCnt.encerrada],backgroundColor:["#FDB913","#059669","#64748b"],borderWidth:2,borderColor:"#fff"}]},options:{responsive:true,plugins:{legend:{position:"bottom",labels:{font:{size:11},padding:12}}}}});
+  // Lista de temas
+  const temasSort=Object.entries(temas).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const maxT=temasSort[0]?temasSort[0][1]:1;
+  document.getElementById("an-temas-list").innerHTML=temasSort.map(([t,c],i)=>{
+    const pct=Math.round(c/maxT*100);
+    return '<div style="display:flex;align-items:center;gap:12px"><span style="font-size:.7rem;font-weight:700;color:var(--text-muted);width:16px;text-align:right">'+(i+1)+'</span><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:.82rem;font-weight:600;color:var(--text-dark)">'+t+'</span><span style="font-size:.75rem;color:var(--mococa-blue);font-weight:700">'+c+'x</span></div><div style="height:6px;background:var(--border);border-radius:3px"><div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,var(--mococa-blue),var(--mococa-yellow));border-radius:3px"></div></div></div></div>';
+  }).join("");
+  // Presenças por setor
+  const presSort=Object.entries(presencasPorSetor).sort((a,b)=>b[1]-a[1]);
+  const maxP=presSort[0]?presSort[0][1]:1;
+  document.getElementById("an-presenca-setor").innerHTML=presSort.length?presSort.map(([s,c])=>{
+    const pct=Math.round(c/maxP*100);
+    return '<div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:.82rem;font-weight:600;color:var(--text-dark)">'+s+'</span><span style="font-size:.75rem;color:var(--green);font-weight:700">'+c+' presenças</span></div><div style="height:8px;background:var(--border);border-radius:4px"><div style="height:100%;width:'+pct+'%;background:var(--green);border-radius:4px;transition:width .6s"></div></div></div>';
+  }).join(""):'<p style="font-size:.8rem;color:var(--text-muted)">Nenhuma sessão encerrada ainda.</p>';
+}
+function printConteudo(){
+  const b=document.getElementById("conteudoBody");
+  const w=window.open("","_blank","width=900,height=700");
+  if(!w)return;
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>DSS - Impressão</title><style>*{box-sizing:border-box;margin:0;padding:0}body{background:#fff;font-family:Arial,sans-serif}@media print{body{margin:0}}</style></head><body>'+b.innerHTML+'</body></html>');
+  w.document.close();
+  w.focus();
+  setTimeout(()=>w.print(),500);
+}
 </script></body></html>
